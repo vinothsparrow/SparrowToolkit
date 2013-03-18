@@ -1,0 +1,331 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Shapes;
+
+namespace Sparrow.Chart
+{
+
+    /// <summary>
+    /// XAxis for Sparrow Chart
+    /// </summary>
+    public class XAxis : AxisBase
+    {
+
+        public XAxis()
+            : base()
+        {           
+        }
+
+        protected override bool CheckType()
+        {
+            if (this.Type == XType.Category)
+                return false;
+            return true;
+        }
+
+        internal void Update()
+        {
+            double desiredHeight = 0;
+
+            CalculateAutoInterval();
+            GenerateLabels();
+            if (this.ActualHeight > 0 && this.ActualWidth > 0)
+            {
+                double xAxisWidthStep = this.ActualWidth / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
+                double xAxisWidthPosition = 0;               
+                axisLine.X2 = this.ActualWidth;                
+                Rect oldRect = new Rect(0, 0, 0, 0);
+                if (this.m_Labels.Count == labels.Count)
+                {
+                    int k = 0;
+                    for (int i = 0; i < this.m_Labels.Count; i++)
+                    {                        
+                        xAxisWidthPosition = this.DataToPoint(m_startValue + (m_Interval * k));
+                        ContentPresenter label = labels[k];
+                        label.Content = m_Labels[k];
+                        label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        Line tickLine = majorTickLines[k];
+                        double labelPadding = 0;
+                        tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        tickLine.X1 = xAxisWidthPosition ;
+                        tickLine.X2 = xAxisWidthPosition ;                        
+                        if (this.ShowMajorTicks)
+                        {
+                            labelPadding = tickLine.Y2;
+                            desiredHeight = tickLine.Y2;
+                        }
+                        Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                        Canvas.SetTop(label, desiredHeight);                        
+                        k++;
+                    }                    
+                }
+                else
+                {
+                    if (this.m_Labels.Count > labels.Count)
+                    {
+                        int offset = this.m_Labels.Count - labels.Count;
+                        for (int j = 0; j < offset; j++)
+                        {
+                            ContentPresenter label = new ContentPresenter();
+                            label.Content = m_Labels[this.m_Labels.Count - offset -1];
+                            Binding labelTemplateBinding = new Binding("LabelTemplate");
+                            labelTemplateBinding.Source = this;
+                            label.SetBinding(ContentPresenter.ContentTemplateProperty, labelTemplateBinding);
+                            label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                            labels.Add(label);
+                            Line tickLine = new Line();
+                            Binding styleBinding = new Binding("MajorLineStyle");
+                            styleBinding.Source = this;
+                            tickLine.SetBinding(Line.StyleProperty, styleBinding);
+                            tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                            tickLine.X1 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
+                            tickLine.X2 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
+                            tickLine.Y1 = 0;
+                            Binding tickSizeBinding = new Binding("MajorLineSize");
+                            tickSizeBinding.Source = this;
+                            tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+                            Binding ticklineVisibilityBinding = new Binding("ShowMajorTicks");
+                            ticklineVisibilityBinding.Source = this;
+                            ticklineVisibilityBinding.Converter = new BooleanToVisibilityConverter();
+                            tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
+                            majorTickLines.Add(tickLine);
+                            this.Children.Add(label);
+                            this.Children.Add(tickLine);
+
+                        }
+                    }
+                    else
+                    {
+                        int offset = labels.Count - this.m_Labels.Count;
+                        for (int j = 0; j < offset; j++)
+                        {
+                            this.Children.Remove(labels[labels.Count - 1]);
+                            labels.RemoveAt(labels.Count - 1);
+                            this.Children.Remove(majorTickLines[majorTickLines.Count - 1]);
+                            majorTickLines.RemoveAt(majorTickLines.Count - 1);
+                        }
+                    }
+                    for (int i = 0; i < this.m_Labels.Count; i++)
+                    {
+                        ContentPresenter label = labels[i];
+                        label.Content = m_Labels[i];
+                        label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        Line tickLine = majorTickLines[i];
+                        double labelPadding = 0;
+                        tickLine.X1 = xAxisWidthPosition;
+                        tickLine.X2 = xAxisWidthPosition;
+                        tickLine.Y1 = 0;
+                        tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        if (this.ShowMajorTicks)
+                        {
+                            labelPadding = tickLine.Y2;
+                            desiredHeight = tickLine.Y2;
+                        }
+                        Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                        Canvas.SetTop(label, desiredHeight);
+                        xAxisWidthPosition += xAxisWidthStep;
+                    }  
+                }
+                header.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
+                Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
+                desiredHeight += header.DesiredSize.Height * 2;              
+            }
+            if (this.Chart.AxisHeight < desiredHeight)
+                this.Chart.AxisHeight = desiredHeight + 1;
+        }
+
+        internal void Initialize()
+        {
+            double desiredHeight = 0;
+            //if (m_MinValue == m_startValue + m_Interval)
+            CalculateAutoInterval();
+            GenerateLabels();
+            if (this.ActualHeight > 0 && this.ActualWidth > 0)
+            {
+               
+                this.Children.Clear();
+                double xAxisWidthStep = this.ActualWidth / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
+                double xAxisWidthPosition = this.DataToPoint(m_startValue);
+                //m_offset = this.DataToPoint(m_MinValue + m_Interval);
+                Rect oldRect = new Rect(0, 0, 0, 0);
+                axisLine = new Line();
+                axisLine.X1 = 0;
+                axisLine.X2 = this.ActualWidth;
+                axisLine.Y1 = 0;
+                axisLine.Y2 = 0;
+                Binding binding = new Binding("AxisLineStyle");
+                binding.Source = this;
+                axisLine.SetBinding(Line.StyleProperty, binding);
+                labels = new List<ContentPresenter>();
+                majorTickLines = new List<Line>();
+
+                for (int i = 0; i < this.m_Labels.Count; i++)
+                {
+                    ContentPresenter label = new ContentPresenter();
+                    label.Content = m_Labels[i];
+                    Binding labelTemplateBinding = new Binding("LabelTemplate");
+                    labelTemplateBinding.Source = this;
+                    label.SetBinding(ContentPresenter.ContentTemplateProperty, labelTemplateBinding);
+                    label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                    labels.Add(label);
+                    Line tickLine = new Line();
+                    double labelPadding = 0;
+                    Binding styleBinding = new Binding("MajorLineStyle");
+                    styleBinding.Source = this;
+                    tickLine.SetBinding(Line.StyleProperty, styleBinding);
+                    tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                    tickLine.X1 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
+                    tickLine.X2 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
+                    tickLine.Y1 = 0;
+                    Binding tickSizeBinding = new Binding("MajorLineSize");
+                    tickSizeBinding.Source = this;
+                    tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+                    Binding ticklineVisibilityBinding = new Binding("ShowMajorTicks");
+                    ticklineVisibilityBinding.Source = this;
+                    ticklineVisibilityBinding.Converter = new BooleanToVisibilityConverter();
+                    tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
+                    majorTickLines.Add(tickLine);
+                    this.Children.Add(tickLine);
+                    if (this.ShowMajorTicks)
+                    {
+                        labelPadding = tickLine.Y2;
+                        desiredHeight = tickLine.Y2;
+                    }
+                    Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                    Canvas.SetTop(label, desiredHeight);
+                    
+                    this.Children.Add(label);                   
+                    xAxisWidthPosition += xAxisWidthStep;
+                }
+                header = new ContentPresenter();
+                Binding contentBinding = new Binding("Header");
+                contentBinding.Source = this;
+                header.SetBinding(ContentPresenter.ContentProperty, contentBinding);
+                Binding headerTemplateBinding = new Binding("HeaderTemplate");
+                headerTemplateBinding.Source = this;
+                header.SetBinding(ContentPresenter.ContentTemplateProperty, headerTemplateBinding);
+                header.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
+                Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
+                desiredHeight += header.DesiredSize.Height * 2;
+                this.Children.Add(header);
+                this.Children.Add(axisLine);
+                isInitialized = true;
+            }
+            if (this.Chart.AxisHeight < desiredHeight)
+                this.Chart.AxisHeight = desiredHeight + 1;
+        }
+
+        protected override void GetStyles()
+        {
+            base.GetStyles();
+            this.HeaderTemplate = (DataTemplate)styles["xAxisHeaderTemplate"];
+        }
+
+        public static Rect BoundsRelativeTo(FrameworkElement element, Visual relativeTo)
+        {
+            return element.TransformToVisual(relativeTo).TransformBounds(LayoutInformation.GetLayoutSlot(element));
+        }
+       
+        internal override void InvalidateVisuals()
+        {
+            if (!isInitialized)
+                Initialize();
+            else
+                Update();
+        }
+
+        public override double DataToPoint(double value)
+        {
+            if (!(m_MinValue == m_MaxValue))
+                return ((value - m_MinValue) * (this.ActualWidth / (m_MaxValue - m_MinValue)));
+            else
+                return 0;
+        }
+
+        public override void CalculateIntervalFromSeriesPoints()
+        {
+            List<double> xValues = new List<double>();
+            if (this.Series != null)
+                foreach (SeriesBase series in Series)
+                {
+                    if (series.Points != null)
+                        foreach (var point in series.Points)
+                        {
+                            xValues.Add(point.XValue);
+                        }
+                }
+            if (xValues.Count > 0)
+            {
+                this.AddMinMax(xValues.ToArray().Min(), xValues.ToArray().Max());                
+            }
+        }
+
+        override public string GetOriginalLabel(double value)
+        {
+            switch (Type)
+            {
+                case XType.Double:
+                    return value.ToString(this.StringFormat);                    
+                case XType.DateTime:
+                    return DateTime.FromOADate(value).ToString(this.StringFormat);                    
+                case XType.Category:
+                    if (SparrowChart.ActualCategoryValues.Count > (int)value)
+                        return SparrowChart.ActualCategoryValues[(int)value];
+                    else
+                        return "";
+                default:
+                    return value.ToString(this.StringFormat);                    
+            }
+        }
+
+        protected override Size ArrangeOverride(Size arrangeSize)
+        {
+            return base.ArrangeOverride(arrangeSize);
+        }
+
+        protected override Size MeasureOverride(Size constraint)
+        {           
+            return base.MeasureOverride(constraint);
+        }
+
+        public XType Type
+        {
+            get { return (XType)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
+        }
+
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register("Type", typeof(XType), typeof(XAxis), new PropertyMetadata(XType.Double,OnTypeChanged));
+        private static void OnTypeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as XAxis).TypeChanged(args);
+        }
+        internal void TypeChanged(DependencyPropertyChangedEventArgs args)
+        {           
+            switch (Type)
+            {
+                case XType.Double:
+                    this.ActualType =(ActualType)Enum.Parse(typeof(ActualType),XType.Double.ToString());
+                    break;
+                case XType.DateTime:
+                    this.ActualType = (ActualType)Enum.Parse(typeof(ActualType), XType.DateTime.ToString());
+                    break;
+                case XType.Category:
+                    this.ActualType = (ActualType)Enum.Parse(typeof(ActualType), XType.Category.ToString());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+}
