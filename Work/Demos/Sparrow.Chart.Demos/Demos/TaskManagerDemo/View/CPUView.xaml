@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <chart:SparrowChart Grid.Row="1" RenderingMode="WritableBitmap" ContainerBorderStyle="{StaticResource containerStyle}">
                 <chart:SparrowChart.XAxis>
-                    <chart:XAxis Type="DateTime" CrossLineStyle="{StaticResource crossLineStyle}" Visibility="Collapsed"/>
+                    <chart:XAxis Type="DateTime" Interval="0:0:1" CrossLineStyle="{StaticResource crossLineStyle}" Visibility="Collapsed"/>
                 </chart:SparrowChart.XAxis>
                 <chart:SparrowChart.YAxis>
                     <chart:YAxis MinValue="0" CrossLineStyle="{StaticResource crossLineStyle}" Interval="10" MaxValue="100" Visibility="Collapsed"/>

@@ -182,10 +182,10 @@ namespace Sparrow.Chart
         internal void GenerateLabels()
         {           
             m_Labels.Clear();
-            double value = m_startValue;
+            double value = m_MinValue;
             for (int i = 0; i <= m_IntervalCount; i++)
             {
-                if (value < m_MinValue )
+                if (value < m_MinValue)
                 {
                     value += m_Interval;
                     continue;
@@ -226,9 +226,9 @@ namespace Sparrow.Chart
                     switch (ActualType)
                     {
                         case ActualType.Double:
-                            m_MinValue = Math.Floor(m_MinValue);                           
+                            //m_MinValue = Math.Floor(m_MinValue);                           
                             this.m_Interval = AxisUtil.CalculateInetrval(Math.Floor(m_MinValue), Math.Ceiling(m_MaxValue), m_IntervalCount);
-                            m_MaxValue = m_MinValue + (m_IntervalCount * this.m_Interval);
+                            //m_MaxValue = m_MinValue + (m_IntervalCount * this.m_Interval);
                             break;
                         case ActualType.DateTime:
                             this.m_Interval = (m_MaxValue - m_MinValue) / m_IntervalCount;
@@ -237,7 +237,7 @@ namespace Sparrow.Chart
                             break;
                     }
                    
-                    //this.m_Interval = (m_MaxValue - m_MinValue) / m_IntervalCount;
+                    this.m_Interval = (m_MaxValue - m_MinValue) / m_IntervalCount;
                 }
                 else
                 {
@@ -266,8 +266,9 @@ namespace Sparrow.Chart
                     m_IntervalCount = (m_IntervalCount > 0) ? m_IntervalCount : 1;
 
                 }
-                if ((m_MinValue >= m_startValue + m_Interval))
-                    m_startValue = m_MinValue + (m_MinValue % m_Interval);
+                //if ((m_MinValue >= m_startValue + m_Interval))
+                //    m_startValue = m_MinValue + (m_MinValue % m_Interval);
+                m_startValue = m_MinValue;
             }
             else
             {
@@ -316,7 +317,7 @@ namespace Sparrow.Chart
             if (Series != null)
                 foreach (SeriesBase series in this.Series)
                 {
-                    series.RefreshWithoutAxis();
+                    series.RefreshWithoutAxis(this);
                 }
         }
         internal double m_Interval;

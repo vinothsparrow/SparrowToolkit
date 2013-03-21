@@ -41,10 +41,6 @@
     <ApplicationIcon>Resources\sparrow.chart.icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sparrow.Chart, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90545d60530ad8e5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Sparrow Chart WPF Toolkit\Bin\4.0\Sparrow.Chart.dll</HintPath>
-    </Reference>
     <Reference Include="Sparrow.Resources">
       <HintPath>C:\Program Files (x86)\Sparrow Chart WPF Toolkit\Bin\4.0\Sparrow.Resources.dll</HintPath>
     </Reference>
@@ -74,6 +70,16 @@
     </ApplicationDefinition>
     <Compile Include="Commands\AboutCommand.cs" />
     <Compile Include="Converters\SampleToContentConverter.cs" />
+    <Compile Include="Demos\LiveDatasDemo\Model\Model.cs" />
+    <Compile Include="Demos\LiveDatasDemo\ViewModel\ViewModel.cs" />
+    <Compile Include="Demos\LiveDatasDemo\View\LiveDatasDemo.xaml.cs">
+      <DependentUpon>LiveDatasDemo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Demos\PerformanceDemo\Model\PerformanceModel.cs" />
+    <Compile Include="Demos\PerformanceDemo\ViewModel\ViewModel.cs" />
+    <Compile Include="Demos\PerformanceDemo\View\PerformanceDemo.xaml.cs">
+      <DependentUpon>PerformanceDemo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Demos\TaskManagerDemo\Model\Model.cs" />
     <Compile Include="Demos\TaskManagerDemo\ViewModel\ViewModel.cs" />
     <Compile Include="Demos\TaskManagerDemo\View\CPUView.xaml.cs">
@@ -84,6 +90,14 @@
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Page Include="Demos\LiveDatasDemo\View\LiveDatasDemo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Demos\PerformanceDemo\View\PerformanceDemo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Demos\TaskManagerDemo\View\CPUView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -140,6 +154,13 @@
   <ItemGroup>
     <Resource Include="Resources\sparrow.chart.icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\Sparrow.Chart\Sparrow.Chart.csproj">
+      <Project>{561755e1-9492-4ec2-aca1-8cf76e6cac5a}</Project>
+      <Name>Sparrow.Chart</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

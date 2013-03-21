@@ -81,6 +81,7 @@ namespace Sparrow.Chart
                         tickSizeBinding.Converter = new MajorSizeThicknessConverter();
                         tickSizeBinding.ConverterParameter = tickLine.X1;
                         tickLine.SetBinding(Line.X2Property, tickSizeBinding);
+                        desiredWidth = 0;
                         if (this.ShowMajorTicks)
                         {
                             labelPadding = tickLine.X2;
@@ -88,8 +89,7 @@ namespace Sparrow.Chart
                         }
                         Canvas.SetLeft(label, this.ActualWidth - (label.DesiredSize.Width) - desiredWidth - 1);
                         Canvas.SetTop(label, yAxisHeightPosition - (label.DesiredSize.Height / 2));
-                        labelSize = Math.Max(labelSize, label.DesiredSize.Width);
-                        //yAxisHeightPosition += yAxisHeightStep;
+                        labelSize = Math.Max(labelSize, label.DesiredSize.Width);                        
                     }
                 }
                 else
@@ -158,6 +158,7 @@ namespace Sparrow.Chart
                         tickSizeBinding.ConverterParameter = tickLine.X1;
                         tickLine.SetBinding(Line.X2Property, tickSizeBinding);
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        desiredWidth = 0;
                         if (this.ShowMajorTicks)
                         {
                             labelPadding = tickLine.X2;
@@ -167,12 +168,13 @@ namespace Sparrow.Chart
                         Canvas.SetTop(label, yAxisHeightPosition - (label.DesiredSize.Height / 2));
                         labelSize = Math.Max(labelSize, label.DesiredSize.Width);
                         yAxisHeightPosition += yAxisHeightStep;
+                        //desiredWidth = desiredWidth + labelSize;
                     }
                 }
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, this.ActualWidth - labelSize - header.DesiredSize.Height - this.MajorLineSize - 1);
                 Canvas.SetTop(header, this.ActualHeight / 2);
-                desiredWidth += header.DesiredSize.Width;
+                desiredWidth = desiredWidth+ header.DesiredSize.Height + labelSize;
             }
             if (this.Chart.AxisWidth < desiredWidth)
                 this.Chart.AxisWidth = desiredWidth + 1;
@@ -233,7 +235,7 @@ namespace Sparrow.Chart
                     tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
                     majorTickLines.Add(tickLine);
                     this.Children.Add(tickLine);
-
+                    desiredWidth = 0;
                     if (this.ShowMajorTicks)
                     {
                         labelPadding = tickLine.X2;
@@ -258,7 +260,7 @@ namespace Sparrow.Chart
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, this.ActualWidth - labelSize - header.DesiredSize.Height - this.MajorLineSize - 1);
                 Canvas.SetTop(header, this.ActualHeight / 2);
-                desiredWidth += header.DesiredSize.Width;
+                desiredWidth = desiredWidth + header.DesiredSize.Height + labelSize;
                 this.Children.Add(header);
                 this.Children.Add(axisLine);
                 isInitialized = true;

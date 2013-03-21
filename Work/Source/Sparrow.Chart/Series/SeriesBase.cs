@@ -104,8 +104,18 @@ namespace Sparrow.Chart
             return null;
         }
 
-        public void RefreshWithoutAxis()
+        public void RefreshWithoutAxis(AxisBase axis)
         {
+            //if (axis is XAxis)
+            //{
+            //    (axis as XAxis).CalculateIntervalFromSeriesPoints();
+            //    //this.XAxis.Refresh();
+            //}
+            //else if (axis is YAxis)
+            //{
+            //    (axis as YAxis).CalculateIntervalFromSeriesPoints();
+            //   // this.YAxis.Refresh();
+            //}
             if (!isRefreshed && IsRefresh)
             {
                 Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.GenerateDatas));
