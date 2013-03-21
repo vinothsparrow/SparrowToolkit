@@ -99,9 +99,9 @@ namespace Sparrow.Chart
 
         private static void OnIntervalChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as AxisBase).IntervalChnaged(args);
+            (sender as AxisBase).IntervalChanged(args);
         }
-        internal void IntervalChnaged(DependencyPropertyChangedEventArgs args)
+        internal void IntervalChanged(DependencyPropertyChangedEventArgs args)
         {
             switch (ActualType)
             {

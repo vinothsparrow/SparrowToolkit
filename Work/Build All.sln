@@ -1,18 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart", "..\..\Source\Sparrow.Chart\Sparrow.Chart.csproj", "{561755E1-9492-4EC2-ACA1-8CF76E6CAC5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart", "Source\Sparrow.Chart\Sparrow.Chart.csproj", "{561755E1-9492-4EC2-ACA1-8CF76E6CAC5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Resources", "..\..\Source\Sparrow.Resources\Sparrow.Resources.csproj", "{4AE312FE-9E56-4CED-8186-3B778EF58032}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Resources", "Source\Sparrow.Resources\Sparrow.Resources.csproj", "{4AE312FE-9E56-4CED-8186-3B778EF58032}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Demos", "Sparrow.Chart.Demos.csproj", "{B4E604AB-6740-4294-B1D4-D519B459FB8A}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Setup", "..\..\Source\Sparrow.Chart.Build\Sparrow.Chart.Setup\Sparrow.Chart.Setup.wixproj", "{7E936699-34D3-465D-94A6-EAB42A34DFC9}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Setup", "Source\Sparrow.Chart.Build\Sparrow.Chart.Setup\Sparrow.Chart.Setup.wixproj", "{7E936699-34D3-465D-94A6-EAB42A34DFC9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{561755E1-9492-4EC2-ACA1-8CF76E6CAC5A} = {561755E1-9492-4EC2-ACA1-8CF76E6CAC5A}
 	EndProjectSection
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Bootstrapper", "..\..\Source\Sparrow.Chart.Build\Sparrow.Chart.Bootstrapper\Sparrow.Chart.Bootstrapper.wixproj", "{FD2FFAEA-6877-4DFD-BDF2-BFF13D85A878}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Bootstrapper", "Source\Sparrow.Chart.Build\Sparrow.Chart.Bootstrapper\Sparrow.Chart.Bootstrapper.wixproj", "{FD2FFAEA-6877-4DFD-BDF2-BFF13D85A878}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6} = {1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}
 		{7E936699-34D3-465D-94A6-EAB42A34DFC9} = {7E936699-34D3-465D-94A6-EAB42A34DFC9}
@@ -21,7 +19,9 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Bootstrapper"
 		{4AE312FE-9E56-4CED-8186-3B778EF58032} = {4AE312FE-9E56-4CED-8186-3B778EF58032}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Installer", "..\..\Source\Sparrow.Chart.Build\Sparrow.Chart.Installer\Sparrow.Chart.Installer.csproj", "{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Installer", "Source\Sparrow.Chart.Build\Sparrow.Chart.Installer\Sparrow.Chart.Installer.csproj", "{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Demos", "Demos\Sparrow.Chart.Demos\Sparrow.Chart.Demos.csproj", "{B4E604AB-6740-4294-B1D4-D519B459FB8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,18 +63,6 @@ Global
 		{4AE312FE-9E56-4CED-8186-3B778EF58032}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4AE312FE-9E56-4CED-8186-3B778EF58032}.Release|x64.ActiveCfg = Release|Any CPU
 		{4AE312FE-9E56-4CED-8186-3B778EF58032}.Release|x86.ActiveCfg = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|x64.ActiveCfg = Release|Any CPU
-		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|x86.ActiveCfg = Release|Any CPU
 		{7E936699-34D3-465D-94A6-EAB42A34DFC9}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{7E936699-34D3-465D-94A6-EAB42A34DFC9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{7E936699-34D3-465D-94A6-EAB42A34DFC9}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -113,6 +101,18 @@ Global
 		{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}.Release|x64.ActiveCfg = Release|Any CPU
 		{1CEF5B7D-FDF5-4263-A0CA-E7BB77D36EE6}.Release|x86.ActiveCfg = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

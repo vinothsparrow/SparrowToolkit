@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -9,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Sparrow.Chart
 {
@@ -121,6 +124,80 @@ namespace Sparrow.Chart
                     
             }
             
+        }
+
+        /// <summary>
+        /// Export the Sparrow Chart as Image
+        /// </summary>
+        /// <param name="fileName">Output File Name to Export the Chart as Image</param>
+        public void ExportAsImage(string fileName)
+        {
+            string fileExtension = new FileInfo(fileName).Extension.ToLower(CultureInfo.InvariantCulture);
+
+            BitmapEncoder imageEncoder = null;
+            switch (fileExtension)
+            {
+                case ".bmp":
+                    imageEncoder = new BmpBitmapEncoder();
+                    break;
+
+                case ".jpg":
+                case ".jpeg":
+                    imageEncoder = new JpegBitmapEncoder();
+                    break;
+
+                case ".png":
+                    imageEncoder = new PngBitmapEncoder();
+                    break;
+
+                case ".gif":
+                    imageEncoder = new GifBitmapEncoder();
+                    break;
+
+                case ".tif":
+                case ".tiff":
+                    imageEncoder = new TiffBitmapEncoder();
+                    break;
+
+                case ".wdp":
+                    imageEncoder = new WmpBitmapEncoder();
+                    break;
+
+                default:
+                    imageEncoder = new BmpBitmapEncoder();
+                    break;
+            }
+
+            RenderTargetBitmap bmpSource =new RenderTargetBitmap((int)this.ActualWidth,(int)this.ActualHeight, 96, 96,PixelFormats.Pbgra32);
+            bmpSource.Render(this);
+
+            imageEncoder.Frames.Add(BitmapFrame.Create(bmpSource));
+            using (Stream stream = File.Create(fileName))
+            {
+                imageEncoder.Save(stream);
+                stream.Close();
+            }
+            
+        }
+
+        /// <summary>
+        /// Export the Sparrow Chart as Image
+        /// </summary>
+        /// <param name="fileName">Output File Name to Export the Chart as Image<</param>
+        /// <param name="imageEncoder">Image Encoder Format for output image<</param>
+        public void ExportAsImage(string fileName,BitmapEncoder imageEncoder)
+        {
+            string fileExtension = new FileInfo(fileName).Extension.ToLower(CultureInfo.InvariantCulture);                  
+
+            RenderTargetBitmap bmpSource = new RenderTargetBitmap((int)this.ActualWidth, (int)this.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bmpSource.Render(this);
+
+            imageEncoder.Frames.Add(BitmapFrame.Create(bmpSource));
+            using (Stream stream = File.Create(fileName))
+            {
+                imageEncoder.Save(stream);
+                stream.Close();
+            }
         }
 
         private void BrushTheme()

@@ -7,45 +7,7 @@
 		<MediaTemplate />
 		<Feature Id="ProductFeature" Title="Sparrow Chart WPF Toolkit" Level="1">
 			      <ComponentGroupRef Id="ProductComponents" />
-            <ComponentRef Id="Framework_4_0" />
-            <ComponentRef Id="APP.CONFIG" />
-            <ComponentRef Id="APP.XAML_3" />
-            <ComponentRef Id="APP.XAML.CS_3" />
-            <ComponentRef Id="MAINWINDOW.XAML_3" />
-            <ComponentRef Id="MAINWINDOW.XAML.CS_3" />
-            <ComponentRef Id="SAMPLECHART.CSPROJ" />
-            <ComponentRef Id="SAMPLECHART.SLN" />
-            <ComponentRef Id="SAMPLECHART.V11.SUO" />
-            <ComponentRef Id="ASSEMBLYINFO.CS_3" />
-            <ComponentRef Id="RESOURCES.DESIGNER.CS_3" />
-            <ComponentRef Id="RESOURCES.RESX_3" />
-            <ComponentRef Id="SETTINGS.DESIGNER.CS_3" />
-            <ComponentRef Id="SETTINGS.SETTINGS_3" />
-            <ComponentRef Id="APP.XAML_4" />
-            <ComponentRef Id="APP.XAML.CS_4" />
-            <ComponentRef Id="SPARROW.CHART.DEMOS.CSPROJ" />
-            <ComponentRef Id="ABOUTCOMMAND.CS" />
-            <ComponentRef Id="SAMPLETOCONTENTCONVERTER.CS" />
-            <ComponentRef Id="MODEL.CS_1" />
-            <ComponentRef Id="CPUVIEW.XAML_1" />
-            <ComponentRef Id="CPUVIEW.XAML.CS_1" />
-            <ComponentRef Id="VIEWMODEL.CS_1" />
-            <ComponentRef Id="CATEGORYMODEL.CS" />
-            <ComponentRef Id="SAMPLEMODEL.CS" />
-            <ComponentRef Id="ASSEMBLYINFO.CS_4" />
-            <ComponentRef Id="RESOURCES.DESIGNER.CS_4" />
-            <ComponentRef Id="RESOURCES.RESX_4" />
-            <ComponentRef Id="SETTINGS.DESIGNER.CS_4" />
-            <ComponentRef Id="SETTINGS.SETTINGS_4" />
-            <ComponentRef Id="SPARROW.CHART.ICON.ICO" />
-            <ComponentRef Id="SPARROW.PNG" />
-            <ComponentRef Id="STYLES.XAML" />
-            <ComponentRef Id="ABOUT.XAML" />
-            <ComponentRef Id="ABOUT.XAML.CS" />
-            <ComponentRef Id="MAINWINDOW.XAML_4" />
-            <ComponentRef Id="MAINWINDOW.XAML.CS_4" />
-            <ComponentRef Id="DEMOVIEWMODEL.CS" />
-            <ComponentRef Id="StartMenuShortcuts" />
+      <ComponentRef Id="Framework_4_0"/>
 		</Feature>
 	</Product>
 
@@ -63,138 +25,7 @@
                             </Component>
                         </Directory>
           </Directory>
-           <Directory Id="DEMOS" Name="Demos">
-                        <Directory Id="SPARROW.CHART.DEMOS" Name="Sparrow.Chart.Demos">
-                            <Component Id="APP.XAML" DiskId="1" Guid="7E2FD052-2C9F-4A6D-95C7-82327AF30FEF">
-                                <File Id="APP.XAML" Name="App.xaml" Source="..\..\Demos\Sparrow.Chart.Demos\App.xaml" />
-                            </Component>
-                            <Component Id="APP.XAML.CS" DiskId="1" Guid="40AFBE3F-A06C-42B6-AD56-012C39A4FB10">
-                                <File Id="APP.XAML.CS" Name="App.xaml.cs" Source="..\..\Demos\Sparrow.Chart.Demos\App.xaml.cs" />
-                            </Component>
-                            <Component Id="SPARROW.CHART.DEMOS.CSPROJ" DiskId="1" Guid="67485693-C1BB-45CC-9ECA-2FEB73E409C6">
-                                <File Id="SPARROW.CHART.DEMOS.CSPROJ" Name="Sparrow.Chart.Demos.csproj" Source="..\..\Demos\Sparrow.Chart.Demos\Sparrow.Chart.Demos.csproj" />
-                            </Component>
-                            <Component Id="SPARROW.CHART.DEMOS.SLN" DiskId="1" Guid="1BB0A041-F20F-48BF-BECC-047903182248">
-                                <File Id="SPARROW.CHART.DEMOS.SLN" Name="Sparrow.Chart.Demos.sln" Source="..\..\Demos\Sparrow.Chart.Demos\Sparrow.Chart.Demos.sln" />
-                            </Component>
-                            <Directory Id="COMMANDS" Name="Commands">
-                                <Component Id="ABOUTCOMMAND.CS" DiskId="1" Guid="E7D981A0-3FFD-47DD-86DA-631C8A917ACA">
-                                    <File Id="ABOUTCOMMAND.CS" Name="AboutCommand.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Commands\AboutCommand.cs" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="CONVERTERS" Name="Converters">
-                                <Component Id="SAMPLETOCONTENTCONVERTER.CS" DiskId="1" Guid="E0FDC1CA-34E4-4798-BAC5-D90849717DBC">
-                                    <File Id="SAMPLETOCONTENTCONVERTER.CS" Name="SampleToContentConverter.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Converters\SampleToContentConverter.cs" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="DEMOS_1" Name="Demos">
-                                <Directory Id="TASKMANAGERDEMO" Name="TaskManagerDemo">
-                                    <Directory Id="MODEL" Name="Model">
-                                        <Component Id="MODEL.CS" DiskId="1" Guid="DB067797-13F6-48B5-83B7-9103E69DCE64">
-                                            <File Id="MODEL.CS" Name="Model.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Demos\TaskManagerDemo\Model\Model.cs" />
-                                        </Component>
-                                    </Directory>
-                                    <Directory Id="VIEW" Name="View">
-                                        <Component Id="CPUVIEW.XAML" DiskId="1" Guid="B8B27202-22B2-45E4-A733-CACB755301C7">
-                                            <File Id="CPUVIEW.XAML" Name="CPUView.xaml" Source="..\..\Demos\Sparrow.Chart.Demos\Demos\TaskManagerDemo\View\CPUView.xaml" />
-                                        </Component>
-                                        <Component Id="CPUVIEW.XAML.CS" DiskId="1" Guid="5DC74EBE-804B-4362-9C28-4FD7DECC0F06">
-                                            <File Id="CPUVIEW.XAML.CS" Name="CPUView.xaml.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Demos\TaskManagerDemo\View\CPUView.xaml.cs" />
-                                        </Component>
-                                    </Directory>
-                                    <Directory Id="VIEWMODEL" Name="ViewModel">
-                                        <Component Id="VIEWMODEL.CS" DiskId="1" Guid="025604A1-CBD0-4E5A-8893-42DE12A5EBD7">
-                                            <File Id="VIEWMODEL.CS" Name="ViewModel.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Demos\TaskManagerDemo\ViewModel\ViewModel.cs" />
-                                        </Component>
-                                    </Directory>
-                                </Directory>
-                            </Directory>
-                            <Directory Id="MODEL_1" Name="Model">
-                                <Component Id="CATEGORYMODEL.CS" DiskId="1" Guid="C1B74F5E-5DEB-4CA6-8342-959313A56A0C">
-                                    <File Id="CATEGORYMODEL.CS" Name="CategoryModel.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Model\CategoryModel.cs" />
-                                </Component>
-                                <Component Id="SAMPLEMODEL.CS" DiskId="1" Guid="CBE143EA-0A21-4532-B962-5600B56FE6D5">
-                                    <File Id="SAMPLEMODEL.CS" Name="SampleModel.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Model\SampleModel.cs" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="PROPERTIES" Name="Properties">
-                                <Component Id="ASSEMBLYINFO.CS" DiskId="1" Guid="30875DC4-FAA7-4857-9DFE-71E236F69FF1">
-                                    <File Id="ASSEMBLYINFO.CS" Name="AssemblyInfo.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Properties\AssemblyInfo.cs" />
-                                </Component>
-                                <Component Id="RESOURCES.DESIGNER.CS" DiskId="1" Guid="9071C4FB-0F8E-44FA-BB51-992A170BDF52">
-                                    <File Id="RESOURCES.DESIGNER.CS" Name="Resources.Designer.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Properties\Resources.Designer.cs" />
-                                </Component>
-                                <Component Id="RESOURCES.RESX" DiskId="1" Guid="87A10D2A-1577-4293-9297-6493A18C9DCD">
-                                    <File Id="RESOURCES.RESX" Name="Resources.resx" Source="..\..\Demos\Sparrow.Chart.Demos\Properties\Resources.resx" />
-                                </Component>
-                                <Component Id="SETTINGS.DESIGNER.CS" DiskId="1" Guid="A7C34516-C89A-4E57-90E3-DFB397C274CB">
-                                    <File Id="SETTINGS.DESIGNER.CS" Name="Settings.Designer.cs" Source="..\..\Demos\Sparrow.Chart.Demos\Properties\Settings.Designer.cs" />
-                                </Component>
-                                <Component Id="SETTINGS.SETTINGS" DiskId="1" Guid="A5751E27-99CF-4841-A815-46E2147549DF">
-                                    <File Id="SETTINGS.SETTINGS" Name="Settings.settings" Source="..\..\Demos\Sparrow.Chart.Demos\Properties\Settings.settings" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="RESOURCES_2" Name="Resources">
-                                <Component Id="SPARROW.CHART.ICON.ICO" DiskId="1" Guid="3204CEC0-9DCB-41DE-B797-31A454D601B3">
-                                    <File Id="SPARROW.CHART.ICON.ICO" Name="sparrow.chart.icon.ico" Source="..\..\Demos\Sparrow.Chart.Demos\Resources\sparrow.chart.icon.ico" />
-                                </Component>
-                                <Component Id="SPARROW.PNG" DiskId="1" Guid="550244AC-C11B-4EB1-AFA8-263DA0B8455C">
-                                    <File Id="SPARROW.PNG" Name="sparrow.png" Source="..\..\Demos\Sparrow.Chart.Demos\Resources\sparrow.png" />
-                                </Component>
-                                <Component Id="STYLES.XAML" DiskId="1" Guid="C801DA3A-5FE4-4583-8AFA-E67749F610CE">
-                                    <File Id="STYLES.XAML" Name="Styles.xaml" Source="..\..\Demos\Sparrow.Chart.Demos\Resources\Styles.xaml" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="VIEW_5" Name="View">
-                                <Component Id="ABOUT.XAML" DiskId="1" Guid="53DC8F17-26EC-462A-9446-744DB838EE33">
-                                    <File Id="ABOUT.XAML" Name="About.xaml" Source="..\..\Demos\Sparrow.Chart.Demos\View\About.xaml" />
-                                </Component>
-                                <Component Id="ABOUT.XAML.CS" DiskId="1" Guid="6F157A4B-1B3C-4F4F-929B-5FADC9283D63">
-                                    <File Id="ABOUT.XAML.CS" Name="About.xaml.cs" Source="..\..\Demos\Sparrow.Chart.Demos\View\About.xaml.cs" />
-                                </Component>
-                                <Component Id="MAINWINDOW.XAML" DiskId="1" Guid="DE5BCBB1-4398-41FE-B424-48A1CBE59CC9">
-                                    <File Id="MAINWINDOW.XAML" Name="MainWindow.xaml" Source="..\..\Demos\Sparrow.Chart.Demos\View\MainWindow.xaml" />
-                                </Component>
-                                <Component Id="MAINWINDOW.XAML.CS" DiskId="1" Guid="E53D4973-A6F7-4CCD-ABE1-32085A086B1C">
-                                    <File Id="MAINWINDOW.XAML.CS" Name="MainWindow.xaml.cs" Source="..\..\Demos\Sparrow.Chart.Demos\View\MainWindow.xaml.cs" />
-                                </Component>
-                            </Directory>
-                            <Directory Id="VIEWMODEL_1" Name="ViewModel">
-                                <Component Id="DEMOVIEWMODEL.CS" DiskId="1" Guid="DDC23A97-BF62-4548-A783-63CDBB155547">
-                                    <File Id="DEMOVIEWMODEL.CS" Name="DemoViewModel.cs" Source="..\..\Demos\Sparrow.Chart.Demos\ViewModel\DemoViewModel.cs" />
-                                </Component>
-                            </Directory>
-                        </Directory>
-                    </Directory>
-                    <Directory Id="DEMOBINARIES" Name="DemoBinaries">
-                        <Component Id="SPARROW.CHART.DEMOS.EXE" DiskId="1" Guid="F86C139B-13D3-40C6-B2E4-903E6934809A">
-                            <File Id="SPARROW.CHART.DEMOS.EXE" Name="Sparrow.Chart.Demos.exe" Source="..\..\DemoBinaries\Sparrow.Chart.Demos.exe" />
-                                 <Shortcut Id="desktopShortcut" Directory="DesktopFolder" Name="Sparrow.Chart.Demos" WorkingDirectory="INSTALLDIR" Advertise="yes" IconIndex="0" />
-                                    <Shortcut Id="ExeShortcut" Directory="ProgramMenuDir" Name="Sparrow.Chart.Demos" Advertise="yes" IconIndex="0" />
-                        </Component>
-                        <Component Id="SPARROW.RESOURCES.DLL" DiskId="1" Guid="69EC84B4-30CF-4413-8DBC-68A8F7069FDB">
-                            <File Id="SPARROW.RESOURCES.DLL_1" Name="Sparrow.Resources.dll" Source="..\..\DemoBinaries\Sparrow.Resources.dll" />
-                        </Component>
-                        <Component Id="SYSTEM.WINDOWS.INTERACTIVITY.DLL" DiskId="1" Guid="A05939BD-85F7-450F-8AE1-3DC68C3AB895">
-                            <File Id="SYSTEM.WINDOWS.INTERACTIVITY.DLL_1" Name="System.Windows.Interactivity.dll" Source="..\..\DemoBinaries\System.Windows.Interactivity.dll" />
-                        </Component>
-                    </Directory>
-                    <Directory Id="Document">
-                        <Component Id="Sparrow_Document" Guid="69212EBF-DFC7-4B50-A2F9-1C2E437D42A3">
-                            <File Id="DOCUMENTATION.CHM" Name="Documentation.chm" Source="..\..\Document\Help\Documentation.chm" />
-                        </Component>
-                    </Directory>
-           <Directory Id="DesktopFolder">
-            </Directory>
-            <Directory Id="ProgramMenuFolder">
-                <Directory Id="ProgramMenuDir" Name="Sparrow Chart WPF Toolkit">
-                    <Component Id="StartMenuShortcuts" Guid="1317F49B-BA33-421E-88B2-46A8A4ABBA14">
-                        <RemoveFolder Id="ProgramMenuDir" On="uninstall" />
-                        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="" />
-                        <Shortcut Id="UninstallProduct" Name="Uninstall" Description="Uninstalls the application" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" />
-                    </Component>
-                </Directory>
-            </Directory>
+          
           <Directory Id="GAC" Name="GAC" />
         </Directory>
 				<Directory Id="INSTALLFOLDER" Name="Sparrow Chart WPF Toolkit" />
@@ -214,7 +45,7 @@
                <File Id="F_SparrowChart" Name="Sparrow.Chart.dll" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" KeyPath="yes" Assembly=".net"/>
        <RegistryKey Root="HKLM"
                  Key="SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\[ProductName]">
-      <RegistryValue Type="string" Value="[ProductDirectory]" />
+      <RegistryValue Type="string" Value="[ProductDirectory]\Bin\4.0" />
     </RegistryKey>
            </Component> 
 			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
