@@ -18,7 +18,7 @@ using System.Windows.Markup;
 [assembly: AssemblyCulture("")]
 [assembly: XmlnsDefinition("http://sparrowtoolkit.codeplex.com/wpf", "Sparrow.Resources")]
 [assembly: XmlnsPrefix("http://sparrowtoolkit.codeplex.com/wpf", "sparrowChartToolkit")]
-[assembly: AssemblyKeyFile(@"Sparrow.Chart.pfx")]
+[assembly: AssemblyKeyFile(@"Sparrow.Chart.snk")]
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
