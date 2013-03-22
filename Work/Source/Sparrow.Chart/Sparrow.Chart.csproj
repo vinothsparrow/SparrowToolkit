@@ -38,7 +38,7 @@
     <DocumentationFile>bin\Release\Sparrow.Chart.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Sparrow.Chart.pfx</AssemblyOriginatorKeyFile>
@@ -167,6 +167,7 @@
     <None Include="ChartDiagram.cd" />
     <AppDesigner Include="Properties\" />
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

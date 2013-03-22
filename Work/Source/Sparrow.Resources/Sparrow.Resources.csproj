@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Sparrow.Chart.pfx</AssemblyOriginatorKeyFile>
@@ -108,6 +108,7 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\System.Windows.Interactivity.dll" />
