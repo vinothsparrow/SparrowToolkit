@@ -18,10 +18,10 @@
         <Directory Name="Bin" Id="BIN">
                         <Directory Name="4.0" Id="_4.0">
                             <Component Id="Framework_4_0" DiskId="1" KeyPath="yes" Guid="9dac5649-584d-4f94-afbb-25e72f058714">
-                                <File Id="SPARROW.CHART.DLL" Name="Sparrow.Chart.dll" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" />
-                                <File Id="SPARROW.CHART.XML" Name="Sparrow.Chart.XML" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.XML" />
-                                <File Id="SPARROW.RESOURCES.DLL" Name="Sparrow.Resources.dll" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Resources\bin\Release\Sparrow.Resources.dll" />
-                                <File Id="SYSTEM.WINDOWS.INTERACTIVITY.DLL" Name="System.Windows.Interactivity.dll" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Resources\bin\Release\System.Windows.Interactivity.dll" />
+                                <File Id="SPARROW.CHART.DLL" Name="Sparrow.Chart.dll" Source="..\..\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" />
+                                <File Id="SPARROW.CHART.XML" Name="Sparrow.Chart.XML" Source="..\..\Sparrow.Chart\bin\Release\Sparrow.Chart.XML" />
+                                <File Id="SPARROW.RESOURCES.DLL" Name="Sparrow.Resources.dll" Source="..\..\Sparrow.Resources\bin\Release\Sparrow.Resources.dll" />
+                                <File Id="SYSTEM.WINDOWS.INTERACTIVITY.DLL" Name="System.Windows.Interactivity.dll" Source="..\..\Sparrow.Resources\bin\Release\System.Windows.Interactivity.dll" />
                             </Component>
                         </Directory>
           </Directory>
@@ -42,7 +42,7 @@
 			</Component>   
       <Component Id="Sparrow.Chart" Guid="55857611-A13E-51ED-897B-A78830F68ADC">
                 <!-- Registering assembly in GAC -->
-               <File Id="F_SparrowChart" Name="Sparrow.Chart.dll" Source="D:\Sparrow.Chart\Work\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" KeyPath="yes" Assembly=".net"/>
+               <File Id="F_SparrowChart" Name="Sparrow.Chart.dll" Source="..\..\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" KeyPath="yes" Assembly=".net"/>
        <RegistryKey Root="HKLM"
                  Key="SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\[ProductName]">
       <RegistryValue Type="string" Value="[ProductDirectory]\Bin\4.0" />
