@@ -1,6 +1,8 @@
 ﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System;
+using System.Windows.Forms;
 
 namespace Sparrow.Chart.Installer
 {
@@ -12,12 +14,13 @@ namespace Sparrow.Chart.Installer
         {
             
             this.IsThinking = false;
-
+            
             this.Bootstrapper = bootstrapper;
             this.Bootstrapper.ApplyComplete += this.OnApplyComplete;
             this.Bootstrapper.DetectPackageComplete += this.OnDetectPackageComplete;
             this.Bootstrapper.PlanComplete += this.OnPlanComplete;
-        }
+            this.Bootstrapper.ExecuteMsiMessage += OnExecuteMessage;            
+        }        
 
         #region Properties
 
@@ -54,27 +57,166 @@ namespace Sparrow.Chart.Installer
             }
         }
 
+       
+        private bool isLicensePage;
+        public bool IsLicensePage
+        {
+            get { return isLicensePage; }
+            set { isLicensePage = value; RaisePropertyChanged("IsLicensePage"); }
+        }
+
+        private bool isUnInstallPage;
+        public bool IsUnInstallPage
+        {
+            get { return isUnInstallPage; }
+            set { isUnInstallPage = value; RaisePropertyChanged("IsUnInstallPage"); }
+        }
+       
+        private bool isInstallPage;
+        public bool IsInstallPage
+        {
+            get { return isInstallPage; }
+            set { isInstallPage = value; RaisePropertyChanged("IsInstallPage"); }
+        }
+
+        private bool isProgressPage;
+        public bool IsProgressPage
+        {
+            get { return isProgressPage; }
+            set { isProgressPage = value; RaisePropertyChanged("IsProgressPage"); }
+        }
+
+        private bool isUnInstallProgressPage;
+        public bool IsUnInstallProgressPage
+        {
+            get { return isUnInstallProgressPage; }
+            set { isUnInstallProgressPage = value; RaisePropertyChanged("IsUnInstallProgressPage"); }
+        }
+
+        private bool isFinsihPage;
+        public bool IsFinsihPage
+        {
+            get { return isFinsihPage; }
+            set { isFinsihPage = value; RaisePropertyChanged("IsFinsihPage"); }
+        }
+
+        private bool isUnInstallFinsihPage;
+        public bool IsUnInstallFinsihPage
+        {
+            get { return isUnInstallFinsihPage; }
+            set { isUnInstallFinsihPage = value; RaisePropertyChanged("IsUnInstallFinsihPage"); }
+        }
+
+        private bool isAgree;
+        public bool IsAgree 
+        {
+            get { return isAgree; }
+            set { isAgree = value; RaisePropertyChanged("IsAgree"); }
+        }
+
+        private string status;
+        public string Status
+        {
+            get { return status; }
+            set { status = value; RaisePropertyChanged("Status"); }
+        }
+
+        private string installLocation;
+        public string InstallLocation
+        {
+            get { return installLocation; }
+            set { installLocation = value; RaisePropertyChanged("InstallLocation"); }
+        }
+
         public BootstrapperApplication Bootstrapper { get; private set; }
 
         #endregion //Properties
 
         #region Methods
 
+        void OnInstallComplete(object sender,ExecuteCompleteEventArgs e)
+        {
+            IsThinking = false;
+            //IsLicensePage = false;
+            //IsInstallPage = false;
+            IsProgressPage = false;
+            IsFinsihPage = true;  
+        }
+
+        void OnUnInstallComplete(object sender, ExecuteCompleteEventArgs e)
+        {
+            IsThinking = false;            
+            IsUnInstallProgressPage = false;
+            IsUnInstallFinsihPage = true;
+        }
+
+        void OnExecuteMessage(object sender, ExecuteMsiMessageEventArgs e)
+        {
+            this.Status ="Status :" + e.Message;
+        }
+
+        private void BrowseExecute()
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.Description = "Please select the Installation folder for Sparrow Chart WPF Toolkit";
+            //dialog.RootFolder = Environment.SpecialFolder.ProgramFilesX86;
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                InstallLocation = dialog.SelectedPath;
+            }
+                    
+        }
+
+        private void PreviousExecute()
+        {
+            IsLicensePage = true;
+            IsInstallPage = false;
+            IsProgressPage = false;
+            IsFinsihPage = false;            
+        }
+
+        private void NextExecute()
+        {            
+            IsLicensePage = false;
+            IsInstallPage = true;
+            IsFinsihPage = false;
+            IsProgressPage = false;
+            //InstallLocation = Bootstrapper.Engine.StringVariables["INSTALLDIR"];
+            InstallLocation = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+        }
+
         private void InstallExecute()
         {
+            IsInstallPage = false;
+            IsProgressPage = true;  
             IsThinking = true;
-            Bootstrapper.Engine.Plan(LaunchAction.Install);
+            Bootstrapper.ExecuteComplete += OnInstallComplete;
+            Bootstrapper.Engine.StringVariables["INSTALLDIR"] = InstallLocation;
+            Bootstrapper.Engine.Plan(LaunchAction.Install);            
+
         }
 
         private void UninstallExecute()
         {
             IsThinking = true;
+            IsUnInstallPage = false;
+            IsUnInstallProgressPage = true;
             Bootstrapper.Engine.Plan(LaunchAction.Uninstall);
+            Bootstrapper.ExecuteComplete += OnUnInstallComplete;
         }
 
         private void ExitExecute()
         {
-            SparrowInstaller.BootstrapperDispatcher.InvokeShutdown();
+            SparrowInstaller.BootstrapperDispatcher.InvokeShutdown();            
+        }
+
+        private void AgreeExecute()
+        {
+            if (IsAgree)
+                IsAgree = false;
+            else
+                IsAgree = true;
         }
 
         /// <summary>
@@ -99,10 +241,16 @@ namespace Sparrow.Chart.Installer
             if (e.PackageId == "SparrowChartPackageId")
             {
                 if (e.State == PackageState.Absent)
+                {
                     InstallEnabled = true;
+                    this.IsLicensePage = true;
+                }
 
                 else if (e.State == PackageState.Present)
+                {
                     UninstallEnabled = true;
+                    this.IsUnInstallPage = true;
+                }
             }
         }
 
@@ -114,12 +262,49 @@ namespace Sparrow.Chart.Installer
         private void OnPlanComplete(object sender, PlanCompleteEventArgs e)
         {
             if (e.Status >= 0)
-                Bootstrapper.Engine.Apply(System.IntPtr.Zero);
+                Bootstrapper.Engine.Apply(System.IntPtr.Zero);            
+           
         }
 
         #endregion //Methods
 
         #region RelayCommands
+
+        private RelayCommand browseCommand;
+        public RelayCommand BrowseCommand
+        {
+            get
+            {
+                if (browseCommand == null)
+                    browseCommand = new RelayCommand(() => BrowseExecute());
+
+                return browseCommand;
+            }
+        }
+
+        private RelayCommand previousCommand;
+        public RelayCommand PreviousCommand
+        {
+            get
+            {
+                if (previousCommand == null)
+                    previousCommand = new RelayCommand(() => PreviousExecute());
+
+                return previousCommand;
+            }
+        }
+
+        private RelayCommand nextCommand;
+        public RelayCommand NextCommand
+        {
+            get
+            {
+                if (nextCommand == null)
+                    nextCommand = new RelayCommand(() => NextExecute());
+
+                return nextCommand;
+            }
+        }
 
         private RelayCommand installCommand;
         public RelayCommand InstallCommand
@@ -154,6 +339,18 @@ namespace Sparrow.Chart.Installer
                     exitCommand = new RelayCommand(() => ExitExecute());
 
                 return exitCommand;
+            }
+        }
+
+        private RelayCommand agreeCommand;
+        public RelayCommand AgreeCommand
+        {
+            get
+            {
+                if (agreeCommand == null)
+                    agreeCommand = new RelayCommand(() => AgreeExecute());
+
+                return agreeCommand;
             }
         }
         

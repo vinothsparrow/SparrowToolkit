@@ -12,23 +12,32 @@ namespace Sparrow.Chart.Installer
     {
         // global dispatcher
         static public Dispatcher BootstrapperDispatcher { get; private set; }
-
+        bool isInstalled;
+        bool isUninstalled;
         protected override void Run()
         {
             this.Engine.Log(LogLevel.Verbose, "Launching Sparrow.Chart.Installer");
             BootstrapperDispatcher = Dispatcher.CurrentDispatcher;
-
             MainViewModel viewModel = new MainViewModel(this);
             viewModel.Bootstrapper.Engine.Detect();
 
-            MainView view = new MainView();
-            view.DataContext = viewModel;
-            view.Closed += (sender, e) => BootstrapperDispatcher.InvokeShutdown();
-            view.Show();
+            if (viewModel.Bootstrapper.Command.Action == LaunchAction.Install && !isInstalled)
+            {                
+                MainView view = new MainView();
+                view.DataContext = viewModel;
+                view.Closed += (sender, e) => BootstrapperDispatcher.InvokeShutdown();
+                view.Show();
+                isInstalled = true;
+            }
 
-            //MainView view = new MainView();
-            //view.Closed += (sender, e) => BootstrapperDispatcher.InvokeShutdown();
-            //view.Show();
+            if (viewModel.Bootstrapper.Command.Action == LaunchAction.Uninstall && !isUninstalled)
+            {
+                MainView view = new MainView();
+                view.DataContext = viewModel;
+                view.Closed += (sender, e) => BootstrapperDispatcher.InvokeShutdown();
+                view.Show();
+                isUninstalled = true;
+            }
 
             Dispatcher.Run();
 
