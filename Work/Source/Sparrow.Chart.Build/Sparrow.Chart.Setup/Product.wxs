@@ -64,7 +64,7 @@
                             <Component Id="DIRECTXX86" DiskId="1" KeyPath="yes" Guid="FC58861C-5C39-49BA-8596-0F20E7768AAD">
                                 <File Id="SPARROW.CHART.DIRECTX2D_X86.DLL" Name="Sparrow.Chart.DirectX2D_x86.dll" Source="..\..\Sparrow.Chart\bin\x86\Release\Sparrow.Chart.DirectX2D_x86.dll" />
                                 <File Id="SPARROW.DIRECTX_X86.dll" Name="Sparrow.DirectX_x86.dll" Source="..\..\..\Release\Sparrow.DirectX_x86.dll" />                                
-                               <File Id="SPARROW.DIRECTX2D_X86.dll" Name="Sparrow.Directx2D_x86.dll" Source="..\..\Sparrow.Directx2D\bin\x64\Release\Sparrow.Directx2D_x86.dll" />                                
+                               <File Id="SPARROW.DIRECTX2D_X86.dll" Name="Sparrow.Directx2D_x86.dll" Source="..\..\Sparrow.Directx2D\bin\x86\Release\Sparrow.Directx2D_x86.dll" />                                
                             </Component>
                         </Directory>
                        <Directory Name="x64" Id="X64">
