@@ -102,10 +102,8 @@
   <ItemGroup>
     <Compile Include="Axis\AxisBase.cs" />
     <Compile Include="Collections\Collections.cs" />
-    <Compile Include="Container\ContainerCollection.cs" />
     <Compile Include="Container\AreaContainer.cs" />
     <Compile Include="Container\AxisCrossLinesContainer.cs" />
-    <Compile Include="Container\ChartRootContainer.cs" />
     <Compile Include="Container\SplineContainer.cs" />
     <Compile Include="Container\StepLineContainer.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -118,14 +116,18 @@
     <Compile Include="Container\SeriesContainer.cs" />
     <Compile Include="Legend\Legend.cs" />
     <Compile Include="Legend\LegendItem.cs" />
-    <Compile Include="Panels\Panel.cs" />
+    <Compile Include="Panels\ContainerCollection.cs" />
+    <Compile Include="Panels\RootDockPanel.cs" />
     <Compile Include="SeriesParts\AreaPart.cs" />
     <Compile Include="SeriesParts\FillPartBase.cs" />
     <Compile Include="SeriesParts\LinePart.cs" />
     <Compile Include="SeriesParts\LinePartBase.cs" />
+    <Compile Include="SeriesParts\LineSinglePart.cs" />
+    <Compile Include="SeriesParts\LineSinglePartBase.cs" />
     <Compile Include="SeriesParts\SeriesPartBase.cs" />
     <Compile Include="SeriesParts\SplinePart.cs" />
     <Compile Include="SeriesParts\StepLinePart.cs" />
+    <Compile Include="SeriesParts\StepLineSinglePart.cs" />
     <Compile Include="Series\AreaSeries.cs" />
     <Compile Include="Series\FillSeriesBase.cs" />
     <Compile Include="Series\LineSeries.cs" />
@@ -161,15 +163,16 @@
     <None Include="ChartDiagram.cd" />
     <AppDesigner Include="Properties\" />
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sparrow.Directx2D\Sparrow.Directx2D_x86.csproj">
       <Project>{23d0fe6e-42c5-4f0a-b7d3-a918f813cdbb}</Project>
-      <Name>Sparrow.Directx2D</Name>
+      <Name>Sparrow.Directx2D_x86</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sparrow.DirectX\DirectX\Sparrow.DirectX_x86.vcxproj">
       <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
-      <Name>Sparrow.DirectX %28Visual Studio 2010%29</Name>
+      <Name>Sparrow.DirectX_x86 %28Visual Studio 2010%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

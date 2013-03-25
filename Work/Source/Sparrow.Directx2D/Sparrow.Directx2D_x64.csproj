@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sparrow.Directx2D</RootNamespace>
-    <AssemblyName>Sparrow.Directx2D</AssemblyName>
+    <AssemblyName>Sparrow.Directx2D_x64</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\x64\Microsoft.WindowsAPICodePack.DirectX.dll" />

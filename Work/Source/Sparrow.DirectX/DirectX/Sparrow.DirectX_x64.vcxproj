@@ -255,8 +255,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>"$(WindowsSdkDir)Bin\sn.exe" -R $(OutDir)Sparrow.DirectX_x64.dll $(ProjectDir)\Sparrow.Chart.snk</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug with FxCop|Win32'">
@@ -764,6 +763,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeAnalysisDictionary.xml" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

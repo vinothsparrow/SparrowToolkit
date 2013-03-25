@@ -38,12 +38,9 @@
     <StartupObject>Sparrow.Chart.Demos.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\sparrow.chart.icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Stocks.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sparrow.Resources">
-      <HintPath>C:\Program Files (x86)\Sparrow Chart WPF Toolkit\Bin\4.0\Sparrow.Resources.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
@@ -149,18 +146,19 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\sparrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\sparrow.chart.icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Source\Sparrow.Chart\Sparrow.Chart.csproj">
       <Project>{561755e1-9492-4ec2-aca1-8cf76e6cac5a}</Project>
       <Name>Sparrow.Chart</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Source\Sparrow.Resources\Sparrow.Resources.csproj">
+      <Project>{4ae312fe-9e56-4ced-8186-3b778ef58032}</Project>
+      <Name>Sparrow.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\sparrow.png" />
+    <Resource Include="Resources\Stocks.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

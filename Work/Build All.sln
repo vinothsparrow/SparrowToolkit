@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Resources", "Source
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sparrow.Chart.Setup", "Source\Sparrow.Chart.Build\Sparrow.Chart.Setup\Sparrow.Chart.Setup.wixproj", "{7E936699-34D3-465D-94A6-EAB42A34DFC9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B4E604AB-6740-4294-B1D4-D519B459FB8A} = {B4E604AB-6740-4294-B1D4-D519B459FB8A}
 		{561755E1-9492-4EC2-ACA1-8CF76E6CAC5A} = {561755E1-9492-4EC2-ACA1-8CF76E6CAC5A}
 	EndProjectSection
 EndProject

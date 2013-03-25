@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define Version="12.1.0.1"?>
+<?define Version="13.1.0.1"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
-	<Bundle Name="Sparrow Chart WPF Toolkit $(var.Version)" Version="$(var.Version)" Copyright="Copyright ©  2013 Vinoth Kumar J (Author)" IconSourceFile="sparrow.chart.icon.ico" Manufacturer="Vinoth Kumar J" UpgradeCode="FD2FFAEA-6877-4DFD-BDF2-BFF13D85A878">
+	<Bundle Name="Sparrow Chart WPF Toolkit $(var.Version)" Version="$(var.Version)" Copyright="Copyright ©  2013 Vinoth Kumar J (Author)" IconSourceFile="Stocks.ico" Manufacturer="Vinoth Kumar J" UpgradeCode="FD2FFAEA-6877-4DFD-BDF2-BFF13D85A878">
     <BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
       <Payload SourceFile="..\Sparrow.Chart.Installer\BootstrapperCore.config"/>
       <Payload SourceFile="..\Sparrow.Chart.Installer\bin\Release\Sparrow.Chart.Installer.dll"/>     
       <Payload SourceFile="..\Sparrow.Chart.Installer\bin\Release\System.Windows.Interactivity.dll"/>
       <Payload SourceFile="..\Sparrow.Chart.Installer\bin\Release\GalaSoft.MvvmLight.WPF4.dll"/>
-      <Payload SourceFile="..\Sparrow.Chart.Installer\bin\Release\Sparrow.Resources.dll"/>
+      <Payload SourceFile="..\..\Sparrow.Resources\bin\Release\Sparrow.Resources.dll"/>
       <Payload SourceFile="..\Sparrow.Chart.Installer\bin\Release\Microsoft.Deployment.WindowsInstaller.dll"/>
     </BootstrapperApplicationRef>
     <Variable Name="INSTALLDIR" Value="[ProgramFilesFolder]"/>
@@ -15,6 +15,7 @@
       <PackageGroupRef Id='Netfx4Full' />
       <MsiPackage SourceFile="..\Sparrow.Chart.Setup\bin\Release\Sparrow.Chart.Setup.msi" Compressed="yes" Id="SparrowChartPackageId" Cache="yes" Visible="no">
        <MsiProperty Name="INSTALLDIR" Value="[INSTALLDIR]"/>
+        
       </MsiPackage>      
     </Chain>
 	</Bundle>

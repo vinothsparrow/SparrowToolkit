@@ -21,19 +21,12 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyCopyrightAttribute("Copyright © Microsoft Corporation")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
+[assembly:AssemblyKeyFileAttribute("Sparrow.Chart.snk")]
+[assembly:AssemblyDelaySignAttribute(true)]
 
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
-//
 [assembly:AssemblyVersionAttribute("1.1.0.0")];
 [assembly:AssemblyFileVersionAttribute("1.1.0.0")];
 [assembly:ComVisible(false)];
 [assembly:CLSCompliant(true)];
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
-[assembly:AssemblyKeyFile("E:\\Workspace\\LineChart\\Sparrow.Chart.snk")];
-[assembly:AssemblyDelaySignAttribute(true)];
+

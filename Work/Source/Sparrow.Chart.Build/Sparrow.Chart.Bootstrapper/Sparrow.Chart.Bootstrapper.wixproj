@@ -37,7 +37,7 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="sparrow.chart.icon.ico" />
+    <Resource Include="Stocks.ico" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

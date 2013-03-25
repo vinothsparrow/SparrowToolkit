@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sparrow.Directx2D</RootNamespace>
-    <AssemblyName>Sparrow.Directx2D</AssemblyName>
+    <AssemblyName>Sparrow.Directx2D_x86</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Sparrow.Chart.pfx</AssemblyOriginatorKeyFile>
@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Binaries\x86\Microsoft.WindowsAPICodePack.DirectX.dll" />
@@ -107,7 +108,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sparrow.DirectX\DirectX\Sparrow.DirectX_x86.vcxproj">
       <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
-      <Name>Sparrow.DirectX %28Visual Studio 2010%29</Name>
+      <Name>Sparrow.DirectX_x86 %28Visual Studio 2010%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

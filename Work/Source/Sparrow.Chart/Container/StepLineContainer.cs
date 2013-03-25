@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Media.Imaging;
-
+#if DIRECTX2D
+using Sparrow.Directx2D;
+using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
+using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
+#endif
 namespace Sparrow.Chart
 {
     /// <summary>

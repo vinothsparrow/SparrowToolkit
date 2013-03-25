@@ -102,10 +102,8 @@
   <ItemGroup>
     <Compile Include="Axis\AxisBase.cs" />
     <Compile Include="Collections\Collections.cs" />
-    <Compile Include="Container\ContainerCollection.cs" />
     <Compile Include="Container\AreaContainer.cs" />
     <Compile Include="Container\AxisCrossLinesContainer.cs" />
-    <Compile Include="Container\ChartRootContainer.cs" />
     <Compile Include="Container\SplineContainer.cs" />
     <Compile Include="Container\StepLineContainer.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -118,14 +116,18 @@
     <Compile Include="Container\SeriesContainer.cs" />
     <Compile Include="Legend\Legend.cs" />
     <Compile Include="Legend\LegendItem.cs" />
-    <Compile Include="Panels\Panel.cs" />
+    <Compile Include="Panels\ContainerCollection.cs" />
+    <Compile Include="Panels\RootDockPanel.cs" />
     <Compile Include="SeriesParts\AreaPart.cs" />
     <Compile Include="SeriesParts\FillPartBase.cs" />
     <Compile Include="SeriesParts\LinePart.cs" />
     <Compile Include="SeriesParts\LinePartBase.cs" />
+    <Compile Include="SeriesParts\LineSinglePart.cs" />
+    <Compile Include="SeriesParts\LineSinglePartBase.cs" />
     <Compile Include="SeriesParts\SeriesPartBase.cs" />
     <Compile Include="SeriesParts\SplinePart.cs" />
     <Compile Include="SeriesParts\StepLinePart.cs" />
+    <Compile Include="SeriesParts\StepLineSinglePart.cs" />
     <Compile Include="Series\AreaSeries.cs" />
     <Compile Include="Series\FillSeriesBase.cs" />
     <Compile Include="Series\LineSeries.cs" />
@@ -161,6 +163,7 @@
     <None Include="ChartDiagram.cd" />
     <AppDesigner Include="Properties\" />
     <None Include="Sparrow.Chart.pfx" />
+    <None Include="Sparrow.Chart.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sparrow.Directx2D\Sparrow.Directx2D_x64.csproj">

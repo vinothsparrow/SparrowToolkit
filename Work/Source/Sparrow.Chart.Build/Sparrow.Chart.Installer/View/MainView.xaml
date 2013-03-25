@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"  BorderBrush="Black" BorderThickness="1"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
-        xmlns:local="clr-namespace:Sparrow.Chart.Installer" Icon="../Resources/sparrow.chart.icon.ico"           
+        xmlns:local="clr-namespace:Sparrow.Chart.Installer" Icon="../Resources/Stocks.ico"           
         mc:Ignorable="d" ShowIconOnTitleBar="False" 
         Title="Sparrow Chart WPF Toolkit Installer" Width="600" MinWidth="400" Height="400" MinHeight="300">
     <sparrow:SparrowWindow.Resources>
