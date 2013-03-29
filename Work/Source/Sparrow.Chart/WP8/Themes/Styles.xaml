@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:local="clr-namespace:Sparrow.Chart"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style TargetType="Line" x:Key="axisLineStyle">
+        <Setter Property="Stroke" Value="White"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+    </Style>
+    <Style TargetType="Line" x:Key="majorLineStyle">
+        <Setter Property="Stroke" Value="White"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+    <Style TargetType="Line" x:Key="minorLineStyle">
+        <Setter Property="Stroke" Value="White"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+    <Style TargetType="Line" x:Key="crossLineStyle">
+        <Setter Property="Stroke" Value="White"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+    <Style TargetType="Border" x:Key="containerBorderStyle">
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    <DataTemplate x:Key="yAxisHeaderTemplate">
+        <TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" TextWrapping="Wrap">
+            <TextBlock.RenderTransform>
+                <RotateTransform Angle="270"/>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+    </DataTemplate>
+    <DataTemplate x:Key="xAxisHeaderTemplate">
+        <TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" TextWrapping="Wrap">           
+        </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate x:Key="axisLabelTemplate">
+        <TextBlock Text="{Binding}" FontSize="12" FontWeight="Light" TextWrapping="Wrap">
+        </TextBlock>
+    </DataTemplate>
+
+</ResourceDictionary>
