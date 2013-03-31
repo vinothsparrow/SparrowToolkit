@@ -14,6 +14,7 @@ using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
 using Image = System.Windows.Controls.Image;
 using System.Windows.Threading;
+using System.Windows.Shapes;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -33,23 +34,21 @@ using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
 #endif
 
 #if DIRECTX2D
+
 using Sparrow.Directx2D;
 using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
 using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
 #endif
+
 namespace Sparrow.Chart
 {
-    /// <summary>
-    /// LineSeries Container
-    /// </summary>
-    public class LineContainer : SeriesContainer
-    {       
-
-        public LineContainer()
+    public class ColumnContainer : SeriesContainer
+    {
+        public ColumnContainer()
             : base()
-        {                                 
+        {
+
         }
-       
         public override void Draw()
         {
             base.Draw();
@@ -95,85 +94,66 @@ namespace Sparrow.Chart
 #if WPF
         override protected void DrawPath(SeriesBase series, System.Drawing.Pen pen)
         {
-            if (series is LineSeries || series is HiLoSeries)
+            if (series is ColumnSeries)
             {
                 var points = new PointCollection();
                 var pointCount = 0;
-                PartsCollection partsCollection = new PartsCollection();
-                if (series is LineSeries)
-                {
-                    LineSeries lineSeries = series as LineSeries;
-                    points = lineSeries.LinePoints;
-                    pointCount = lineSeries.LinePoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
-                else if(series is HiLoSeries)
-                {
-                    HiLoSeries lineSeries = series as HiLoSeries;
-                    points = lineSeries.HighPoints;
-                    pointCount = lineSeries.HighPoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
+
+                ColumnSeries columnSeries = series as ColumnSeries;
+                points = columnSeries.ColumnPoints;
+                pointCount = columnSeries.ColumnPoints.Count;
+
                 if (RenderingMode == RenderingMode.Default)
                 {
-                    for (int i = 0; i < partsCollection.Count; i++)
+                    for (int i = 0; i < columnSeries.Parts.Count; i++)
                     {
-                        PartsCanvas.Children.Add(partsCollection[i].CreatePart());
+                        System.Windows.Shapes.Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as System.Windows.Shapes.Rectangle;                        
+                        PartsCanvas.Children.Add(element);
                     }
-                }
-                else
-                {
-                    for (int i = 0; i < pointCount - 1; i++)
-                    {
-                        switch (RenderingMode)
-                        {
-                            case RenderingMode.GDIRendering:
-                                GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
-                                
-                                break;
-                            case RenderingMode.Default:
-                                break;
-                            case RenderingMode.WritableBitmap:
-                                this.WritableBitmap.Lock();
-                                WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());                               
-                                this.WritableBitmap.Unlock();
-                                break;
-                            default:
-                                break;
-                        }
-
-                    }
-                    this.collection.InvalidateBitmap();
                 }                
-            }        
+                //else
+                //{
+                //    for (int i = 0; i < pointCount - 1; i++)
+                //    {
+                //        switch (RenderingMode)
+                //        {
+                //            case RenderingMode.GDIRendering:
+                //                GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
+
+                //                break;
+                //            case RenderingMode.Default:
+                //                break;
+                //            case RenderingMode.WritableBitmap:
+                //                this.WritableBitmap.Lock();
+                //                WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
+                //                this.WritableBitmap.Unlock();
+                //                break;
+                //            default:
+                //                break;
+                //        }
+
+                //    }
+                //    this.collection.InvalidateBitmap();
+            }
         }
 #else
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
-            if (series is LineSeries || series is HiLoSeries)
+            if (series is ColumnSeries)
             {
                 var points = new PointCollection();
                 var pointCount = 0;
-                PartsCollection partsCollection = new PartsCollection();
-                if (series is LineSeries)
-                {
-                    LineSeries lineSeries = series as LineSeries;
-                    points = lineSeries.LinePoints;
-                    pointCount = lineSeries.LinePoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
-                else if (series is HiLoSeries)
-                {
-                    HiLoSeries lineSeries = series as HiLoSeries;
-                    points = lineSeries.HighPoints;
-                    pointCount = lineSeries.HighPoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
+
+                ColumnSeries columnSeries = series as ColumnSeries;
+                points = columnSeries.ColumnPoints;
+                pointCount = columnSeries.ColumnPoints.Count;
+
                 if (RenderingMode == RenderingMode.Default)
                 {
-                    for (int i = 0; i < partsCollection.Count; i++)
+                    for (int i = 0; i < columnSeries.Parts.Count; i++)
                     {
-                        PartsCanvas.Children.Add(partsCollection[i].CreatePart());
+                        Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as Rectangle;                        
+                        PartsCanvas.Children.Add(element);
                     }
                 }
             }

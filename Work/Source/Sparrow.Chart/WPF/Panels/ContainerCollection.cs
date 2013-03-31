@@ -118,11 +118,12 @@ namespace Sparrow.Chart
 
         void ContainerCollection_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-#if SILVERLIGHT || WP7 || WP8
+#if !WPF
             RectangleGeometry clipRectGeometry = new RectangleGeometry();
             clipRectGeometry.Rect = new Rect(new Point(0, 0), new Size(this.ActualWidth,this.ActualHeight));
             this.Clip = clipRectGeometry;
 #endif
+            
             Refresh();
         }
        
@@ -518,6 +519,7 @@ namespace Sparrow.Chart
                 seriesBase.Height = this.ActualHeight;
                 seriesBase.Width = this.ActualWidth;
                 container.Series = seriesBase;
+                container.Container = this;
                 container.RenderingMode = this.RenderingMode;
 #if WPF
                 container.dpiFactor = this.dpiFactor;      

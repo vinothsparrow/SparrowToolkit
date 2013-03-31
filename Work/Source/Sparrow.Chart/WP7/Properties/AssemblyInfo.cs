@@ -2,18 +2,20 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
+using System.Windows.Markup;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sparrow.Chart.WP7")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sparrow Chart Toolkit for Windows Phone 7")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sparrow.Chart.WP7")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("Vinoth Kumar J (Author)")]
+[assembly: AssemblyProduct("Sparrow Chart Toolkit")]
+[assembly: AssemblyCopyright("Copyright © 2013 Vinoth Kumar J (Author)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.Chart.snk")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -5,14 +5,15 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sprrow.Chart.Winrt")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Sprrow.Chart.WinRT")]
+[assembly: AssemblyDescription("Sparrow Chart Toolkit for WinRT")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sprrow.Chart.Winrt")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("Vinoth Kumar J (Author)")]
+[assembly: AssemblyProduct("Sparrow Chart Toolkit")]
+[assembly: AssemblyCopyright("Copyright © 2013 Vinoth Kumar J (Author)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.Chart.snk")]
 
 // Version information for an assembly consists of the following four values:
 //

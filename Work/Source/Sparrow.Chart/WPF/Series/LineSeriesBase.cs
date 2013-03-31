@@ -41,7 +41,8 @@ namespace Sparrow.Chart
         }
         override public void Refresh()
         {
-            base.Refresh();
+            if (!isPointsGenerated)
+                base.Refresh();
             if (!isRefreshed && IsRefresh)
             {
 #if WPF
@@ -115,5 +116,6 @@ namespace Sparrow.Chart
 
         public static readonly DependencyProperty YPathProperty =
             DependencyProperty.Register("YPath", typeof(string), typeof(LineSeriesBase), new PropertyMetadata(null));
+       
     }
 }

@@ -83,6 +83,19 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(SeriesContainer), new PropertyMetadata(RenderingMode.Default));
 
+
+
+        public ContainerCollection Container
+        {
+            get { return (ContainerCollection)GetValue(ContainerProperty); }
+            set { SetValue(ContainerProperty, value); }
+        }
+
+        public static readonly DependencyProperty ContainerProperty =
+            DependencyProperty.Register("Container", typeof(ContainerCollection), typeof(SeriesContainer), new PropertyMetadata(null));
+
+
+
         public SeriesContainer()
         {
             

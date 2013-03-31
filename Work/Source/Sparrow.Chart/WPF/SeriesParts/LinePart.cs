@@ -23,6 +23,7 @@ namespace Sparrow.Chart
 {
     public class LinePart : LinePartBase
     {
+        internal Line linePart;
         public LinePart()
         {
 
@@ -45,13 +46,20 @@ namespace Sparrow.Chart
 
         public override UIElement CreatePart()
         {
-            Line linePart = new Line();
+            linePart = new Line();
             linePart.X1 = this.X1;
             linePart.X2 = this.X2;
             linePart.Y1 = this.Y1;
             linePart.Y2 = this.Y2;
             SetBindingForStrokeandStrokeThickness(linePart);
             return linePart;
+        }
+        public override void Refresh()
+        {
+            linePart.X1 = this.X1;
+            linePart.X2 = this.X2;
+            linePart.Y1 = this.Y1;
+            linePart.Y2 = this.Y2;
         }
     }
 }

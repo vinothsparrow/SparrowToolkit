@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Axis\AxisBase.cs" />
     <Compile Include="Collections\Collections.cs" />
+    <Compile Include="Container\ColumnContainer.cs" />
     <Compile Include="Container\ScatterContainer.cs" />
     <Compile Include="Panels\ContainerCollection.cs" />
     <Compile Include="Container\AreaContainer.cs" />
@@ -121,7 +122,9 @@
     <Compile Include="Legend\LegendItem.cs" />
     <Compile Include="Panels\RootDockPanel.cs" />
     <Compile Include="Points\CategoryPoint.cs" />
+    <Compile Include="Points\TimeSpanPoint.cs" />
     <Compile Include="SeriesParts\AreaPart.cs" />
+    <Compile Include="SeriesParts\ColumnPart.cs" />
     <Compile Include="SeriesParts\FillPartBase.cs" />
     <Compile Include="SeriesParts\LinePart.cs" />
     <Compile Include="SeriesParts\LinePartBase.cs" />
@@ -133,13 +136,17 @@
     <Compile Include="SeriesParts\StepLinePart.cs" />
     <Compile Include="SeriesParts\StepLineSinglePart.cs" />
     <Compile Include="Series\AreaSeries.cs" />
+    <Compile Include="Series\BubbleSeries.cs" />
+    <Compile Include="Series\ColumnSeries.cs" />
     <Compile Include="Series\FillSeriesBase.cs" />
+    <Compile Include="Series\HiLoSeries.cs" />
     <Compile Include="Series\LineSeries.cs" />
     <Compile Include="Series\LineSeriesBase.cs" />
     <Compile Include="Series\ScatterSeries.cs" />
     <Compile Include="Series\SeriesBase.cs" />
     <Compile Include="Series\SplineSeries.cs" />
     <Compile Include="Series\StepLineSeries.cs" />
+    <Compile Include="Series\StockChartBase.cs" />
     <Compile Include="Utility\AxisUtil.cs" />
     <Compile Include="Utility\FastReflectionUtility.cs" />
     <Compile Include="Utility\Recycler.cs" />

@@ -26,9 +26,10 @@ namespace Sparrow.Chart
     /// </summary>
     public class StepLinePart : LinePartBase
     {
-        Point startPoint;
-        Point endPoint;
-        Point stepPoint;
+        internal Point startPoint;
+        internal Point endPoint;
+        internal Point stepPoint;
+        internal Polyline lines;
         /// <summary>
         /// 
         /// </summary>
@@ -57,7 +58,7 @@ namespace Sparrow.Chart
         /// <returns></returns>
         public override UIElement CreatePart()
         {            
-            Polyline lines = new Polyline();
+            lines = new Polyline();
             PointCollection pointsCollection=new PointCollection();
             pointsCollection.Add(startPoint);
             pointsCollection.Add(stepPoint);
@@ -65,6 +66,15 @@ namespace Sparrow.Chart
             lines.Points = pointsCollection;
             SetBindingForStrokeandStrokeThickness(lines);
             return lines;
+        }
+
+        public override void Refresh()
+        {
+            PointCollection pointsCollection = new PointCollection();
+            pointsCollection.Add(startPoint);
+            pointsCollection.Add(stepPoint);
+            pointsCollection.Add(endPoint);
+            lines.Points = pointsCollection;
         }
         
     }

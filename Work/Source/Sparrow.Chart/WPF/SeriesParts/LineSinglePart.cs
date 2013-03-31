@@ -23,6 +23,7 @@ namespace Sparrow.Chart
 {
     public class LineSinglePart : LineSinglePartBase
     {
+        internal Polyline linePart;
         public LineSinglePart()
         {
         }
@@ -34,10 +35,14 @@ namespace Sparrow.Chart
 
         public override UIElement CreatePart()
         {
-            Polyline linePart = new Polyline();
+            linePart = new Polyline();
             linePart.Points = this.LinePoints;            
             SetBindingForStrokeandStrokeThickness(linePart);
             return linePart;
+        }
+        public override void Refresh()
+        {
+            linePart.Points = this.LinePoints;     
         }
     }
 }

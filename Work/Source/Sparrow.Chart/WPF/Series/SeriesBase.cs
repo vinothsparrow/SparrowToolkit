@@ -42,13 +42,12 @@ namespace Sparrow.Chart
         double yDifference;
         double xAbs;
         double yAbs;
-        protected List<double> xValues;
-        protected List<double> yValues;
+        internal List<double> xValues;
+        internal List<double> yValues;
         internal SeriesContainer seriesContainer;
         internal bool isFill;
-        internal double Height;
-        internal double Width;
         protected bool isRefreshed;
+        internal bool isPointsGenerated;
 
         public virtual void GenerateDatas()
         {
@@ -114,17 +113,7 @@ namespace Sparrow.Chart
         }
 
         public void RefreshWithoutAxis(AxisBase axis)
-        {
-            //if (axis is XAxis)
-            //{
-            //    (axis as XAxis).CalculateIntervalFromSeriesPoints();
-            //    //this.XAxis.Refresh();
-            //}
-            //else if (axis is YAxis)
-            //{
-            //    (axis as YAxis).CalculateIntervalFromSeriesPoints();
-            //   // this.YAxis.Refresh();
-            //}
+        {           
             if (!isRefreshed && IsRefresh)
             {
 #if WPF
@@ -177,7 +166,7 @@ namespace Sparrow.Chart
             if (propertInfo != null)
             {
                 object value = fastPropertInfo.Get(item);
-                if (value is Double)
+                if (value is Double || value is int)
                 {
                     return Double.Parse(value.ToString());
                 }
@@ -311,16 +300,7 @@ namespace Sparrow.Chart
         }
 
         public static readonly DependencyProperty XAxisProperty =
-            DependencyProperty.Register("XAxis", typeof(XAxis), typeof(SeriesBase), new PropertyMetadata(null));
-
-        public string XPath
-        {
-            get { return (string)GetValue(XPathProperty); }
-            set { SetValue(XPathProperty, value); }
-        }
-
-        public static readonly DependencyProperty XPathProperty =
-            DependencyProperty.Register("XPath", typeof(string), typeof(SeriesBase), new PropertyMetadata(null));
+            DependencyProperty.Register("XAxis", typeof(XAxis), typeof(SeriesBase), new PropertyMetadata(null));        
 
 
         public bool IsRefresh
@@ -412,17 +392,26 @@ namespace Sparrow.Chart
             {
                 (args.NewValue as INotifyCollectionChanged).CollectionChanged += Points_CollectionChanged;
             }
+            isPointsGenerated = false;
             if (this.IsRefresh)
-                Refresh();
+                Refresh();            
         }
 
         void Points_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            isPointsGenerated = false;
             if (this.IsRefresh)
                 Refresh();
         }
 
-       
+        public string XPath
+        {
+            get { return (string)GetValue(XPathProperty); }
+            set { SetValue(XPathProperty, value); }
+        }
+
+        public static readonly DependencyProperty XPathProperty =
+            DependencyProperty.Register("XPath", typeof(string), typeof(SeriesBase), new PropertyMetadata(null));
 
         internal RenderingMode RenderingMode
         {

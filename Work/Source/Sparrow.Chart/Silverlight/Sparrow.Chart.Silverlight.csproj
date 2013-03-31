@@ -44,6 +44,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Bin\Release\Sparrow.Chart.Silverlight.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -80,6 +81,9 @@
     </Compile>
     <Compile Include="..\WPF\Container\AxisCrossLinesContainer.cs">
       <Link>Container\AxisCrossLinesContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Container\ColumnContainer.cs">
+      <Link>Container\ColumnContainer.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Container\LineContainer.cs">
       <Link>Container\LineContainer.cs</Link>
@@ -135,8 +139,14 @@
     <Compile Include="..\WPF\Points\TimePoint.cs">
       <Link>Points\TimePoint.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Points\TimeSpanPoint.cs">
+      <Link>Points\TimeSpanPoint.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\SeriesParts\AreaPart.cs">
       <Link>SeriesParts\AreaPart.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\SeriesParts\ColumnPart.cs">
+      <Link>SeriesParts\ColumnPart.cs</Link>
     </Compile>
     <Compile Include="..\WPF\SeriesParts\FillPartBase.cs">
       <Link>SeriesParts\FillPartBase.cs</Link>
@@ -171,8 +181,17 @@
     <Compile Include="..\WPF\Series\AreaSeries.cs">
       <Link>Series\AreaSeries.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Series\BubbleSeries.cs">
+      <Link>Series\BubbleSeries.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Series\ColumnSeries.cs">
+      <Link>Series\ColumnSeries.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Series\FillSeriesBase.cs">
       <Link>Series\FillSeriesBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Series\HiLoSeries.cs">
+      <Link>Series\HiLoSeries.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Series\LineSeries.cs">
       <Link>Series\LineSeries.cs</Link>
@@ -191,6 +210,9 @@
     </Compile>
     <Compile Include="..\WPF\Series\StepLineSeries.cs">
       <Link>Series\StepLineSeries.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Series\StockChartBase.cs">
+      <Link>Series\StockChartBase.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Utility\AxisUtil.cs">
       <Link>Utility\AxisUtil.cs</Link>

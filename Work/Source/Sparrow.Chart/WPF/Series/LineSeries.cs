@@ -34,7 +34,8 @@ namespace Sparrow.Chart
         override public void GenerateDatas()
         {
             LinePoints.Clear();
-            Parts.Clear();
+            if (!isPointsGenerated)
+                Parts.Clear();
             if (this.Points != null && this.seriesContainer != null)
             {
                 CalculateMinAndMax();
@@ -51,20 +52,49 @@ namespace Sparrow.Chart
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!UseSinglePart)
+                    if (!isPointsGenerated)
                     {
-                        for (int i = 0; i < this.LinePoints.Count - 1; i++)
+                        if (!UseSinglePart)
                         {
-                            LinePart linePart = new LinePart(this.LinePoints[i], this.LinePoints[i + 1]);
-                            SetBindingForStrokeandStrokeThickness(linePart);
-                            this.Parts.Add(linePart);
+                            for (int i = 0; i < this.LinePoints.Count - 1; i++)
+                            {
+                                LinePart linePart = new LinePart(this.LinePoints[i], this.LinePoints[i + 1]);
+                                SetBindingForStrokeandStrokeThickness(linePart);
+                                this.Parts.Add(linePart);
+                            }
                         }
+                        else
+                        {
+                            LineSinglePart singlePart = new LineSinglePart(this.LinePoints);
+                            SetBindingForStrokeandStrokeThickness(singlePart);
+                            this.Parts.Add(singlePart);
+                        }
+                        isPointsGenerated = true;
                     }
                     else
                     {
-                        LineSinglePart singlePart = new LineSinglePart(this.LinePoints);
-                        SetBindingForStrokeandStrokeThickness(singlePart);
-                        this.Parts.Add(singlePart);
+                        int i=0;
+                        if (!UseSinglePart)
+                        {
+                            foreach (LinePart part in this.Parts)
+                            {
+                                part.X1 = this.LinePoints[i].X;
+                                part.Y1 = this.LinePoints[i].Y;
+                                part.X2 = this.LinePoints[i + 1].X;
+                                part.Y2 = this.LinePoints[i + 1].Y;
+                                part.Refresh();
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            foreach (LineSinglePart part in this.Parts)
+                            {
+                                part.LinePoints = this.LinePoints;
+                                part.Refresh();
+                                i++;
+                            }
+                        }
                     }
                 }
                 this.seriesContainer.Invalidate();

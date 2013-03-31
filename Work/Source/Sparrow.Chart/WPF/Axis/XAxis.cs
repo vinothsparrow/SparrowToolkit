@@ -47,7 +47,7 @@ namespace Sparrow.Chart
         internal void Update()
         {
             double desiredHeight = 0;
-
+            double labelSize = 0;
             CalculateAutoInterval();
             GenerateLabels();
             if (this.ActualHeight > 0 && this.ActualWidth > 0)
@@ -56,6 +56,7 @@ namespace Sparrow.Chart
                 double xAxisWidthPosition = 0;               
                 axisLine.X2 = this.ActualWidth;                
                 Rect oldRect = new Rect(0, 0, 0, 0);
+               
                 if (this.m_Labels.Count == labels.Count)
                 {
                     int k = 0;
@@ -78,6 +79,7 @@ namespace Sparrow.Chart
                         Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
                         Canvas.SetTop(label, desiredHeight);                        
                         k++;
+                        labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
                     }                    
                 }
                 else
@@ -149,12 +151,13 @@ namespace Sparrow.Chart
                         Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
                         Canvas.SetTop(label, desiredHeight);
                         xAxisWidthPosition += xAxisWidthStep;
+                        labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
                     }  
                 }
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
                 Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
-                desiredHeight += header.DesiredSize.Height * 2;              
+                desiredHeight += header.DesiredSize.Height + labelSize;              
             }
             if (this.Chart.AxisHeight < desiredHeight)
                 this.Chart.AxisHeight = desiredHeight + 1;
@@ -163,6 +166,7 @@ namespace Sparrow.Chart
         internal void Initialize()
         {
             double desiredHeight = 0;
+            double labelSize = 0;
             //if (m_MinValue == m_startValue + m_Interval)
             CalculateAutoInterval();
             GenerateLabels();
@@ -220,11 +224,11 @@ namespace Sparrow.Chart
                     if (this.ShowMajorTicks)
                     {
                         labelPadding = tickLine.Y2;
-                        desiredHeight = tickLine.Y2;
+                        desiredHeight = MajorLineSize;
                     }
                     Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
                     Canvas.SetTop(label, desiredHeight);
-                    
+                    labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
                     this.Children.Add(label);                   
                     xAxisWidthPosition += xAxisWidthStep;
                 }
@@ -240,7 +244,7 @@ namespace Sparrow.Chart
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
                 Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
-                desiredHeight += header.DesiredSize.Height * 2;
+                desiredHeight += header.DesiredSize.Height + labelSize;
                 this.Children.Add(header);
                 this.Children.Add(axisLine);
                 isInitialized = true;

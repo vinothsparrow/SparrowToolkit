@@ -42,7 +42,8 @@ namespace Sparrow.Chart
             ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
             IntializePoints();
             SplinePoints.Clear();
-            Parts.Clear();
+            if (!isPointsGenerated)
+                Parts.Clear();
             if (this.Points != null && this.seriesContainer != null)
             {
                 CalculateMinAndMax();
@@ -57,14 +58,32 @@ namespace Sparrow.Chart
                 if (this.SplinePoints.Count > 1)
                     BezierSpline.GetCurveControlPoints(this.SplinePoints.ToArray(), out FirstControlPoints, out SecondControlPoints);
                 if (this.RenderingMode == RenderingMode.Default)
-                    for (int i = 0; i < this.SplinePoints.Count - 1; i++)
+                {
+                    if (!isPointsGenerated)
                     {
-                        SplinePart splinePart = new SplinePart(SplinePoints[i], FirstControlPoints[i], SecondControlPoints[i], SplinePoints[i + 1]);
-                        SetBindingForStrokeandStrokeThickness(splinePart);
-                        this.Parts.Add(splinePart);
+                        for (int i = 0; i < this.SplinePoints.Count - 1; i++)
+                        {
+                            SplinePart splinePart = new SplinePart(SplinePoints[i], FirstControlPoints[i], SecondControlPoints[i], SplinePoints[i + 1]);
+                            SetBindingForStrokeandStrokeThickness(splinePart);
+                            this.Parts.Add(splinePart);
+                        }
+                        isPointsGenerated = true;
                     }
-                if (this.seriesContainer != null)
-                    this.seriesContainer.Invalidate();
+                    else
+                    {
+                        int i = 0;
+                        foreach (SplinePart part in this.Parts)
+                        {
+                            part.startPoint = SplinePoints[i];
+                            part.firstControlPoint = FirstControlPoints[i];
+                            part.endControlPoint = SecondControlPoints[i];
+                            part.endPoint = SplinePoints[i + 1];
+                            part.Refresh();
+                            i++;
+                        }
+                    }
+                }
+                this.seriesContainer.Invalidate();
             }
             isRefreshed = false;
         }

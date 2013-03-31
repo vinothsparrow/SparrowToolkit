@@ -141,8 +141,8 @@ namespace Sparrow.Chart
             metroBrushes[5] = new SolidColorBrush(Color.FromArgb(0xFF,230, 113, 84));
             metroBrushes[6] = new SolidColorBrush(Color.FromArgb(0xFF,240, 150, 9));
             metroBrushes[7] = new SolidColorBrush(Color.FromArgb(0xFF,27, 161, 226));
-            metroBrushes[8] = new SolidColorBrush(Color.FromArgb(0xFF,29, 20, 0));
-            metroBrushes[9] = new SolidColorBrush(Color.FromArgb(0xFF,51, 153, 51));
+            metroBrushes[8] = new SolidColorBrush(Color.FromArgb(0xFF,0x33, 0x99, 0x33));
+            metroBrushes[9] = new SolidColorBrush(Color.FromArgb(0xFF,0, 171, 169));
             return metroBrushes;
         }
         

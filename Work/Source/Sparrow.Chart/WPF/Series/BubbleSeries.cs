@@ -6,6 +6,7 @@ using System.Windows;
 #if !WINRT
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Collections;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,40 +18,39 @@ using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
-
-
 namespace Sparrow.Chart
 {
-    /// <summary>
-    /// ScatterSeries for SparrowChart
-    /// </summary>
-    public class ScatterSeries : FillSeriesBase
+    public class BubbleSeries : FillSeriesBase
     {
-        public ScatterSeries()
+        private List<double> sizeValues;
+        public BubbleSeries()
         {
-            ScatterPoints = new PointCollection();
+            BubblePoints = new PointCollection();
             isFill = true;
+            sizeValues = new List<double>();
         }
 
         public override void GenerateDatas()
         {
-            ScatterPoints.Clear();
+            BubblePoints.Clear();
             if (!isPointsGenerated)
                 Parts.Clear();
             Point endPoint = new Point(0, 0);
-            Point startPoint = new Point(0, 0);
-            int index = 0;
+            Point startPoint = new Point(0, 0);            
+            if (PointsSource != null)
+                sizeValues = this.GetReflectionValues(this.SizePath, PointsSource, sizeValues, false);
+
             if (this.Points != null && this.seriesContainer != null && this.Points.Count > 1)
             {
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
-                IntializePoints();                
+                IntializePoints();
                 foreach (ChartPoint point in this.Points)
                 {
                     if (CheckValuePoint(oldPoint, point))
                     {
-                        Point linePoint = NormalizePoint(new Point(point.XValue, point.YValue));                       
-                        ScatterPoints.Add(linePoint);
+                        Point linePoint = NormalizePoint(new Point(point.XValue, point.YValue));
+                        BubblePoints.Add(linePoint);
                         oldPoint = point;
                     }
                 }
@@ -58,13 +58,10 @@ namespace Sparrow.Chart
                 {
                     if (!isPointsGenerated)
                     {
-                        for (int i = 0; i < ScatterPoints.Count; i++)
+                        for (int i = 0; i < BubblePoints.Count; i++)
                         {
-                            ScatterPart scatterPart = new ScatterPart(ScatterPoints[i]);
-                            Binding sizeBinding = new Binding();
-                            sizeBinding.Path = new PropertyPath("ScatterSize");
-                            sizeBinding.Source = this;
-                            scatterPart.SetBinding(ScatterPart.SizeProperty, sizeBinding);
+                            ScatterPart scatterPart = new ScatterPart(BubblePoints[i]);
+                            scatterPart.Size = sizeValues[i];
                             SetBindingForStrokeandStrokeThickness(scatterPart);
                             this.Parts.Add(scatterPart);
                         }
@@ -75,16 +72,15 @@ namespace Sparrow.Chart
                         int i = 0;
                         foreach (ScatterPart part in this.Parts)
                         {
-                            part.X1 = ScatterPoints[i].X;
-                            part.Y1 = ScatterPoints[i].Y;
+                            part.X1 = BubblePoints[i].X;
+                            part.Y1 = BubblePoints[i].Y;
                             part.Refresh();
                             i++;
                         }
                     }
                 }
-                
-                if (this.seriesContainer != null)
-                    this.seriesContainer.Invalidate();
+
+                this.seriesContainer.Invalidate();
             }
             isRefreshed = false;
         }
@@ -94,25 +90,25 @@ namespace Sparrow.Chart
             return new ScatterContainer();
         }
 
-        public PointCollection ScatterPoints
+        public PointCollection BubblePoints
         {
-            get { return (PointCollection)GetValue(ScatterPointsProperty); }
-            set { SetValue(ScatterPointsProperty, value); }
+            get { return (PointCollection)GetValue(BubblePointsPointsProperty); }
+            set { SetValue(BubblePointsPointsProperty, value); }
         }
 
-        public static readonly DependencyProperty ScatterPointsProperty =
-            DependencyProperty.Register("ScatterPoints", typeof(PointCollection), typeof(ScatterSeries), new PropertyMetadata(null));
+        public static readonly DependencyProperty BubblePointsPointsProperty =
+            DependencyProperty.Register("BubblePointsPoints", typeof(PointCollection), typeof(BubbleSeries), new PropertyMetadata(null));
 
 
-        public double ScatterSize
+
+        public string SizePath
         {
-            get { return (double)GetValue(ScatterSizeProperty); }
-            set { SetValue(ScatterSizeProperty, value); }
+            get { return (string)GetValue(SizePathProperty); }
+            set { SetValue(SizePathProperty, value); }
         }
 
-        public static readonly DependencyProperty ScatterSizeProperty =
-            DependencyProperty.Register("ScatterSize", typeof(double), typeof(ScatterSeries), new PropertyMetadata(30d));
+        public static readonly DependencyProperty SizePathProperty =
+            DependencyProperty.Register("SizePath", typeof(string), typeof(BubbleSeries), new PropertyMetadata(string.Empty));
 
-           
     }
 }

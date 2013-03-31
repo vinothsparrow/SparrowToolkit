@@ -26,10 +26,11 @@ namespace Sparrow.Chart
     /// </summary>
     public class SplinePart : LinePartBase
     {
-        Point startPoint;
-        Point firstControlPoint;
-        Point endControlPoint;
-        Point endPoint;
+        internal Point startPoint;
+        internal Point firstControlPoint;
+        internal Point endControlPoint;
+        internal Point endPoint;
+        internal Path splinePath;
         /// <summary>
         /// 
         /// </summary>
@@ -60,7 +61,7 @@ namespace Sparrow.Chart
         /// <returns></returns>
         public override UIElement CreatePart()
         {
-            Path splinePath = new Path();
+            splinePath = new Path();
             PathFigure figure = new PathFigure();
             BezierSegment bezierPoints = new BezierSegment();
             PathGeometry pathGeometry = new PathGeometry();
@@ -73,6 +74,20 @@ namespace Sparrow.Chart
             splinePath.Data = pathGeometry;
             SetBindingForStrokeandStrokeThickness(splinePath);
             return splinePath;
+        }
+
+        public override void Refresh()
+        {
+            PathFigure figure = new PathFigure();
+            BezierSegment bezierPoints = new BezierSegment();
+            PathGeometry pathGeometry = new PathGeometry();
+            figure.StartPoint = startPoint;
+            bezierPoints.Point1 = firstControlPoint;
+            bezierPoints.Point2 = endControlPoint;
+            bezierPoints.Point3 = endPoint;
+            figure.Segments.Add(bezierPoints);
+            pathGeometry.Figures = new PathFigureCollection() { figure };
+            splinePath.Data = pathGeometry;
         }
     }
 }

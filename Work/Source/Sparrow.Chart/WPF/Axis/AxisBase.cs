@@ -212,7 +212,7 @@ namespace Sparrow.Chart
                     continue;
                 }
                 m_Labels.Add(GetOriginalLabel(value));
-                value += m_Interval;                
+                value += m_Interval;
                 if (isIntervalCountZero)
                     break;
             }           
@@ -240,6 +240,7 @@ namespace Sparrow.Chart
 
         protected void CalculateAutoInterval()
         {
+            isIntervalCountZero = false;
             if (CheckType())
             {
                 if (this.Interval == null)

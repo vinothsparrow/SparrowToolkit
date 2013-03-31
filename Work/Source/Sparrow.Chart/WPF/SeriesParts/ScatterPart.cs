@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Controls;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -23,6 +24,7 @@ namespace Sparrow.Chart
 {
     public class ScatterPart : FillPartBase
     {
+        internal Ellipse ellipse;
 
         public double Size
         {
@@ -37,6 +39,7 @@ namespace Sparrow.Chart
         public ScatterPart()
         {
         }
+
         public ScatterPart(Point centerPoint)
         {
             this.X1 = centerPoint.X;
@@ -47,7 +50,7 @@ namespace Sparrow.Chart
 
         public override UIElement CreatePart()
         {
-            Ellipse ellipse = new Ellipse();            
+            ellipse = new Ellipse();            
             Binding heightBinding = new Binding();
             heightBinding.Path = new PropertyPath("Size");
             heightBinding.Source = this;
@@ -57,8 +60,17 @@ namespace Sparrow.Chart
             widthBinding.Source = this;
             ellipse.SetBinding(Ellipse.WidthProperty, widthBinding);
 
+            Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
+            Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
+
             SetBindingForStrokeandStrokeThickness(ellipse);
             return ellipse;
+        }
+
+        public override void Refresh()
+        {
+            Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
+            Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
         }
 
     }

@@ -38,7 +38,8 @@ namespace Sparrow.Chart
         override public void GenerateDatas()
         {
             AreaPoints.Clear();
-            Parts.Clear();
+            if (!isPointsGenerated)
+                Parts.Clear();
             Point endPoint = new Point(0,0);
             Point startPoint=new Point(0,0);
             int index = 0;
@@ -59,14 +60,36 @@ namespace Sparrow.Chart
                     }
                 }
                 if (this.RenderingMode == RenderingMode.Default)
-                    for (int i = 0; i < AreaPoints.Count - 2; i++)
+                {
+                    if (!isPointsGenerated)
                     {
-                        startPoint = NormalizePoint(new Point(this.Points[i].XValue, yMin));                        
-                        endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, yMin));
-                        AreaPart areaPart = new AreaPart(AreaPoints[i + 1], startPoint, endPoint, AreaPoints[i + 2]);
-                        SetBindingForStrokeandStrokeThickness(areaPart);
-                        this.Parts.Add(areaPart);
+                        for (int i = 0; i < AreaPoints.Count - 2; i++)
+                        {
+                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, yMin));
+                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, yMin));
+                            AreaPart areaPart = new AreaPart(AreaPoints[i + 1], startPoint, endPoint, AreaPoints[i + 2]);
+                            SetBindingForStrokeandStrokeThickness(areaPart);
+                            this.Parts.Add(areaPart);
+
+                        }
+                        isPointsGenerated = true;
                     }
+                    else
+                    {
+                        int i = 0;
+                        foreach (AreaPart part in this.Parts)
+                        {
+                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, yMin));
+                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, yMin));
+                            part.startPoint = AreaPoints[i + 1];
+                            part.areaStartPoint = startPoint;
+                            part.areaEndPoint = endPoint;
+                            part.endPoint = AreaPoints[i + 2];
+                            part.Refresh();
+                            i++;
+                        }
+                    }
+                }
                 endPoint = NormalizePoint(new Point(this.Points[this.Points.Count - 1].XValue, yMin));
                 startPoint = NormalizePoint(new Point(xMin, yMin));
                 startPoint.X = startPoint.X - this.StrokeThickness;                

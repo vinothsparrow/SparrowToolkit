@@ -37,7 +37,8 @@ namespace Sparrow.Chart
         override public void GenerateDatas()
         {
             LinePoints.Clear();
-            Parts.Clear();
+            if (!isPointsGenerated)
+                Parts.Clear();
             if (this.Points != null && this.seriesContainer != null)
             {
                 CalculateMinAndMax();
@@ -62,21 +63,49 @@ namespace Sparrow.Chart
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!this.UseSinglePart)
+                    if (!isPointsGenerated)
                     {
-                        for (int i = 0; i < LinePoints.Count - 2; i++)
+                        if (!this.UseSinglePart)
                         {
-                            StepLinePart stepLinePart = new StepLinePart(LinePoints[i], LinePoints[i + 1], LinePoints[i + 2]);
+                            for (int i = 0; i < LinePoints.Count - 2; i++)
+                            {
+                                StepLinePart stepLinePart = new StepLinePart(LinePoints[i], LinePoints[i + 1], LinePoints[i + 2]);
+                                SetBindingForStrokeandStrokeThickness(stepLinePart);
+                                this.Parts.Add(stepLinePart);
+                            }
+                        }
+                        else
+                        {
+                            LineSinglePart stepLinePart = new LineSinglePart();
+                            stepLinePart.LinePoints = this.LinePoints;
                             SetBindingForStrokeandStrokeThickness(stepLinePart);
                             this.Parts.Add(stepLinePart);
                         }
+                        isPointsGenerated = true;
                     }
                     else
                     {
-                        LineSinglePart stepLinePart = new LineSinglePart();
-                        stepLinePart.LinePoints = this.LinePoints;
-                        SetBindingForStrokeandStrokeThickness(stepLinePart);
-                        this.Parts.Add(stepLinePart);
+                        int i = 0;
+                        if (!this.UseSinglePart)
+                        {
+                            foreach (StepLinePart part in this.Parts)
+                            {
+                                part.startPoint = LinePoints[i];
+                                part.stepPoint = LinePoints[i + 1];
+                                part.endPoint = LinePoints[i + 2];
+                                part.Refresh();
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            foreach (LineSinglePart part in this.Parts)
+                            {
+                                part.LinePoints = this.LinePoints;
+                                part.Refresh();
+                                i++;
+                            }
+                        }
                     }
                 }
                 if (this.seriesContainer != null)

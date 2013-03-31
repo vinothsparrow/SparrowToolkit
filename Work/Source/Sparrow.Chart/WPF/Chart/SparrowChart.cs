@@ -43,6 +43,7 @@ namespace Sparrow.Chart
         bool isMouseDragging;
         bool isMouseClick;
         internal DockPanel rootDockPanel;
+        internal List<ColumnSeries> columnSeries;       
         ResourceDictionary styles;
 
         private static List<string> actualCategoryValues;
@@ -66,10 +67,19 @@ namespace Sparrow.Chart
         { 
             containers = this.GetTemplateChild("PART_containers") as ContainerCollection;
             rootDockPanel =this.GetTemplateChild("Part_rootDockPanel") as DockPanel;
+           
 #endif
 #if WPF
-            containers.ClipToBounds = true;    
-#endif           
+            containers.ClipToBounds = true;  
+#else
+            foreach (SeriesBase series in Series)
+            {
+                Binding dataContextBinding = new Binding();
+                dataContextBinding.Path = new PropertyPath("DataContext");
+                dataContextBinding.Source = this;
+                BindingOperations.SetBinding(series, SeriesBase.DataContextProperty, dataContextBinding);
+            }
+#endif                       
             BrushTheme();       
             base.OnApplyTemplate();
         }
@@ -99,6 +109,7 @@ namespace Sparrow.Chart
             this.Series.CollectionChanged += OnSeriesCollectionChanged;
             brushes = Themes.MetroBrushes();
             ActualCategoryValues = new List<string>();
+            columnSeries = new List<ColumnSeries>();
             styles = new ResourceDictionary()
             {
 #if X86
@@ -144,6 +155,10 @@ namespace Sparrow.Chart
                         series.XAxis = XAxis;
                         series.YAxis = YAxis;                       
                         indexCount++;
+                        if (series is ColumnSeries)
+                        {
+                            columnSeries.Add(series as ColumnSeries);                            
+                        }
                     }                   
                     break;
 #if WPF
@@ -482,6 +497,15 @@ namespace Sparrow.Chart
 
         public static readonly DependencyProperty ContainerBorderStyleProperty =
             DependencyProperty.Register("ContainerBorderStyle", typeof(Style), typeof(SparrowChart), new PropertyMetadata(null));
+
+        public double ColumnMargin
+        {
+            get { return (double)GetValue(ColumnMarginProperty); }
+            set { SetValue(ColumnMarginProperty, value); }
+        }
+
+        public static readonly DependencyProperty ColumnMarginProperty =
+            DependencyProperty.Register("ColumnMargin", typeof(double), typeof(SparrowChart), new PropertyMetadata(5d));
 
 
         public RenderingMode RenderingMode

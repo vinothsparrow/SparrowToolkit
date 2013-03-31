@@ -79,5 +79,11 @@ namespace Sparrow.Chart
             return null;
         }
 
+        /// <summary>
+        /// Refresh the Series Part
+        /// </summary>
+        public virtual void Refresh()
+        {
+        }
     }
 }
