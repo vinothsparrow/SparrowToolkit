@@ -91,6 +91,7 @@ namespace Sparrow.Chart
         SourceCopy,
         SourceOver
     }
+   
 
 #if !WPF
 

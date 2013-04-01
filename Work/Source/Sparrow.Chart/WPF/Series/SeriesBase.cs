@@ -176,7 +176,9 @@ namespace Sparrow.Chart
                 }
                 else if (value is String)
                 {
-
+                    if (!SparrowChart.ActualCategoryValues.Contains(value.ToString()))
+                        SparrowChart.ActualCategoryValues.Add(value.ToString());
+                    return SparrowChart.ActualCategoryValues.IndexOf(value.ToString());
                 }
                 else
                     throw new NotSupportedException(String.Format("The {0} type is Not Supported by Chart", path));
@@ -216,7 +218,9 @@ namespace Sparrow.Chart
                         }
                         else if (value is String)
                         {
-                            return index++;
+                            if (!SparrowChart.ActualCategoryValues.Contains(value.ToString()))
+                                SparrowChart.ActualCategoryValues.Add(value.ToString());
+                            return SparrowChart.ActualCategoryValues.IndexOf(value.ToString());
                         }
                         else
                             throw new NotSupportedException(String.Format("The {0} type is Not Supported by Chart", path));
@@ -265,7 +269,9 @@ namespace Sparrow.Chart
                             }
                             else if (value is String)
                             {
-                                values.Add(index);
+                                if (!SparrowChart.ActualCategoryValues.Contains(value.ToString()))
+                                    SparrowChart.ActualCategoryValues.Add(value.ToString());
+                                values.Add(SparrowChart.ActualCategoryValues.IndexOf(value.ToString()));
                             }
                             else
                                 throw new NotSupportedException(String.Format("The {0} type is Not Supported by Chart", path));
@@ -393,6 +399,7 @@ namespace Sparrow.Chart
                 (args.NewValue as INotifyCollectionChanged).CollectionChanged += Points_CollectionChanged;
             }
             isPointsGenerated = false;
+            
             if (this.IsRefresh)
                 Refresh();            
         }
@@ -409,6 +416,19 @@ namespace Sparrow.Chart
             get { return (string)GetValue(XPathProperty); }
             set { SetValue(XPathProperty, value); }
         }
+
+
+
+        public object Label
+        {
+            get { return (object)GetValue(LabelProperty); }
+            set { SetValue(LabelProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelProperty =
+            DependencyProperty.Register("Label", typeof(object), typeof(SeriesBase), new PropertyMetadata(null));
+
+
 
         public static readonly DependencyProperty XPathProperty =
             DependencyProperty.Register("XPath", typeof(string), typeof(SeriesBase), new PropertyMetadata(null));

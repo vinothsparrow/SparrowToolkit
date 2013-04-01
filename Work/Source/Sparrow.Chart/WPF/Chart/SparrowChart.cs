@@ -42,9 +42,12 @@ namespace Sparrow.Chart
         internal int indexCount = 0;
         bool isMouseDragging;
         bool isMouseClick;
-        internal DockPanel rootDockPanel;
+        private bool isLegendUpdate;
+        internal RootPanel rootDockPanel;
+        internal Legend legend;
         internal List<ColumnSeries> columnSeries;       
         ResourceDictionary styles;
+        internal ObservableCollection<LegendItem> legendItems;
 
         private static List<string> actualCategoryValues;
         internal static List<string> ActualCategoryValues
@@ -57,7 +60,10 @@ namespace Sparrow.Chart
         public override void OnApplyTemplate()
         {            
             containers = (ContainerCollection)this.GetTemplateChild("PART_containers");
-            rootDockPanel = (DockPanel)this.GetTemplateChild("Part_rootDockPanel");
+            if (containers != null)
+                containers.Chart = this;
+            rootDockPanel = (RootPanel)this.GetTemplateChild("Part_rootDockPanel");
+            legend = (Legend)this.GetTemplateChild("Part_Legend"); 
             //containers.MouseMove += OnMouseMove;
             //containers.MouseLeave += OnMouseLeave;
             //containers.MouseLeftButtonDown += OnMousePress;
@@ -66,7 +72,9 @@ namespace Sparrow.Chart
         protected override void OnApplyTemplate()
         { 
             containers = this.GetTemplateChild("PART_containers") as ContainerCollection;
-            rootDockPanel =this.GetTemplateChild("Part_rootDockPanel") as DockPanel;
+            if (containers != null)
+                containers.Chart = this;
+            rootDockPanel = this.GetTemplateChild("Part_rootDockPanel") as RootPanel;
            
 #endif
 #if WPF
@@ -82,6 +90,31 @@ namespace Sparrow.Chart
 #endif                       
             BrushTheme();       
             base.OnApplyTemplate();
+            RefreshLegend();  
+        }
+
+        public void RefreshLegend()
+        {
+            if (!isLegendUpdate)
+            {
+                if (this.Legend != null)
+                {
+                    this.legendItems.Clear();
+                    foreach (SeriesBase series in this.Series)
+                    {
+                        LegendItem legendItem = new LegendItem();
+                        legendItem.Series = series;
+                        Binding showIconBinding = new Binding();
+                        showIconBinding.Path = new PropertyPath("ShowIcon");
+                        showIconBinding.Source = this.Legend;
+                        BindingOperations.SetBinding(legendItem, LegendItem.ShowIconProperty, showIconBinding);
+                        this.legendItems.Add(legendItem);
+                    }
+                    this.Legend.ItemsSource = this.legendItems;                   
+                    isLegendUpdate = true;
+                }
+
+            }
         }
 
         void OnMouseRelease(object sender, MouseEventArgs e)
@@ -108,6 +141,7 @@ namespace Sparrow.Chart
             this.Series = new SeriesCollection();
             this.Series.CollectionChanged += OnSeriesCollectionChanged;
             brushes = Themes.MetroBrushes();
+            legendItems = new ObservableCollection<LegendItem>();
             ActualCategoryValues = new List<string>();
             columnSeries = new List<ColumnSeries>();
             styles = new ResourceDictionary()
@@ -159,6 +193,8 @@ namespace Sparrow.Chart
                         {
                             columnSeries.Add(series as ColumnSeries);                            
                         }
+                        isLegendUpdate = false;
+                        RefreshLegend();
                     }                   
                     break;
 #if WPF
@@ -403,7 +439,8 @@ namespace Sparrow.Chart
         {
             if (this.Legend != null)
             {
-                this.Legend.Chart = this;              
+                this.Legend.Chart = this;
+                this.Legend.DataContext = null;
             }
         }
 
@@ -498,14 +535,20 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty ContainerBorderStyleProperty =
             DependencyProperty.Register("ContainerBorderStyle", typeof(Style), typeof(SparrowChart), new PropertyMetadata(null));
 
-        public double ColumnMargin
+
+
+        public static double GetColumnMarginPercentage(DependencyObject obj)
         {
-            get { return (double)GetValue(ColumnMarginProperty); }
-            set { SetValue(ColumnMarginProperty, value); }
+            return (double)obj.GetValue(ColumnMarginPercentageProperty);
         }
 
-        public static readonly DependencyProperty ColumnMarginProperty =
-            DependencyProperty.Register("ColumnMargin", typeof(double), typeof(SparrowChart), new PropertyMetadata(5d));
+        public static void SetColumnMarginPercentage(DependencyObject obj, double value)
+        {
+            obj.SetValue(ColumnMarginPercentageProperty, value);
+        }
+
+        public static readonly DependencyProperty ColumnMarginPercentageProperty =
+            DependencyProperty.RegisterAttached("ColumnMarginPercentage", typeof(double), typeof(SparrowChart), new PropertyMetadata(0.3d));
 
 
         public RenderingMode RenderingMode

@@ -22,7 +22,7 @@ namespace Sparrow.Chart
 {
     public class BubbleSeries : FillSeriesBase
     {
-        private List<double> sizeValues;
+        internal List<double> sizeValues;
         public BubbleSeries()
         {
             BubblePoints = new PointCollection();

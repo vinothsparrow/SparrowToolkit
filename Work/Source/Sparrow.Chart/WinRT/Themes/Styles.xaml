@@ -7,19 +7,23 @@
         <Setter Property="StrokeThickness" Value="2"/>
     </Style>
     <Style TargetType="Line" x:Key="majorLineStyle">
-        <Setter Property="Stroke" Value="#FF888888"/>
+        <Setter Property="Stroke" Value="#FFD4D4D4"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
     <Style TargetType="Line" x:Key="minorLineStyle">
-        <Setter Property="Stroke" Value="#FF888888"/>
-        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="Stroke" Value="#FFB0B0B0"/>
+        <Setter Property="StrokeThickness" Value="0.5"/>
     </Style>
     <Style TargetType="Line" x:Key="crossLineStyle">
-        <Setter Property="Stroke" Value="#FF888888"/>
+        <Setter Property="Stroke" Value="#FFD4D4D4"/>
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
+    <Style TargetType="Line" x:Key="minorCrossLineStyle">
+        <Setter Property="Stroke" Value="#FFB0B0B0"/>
+        <Setter Property="StrokeThickness" Value="0.5"/>
+    </Style>
     <Style TargetType="Border" x:Key="containerBorderStyle">
-        <Setter Property="BorderBrush" Value="#FF888888"/>
+        <Setter Property="BorderBrush" Value="#FFD4D4D4"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
     <DataTemplate x:Key="yAxisHeaderTemplate">
@@ -38,5 +42,9 @@
         <TextBlock Text="{Binding}" FontSize="12" FontWeight="Light" TextWrapping="Wrap">
         </TextBlock>
     </DataTemplate>
-
+    
+    <DataTemplate x:Key="legendTitleTemplate">
+        <TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap">
+        </TextBlock>
+    </DataTemplate>
 </ResourceDictionary>

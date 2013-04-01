@@ -28,11 +28,10 @@ namespace Sparrow.Chart
     /// <summary>
     /// Legend Item
     /// </summary>
-    public class LegendItem : ContentControl
+    public class LegendItem : DependencyObject
     {
         public LegendItem()
-        {
-            this.DefaultStyleKey = typeof(LegendItem);
+        {            
         }
 
         public Shape Shape
@@ -43,6 +42,71 @@ namespace Sparrow.Chart
 
         public static readonly DependencyProperty ShapeProperty =
             DependencyProperty.Register("Shape", typeof(Shape), typeof(LegendItem), new PropertyMetadata(null));
+
+
+        public SeriesBase Series
+        {
+            get { return (SeriesBase)GetValue(SeriesProperty); }
+            set { SetValue(SeriesProperty, value); }
+        }
+
+        public static readonly DependencyProperty SeriesProperty =
+            DependencyProperty.Register("Series", typeof(SeriesBase), typeof(LegendItem), new PropertyMetadata(null,OnSeriesChanged));
+
+        private static void OnSeriesChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as LegendItem).SeriesChanged(args);
+        }
+
+        internal void SeriesChanged(DependencyPropertyChangedEventArgs args)
+        {
+            Binding binding = new Binding();
+            binding.Source = Series;
+            if (Series is FillSeriesBase)
+                binding.Path = new PropertyPath("Fill");
+            else
+                binding.Path = new PropertyPath("Stroke");                    
+            BindingOperations.SetBinding(this, LegendItem.IconColorProperty, binding);
+
+            binding = new Binding();
+            binding.Source = Series;
+            binding.Path = new PropertyPath("Label");
+            BindingOperations.SetBinding(this, LegendItem.LabelProperty, binding);
+          
+        }
+
+        public Brush IconColor
+        {
+            get { return (Brush)GetValue(IconColorProperty); }
+            set { SetValue(IconColorProperty, value); }
+        }
+
+        public static readonly DependencyProperty IconColorProperty =
+            DependencyProperty.Register("IconColor", typeof(Brush), typeof(LegendItem), new PropertyMetadata(null));
+
+
+
+        public object Label
+        {
+            get { return (object)GetValue(LabelProperty); }
+            set { SetValue(LabelProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelProperty =
+            DependencyProperty.Register("Label", typeof(object), typeof(LegendItem), new PropertyMetadata(null));
+
+
+
+        public bool ShowIcon
+        {
+            get { return (bool)GetValue(ShowIconProperty); }
+            set { SetValue(ShowIconProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowIconProperty =
+            DependencyProperty.Register("ShowIcon", typeof(bool), typeof(LegendItem), new PropertyMetadata(null));
+
+
         
     }
 }

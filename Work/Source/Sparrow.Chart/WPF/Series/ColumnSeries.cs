@@ -30,7 +30,7 @@ namespace Sparrow.Chart
     public class ColumnSeries : FillSeriesBase
     {        
         internal PointCollection startEndPoints;
-
+        internal List<Rect> rects;
         override public void GenerateDatas()
         {
             if (this.Points != null && this.seriesContainer != null)
@@ -39,6 +39,7 @@ namespace Sparrow.Chart
                 if (!isPointsGenerated)
                     Parts.Clear();
                 startEndPoints = new PointCollection();
+                rects = new List<Rect>();
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
                 IntializePoints();
@@ -53,6 +54,7 @@ namespace Sparrow.Chart
                         startEndPoints.Add(startPoint);
                         startEndPoints.Add(endPoint);
                         ColumnPoints.Add(linePoint);
+                        rects.Add(new Rect(startPoint, endPoint));
                         oldPoint = point;
                     }
                 }
@@ -111,8 +113,8 @@ namespace Sparrow.Chart
         }
         public Point CalculateColumnSeriesInfo()
         {
-            double width = 0.8;
-            double m_minPointsDelta = double.MaxValue;
+            double width = 1 - SparrowChart.GetColumnMarginPercentage(this);
+            double mininumWidth = double.MaxValue;
             int position = Chart.columnSeries.IndexOf(this) + 1;
             int count = Chart.columnSeries.Count;
             foreach (SeriesBase series in Chart.Series)
@@ -125,15 +127,15 @@ namespace Sparrow.Chart
                         double delta = xValues[i] - xValues[i - 1];
                         if (delta != 0)
                         {
-                            m_minPointsDelta = Math.Min(m_minPointsDelta, delta);
+                            mininumWidth = Math.Min(mininumWidth, delta);
                         }
                     }
                 }
             }
-            m_minPointsDelta = ((m_minPointsDelta == double.MaxValue || m_minPointsDelta >= 1 || m_minPointsDelta < 0) ? 1 : m_minPointsDelta);
-            double div = m_minPointsDelta * width / count;
-            double start = div * (position - 1) - m_minPointsDelta * width / 2;
-            double end = start + div;
+            mininumWidth = ((mininumWidth == double.MaxValue || mininumWidth >= 1 || mininumWidth < 0) ? 1 : mininumWidth);
+            double per = mininumWidth * width / count;
+            double start = per * (position - 1) - mininumWidth * width / 2;
+            double end = start + per;
             return new Point(start,end);
             //}
         }      

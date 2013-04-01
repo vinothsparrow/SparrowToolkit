@@ -42,6 +42,7 @@ namespace Sparrow.Chart
             if (series is ScatterSeries || series is BubbleSeries)
             {
                 var points = new PointCollection();
+                var sizes=new List<double>();
                 var pointCount = 0;
                 float size = 0;
                 var brush=new SolidColorBrush(Colors.Blue).AsDrawingBrush();
@@ -61,6 +62,7 @@ namespace Sparrow.Chart
                     points = scatterSeries.BubblePoints;
                     pointCount = scatterSeries.BubblePoints.Count;
                     //size = (float)scatterSeries.;
+                    sizes=scatterSeries.sizeValues;
                     brush = (this.Series as FillSeriesBase).Fill.AsDrawingBrush();
                     partsCollection = scatterSeries.Parts;
                 }
@@ -77,22 +79,46 @@ namespace Sparrow.Chart
                 {
                     for (int i = 0; i < pointCount; i++)
                     {
-                        switch (RenderingMode)
+                        if (series is ScatterSeries)
                         {
-                            case RenderingMode.GDIRendering:
-                                GDIGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
-                                GDIGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
-                                break;
-                            case RenderingMode.Default:
-                                break;
-                            case RenderingMode.WritableBitmap:
-                                this.WritableBitmap.Lock();
-                                WritableBitmapGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
-                                WritableBitmapGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
-                                this.WritableBitmap.Unlock();
-                                break;
-                            default:
-                                break;
+                            switch (RenderingMode)
+                            {
+                                case RenderingMode.GDIRendering:
+                                    GDIGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    GDIGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    break;
+                                case RenderingMode.Default:
+                                    break;
+                                case RenderingMode.WritableBitmap:
+                                    this.WritableBitmap.Lock();
+                                    WritableBitmapGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    WritableBitmapGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    this.WritableBitmap.Unlock();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            size=(int)sizes[i];
+                            switch (RenderingMode)
+                            {
+                                case RenderingMode.GDIRendering:
+                                    GDIGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    GDIGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    break;
+                                case RenderingMode.Default:
+                                    break;
+                                case RenderingMode.WritableBitmap:
+                                    this.WritableBitmap.Lock();
+                                    WritableBitmapGraphics.DrawEllipse(pen, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    WritableBitmapGraphics.FillEllipse(brush, points[i].AsDrawingPointF().X - size / 2, points[i].AsDrawingPointF().Y - size / 2, size, size);
+                                    this.WritableBitmap.Unlock();
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
 
                     }

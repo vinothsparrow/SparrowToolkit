@@ -98,42 +98,47 @@ namespace Sparrow.Chart
             {
                 var points = new PointCollection();
                 var pointCount = 0;
-
+                var rects = new List<Rect>();
                 ColumnSeries columnSeries = series as ColumnSeries;
                 points = columnSeries.ColumnPoints;
                 pointCount = columnSeries.ColumnPoints.Count;
-
+                rects = columnSeries.rects;
+                System.Drawing.Brush fill = columnSeries.Fill.AsDrawingBrush();
+                System.Drawing.Pen fillPen = new System.Drawing.Pen(fill);
                 if (RenderingMode == RenderingMode.Default)
                 {
                     for (int i = 0; i < columnSeries.Parts.Count; i++)
                     {
-                        System.Windows.Shapes.Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as System.Windows.Shapes.Rectangle;                        
+                        System.Windows.Shapes.Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as System.Windows.Shapes.Rectangle;
                         PartsCanvas.Children.Add(element);
                     }
-                }                
-                //else
-                //{
-                //    for (int i = 0; i < pointCount - 1; i++)
-                //    {
-                //        switch (RenderingMode)
-                //        {
-                //            case RenderingMode.GDIRendering:
-                //                GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
+                }
+                else
+                {
+                    for (int i = 0; i < rects.Count; i++)
+                    {
+                        Rect rect=rects[i];
+                        switch (RenderingMode)
+                        {
+                            case RenderingMode.GDIRendering:
+                                GDIGraphics.DrawRectangle(pen, (float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
+                                GDIGraphics.FillRectangle(fill, (float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
+                                break;
+                            case RenderingMode.Default:
+                                break;
+                            case RenderingMode.WritableBitmap:
+                                this.WritableBitmap.Lock();
+                                WritableBitmapGraphics.DrawRectangle(pen, (float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
+                                WritableBitmapGraphics.FillRectangle(fill, (float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height);
+                                this.WritableBitmap.Unlock();
+                                break;
+                            default:
+                                break;
+                        }
 
-                //                break;
-                //            case RenderingMode.Default:
-                //                break;
-                //            case RenderingMode.WritableBitmap:
-                //                this.WritableBitmap.Lock();
-                //                WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
-                //                this.WritableBitmap.Unlock();
-                //                break;
-                //            default:
-                //                break;
-                //        }
-
-                //    }
-                //    this.collection.InvalidateBitmap();
+                    }
+                    this.collection.InvalidateBitmap();
+                }
             }
         }
 #else

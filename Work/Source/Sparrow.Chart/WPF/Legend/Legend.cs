@@ -29,12 +29,37 @@ namespace Sparrow.Chart
     /// Chart Legend
     /// </summary>
     public class Legend : ItemsControl
-    {
-
+    {        
+        ResourceDictionary styles;
         public Legend()
         {
             this.DefaultStyleKey = typeof(Legend);
+            styles = new ResourceDictionary()
+            {
+#if X86
+                Source = new Uri(@"/Sparrow.Chart.DirectX2D_x86;component/Themes/Styles.xaml", UriKind.Relative)
+#elif X64
+                Source = new Uri(@"/Sparrow.Chart.DirectX2D_x64;component/Themes/Styles.xaml", UriKind.Relative)
+#elif WPF
+                Source = new Uri(@"/Sparrow.Chart.Wpf;component/Themes/Styles.xaml", UriKind.Relative)
+#elif SILVERLIGHT
+                Source = new Uri(@"/Sparrow.Chart.Silverlight;component/Themes/Styles.xaml", UriKind.Relative)
+#elif WINRT
+                Source = new Uri(@"ms-appx:///Sparrow.Chart.WinRT/Themes/Styles.xaml")
+#elif WP7
+                Source = new Uri(@"/Sparrow.Chart.WP7;component/Themes/Styles.xaml", UriKind.Relative)
+#elif WP8
+                Source = new Uri(@"/Sparrow.Chart.WP8;component/Themes/Styles.xaml", UriKind.Relative)
+#endif
+            };
+            this.TitleTemplate = (DataTemplate)styles["legendTitleTemplate"];
+            this.Loaded += Legend_Loaded;
         }
+
+        void Legend_Loaded(object sender, RoutedEventArgs e)
+        {
+            ChangeOrientation();
+        }       
 
         public SparrowChart Chart
         {
@@ -45,6 +70,62 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty ChartProperty =
             DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(Legend), new PropertyMetadata(null));
 
+
+
+        internal Orientation LegendOrientaion
+        {
+            get { return (Orientation)GetValue(LegendOrientaionProperty); }
+            set { SetValue(LegendOrientaionProperty, value); }
+        }
+
+        internal static readonly DependencyProperty LegendOrientaionProperty =
+            DependencyProperty.Register("LegendOrientaion", typeof(Orientation), typeof(Legend), new PropertyMetadata(Orientation.Horizontal,OnLegendOrientationChanged));
+
+        private static void OnLegendOrientationChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as Legend).ChangeOrientation();
+        }
+
+        internal void ChangeOrientation()
+        {
+            ItemsPresenter itemsPresenter = GetVisualChild<ItemsPresenter>(this);
+            if (itemsPresenter != null)
+            {
+                if (VisualTreeHelper.GetChildrenCount(itemsPresenter) > 0)
+                {
+#if WINRT
+                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 1) as StackPanel;
+#else
+                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as StackPanel;
+#endif
+                    if (itemsPanel != null)
+                    {
+                        itemsPanel.Orientation = this.LegendOrientaion;                       
+                    }
+                }
+            }
+        }
+
+        private static T GetVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            T child = default(T);
+
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                DependencyObject v = (DependencyObject)VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetVisualChild<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
+        }
        
         public Dock Dock
         {
@@ -62,21 +143,63 @@ namespace Sparrow.Chart
         internal void DockChanged(DependencyPropertyChangedEventArgs args)
         {
             DockPanel.SetDock(this, this.Dock);
-            if (this.Chart != null)
+
+            switch (this.Dock)
             {
-                if (this.Chart.rootDockPanel != null)
-                    this.Chart.rootDockPanel.InvalidateMeasure();
+                case Dock.Bottom:
+                case Dock.Top:
+                    this.LegendOrientaion = Orientation.Horizontal;
+                    break;
+                case Dock.Left:
+                case Dock.Right:
+                    this.LegendOrientaion = Orientation.Vertical;
+                    break;
+                default:
+                    break;
             }
-        }        
-        
-        protected override bool IsItemItsOwnContainerOverride(object item)
-        {
-            return (item is LegendItem);
+
         }
 
-        protected override DependencyObject GetContainerForItemOverride()
+        public object Title
         {
-            return new LegendItem();
+            get { return (object)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
         }
+
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register("Title", typeof(object), typeof(Legend), new PropertyMetadata(null));
+
+
+
+        public DataTemplate TitleTemplate
+        {
+            get { return (DataTemplate)GetValue(TitleTemplateProperty); }
+            set { SetValue(TitleTemplateProperty, value); }
+        }
+
+        public static readonly DependencyProperty TitleTemplateProperty =
+            DependencyProperty.Register("TitleTemplate", typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
+
+
+
+        public CornerRadius CornerRadius
+        {
+            get { return (CornerRadius)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+
+        public static readonly DependencyProperty CornerRadiusProperty =
+            DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Legend), new PropertyMetadata(new CornerRadius(0)));
+
+
+        public bool ShowIcon
+        {
+            get { return (bool)GetValue(ShowIconProperty); }
+            set { SetValue(ShowIconProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowIconProperty =
+            DependencyProperty.Register("ShowIcon", typeof(bool), typeof(Legend), new PropertyMetadata(true));        
+
     }
 }

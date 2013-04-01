@@ -102,6 +102,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Axis\AxisBase.cs" />
+    <Compile Include="Axis\CategoryXAxis.cs" />
+    <Compile Include="Axis\DateTimeXAxis.cs" />
+    <Compile Include="Axis\DateTimeYAxis.cs" />
+    <Compile Include="Axis\LinearXAxis.cs" />
+    <Compile Include="Axis\LinearYAxis.cs" />
     <Compile Include="Collections\Collections.cs" />
     <Compile Include="Container\ColumnContainer.cs" />
     <Compile Include="Container\ScatterContainer.cs" />
@@ -151,6 +156,10 @@
     <Compile Include="Utility\FastReflectionUtility.cs" />
     <Compile Include="Utility\Recycler.cs" />
     <Compile Include="Utility\Utility.cs" />
+    <Page Include="Legend\Legend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

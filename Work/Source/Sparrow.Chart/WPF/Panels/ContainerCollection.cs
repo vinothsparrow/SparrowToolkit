@@ -70,8 +70,6 @@ namespace Sparrow.Chart
 #endif
 #if WPF
         private bool disposed;
-        internal int width;
-        internal int height;
         protected bool isDirectXInitialized;
         private int bpp = PixelFormats.Bgra32.BitsPerPixel / 8;
         private IntPtr MapViewPointer;
@@ -83,6 +81,7 @@ namespace Sparrow.Chart
         protected Graphics WritableBitmapGraphics;
 #endif
         private Canvas partsCanvas;
+        private bool isLegendUpdate;
 
         
 
@@ -208,15 +207,14 @@ namespace Sparrow.Chart
                 this.YAxis.CalculateIntervalFromSeriesPoints();
                 this.YAxis.Refresh();
             }
-            
+           
             foreach (SeriesBase series in this.Series)
             {
                 if (Containers.Count > 0)
                     series.seriesContainer = Containers[series.Index];
                 series.Refresh();
             }
-            //if (axisLinesconatiner != null)
-            //    axisLinesconatiner.Refresh();
+           
         }
        
         public void Clear()
@@ -600,7 +598,19 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(ContainerCollection), new PropertyMetadata(RenderingMode.Default));
 
-       
+
+
+        public SparrowChart Chart
+        {
+            get { return (SparrowChart)GetValue(ChartProperty); }
+            set { SetValue(ChartProperty, value); }
+        }
+
+        public static readonly DependencyProperty ChartProperty =
+            DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(ContainerCollection), new PropertyMetadata(null));
+
+
+
         public XAxis XAxis
         {
             get { return (XAxis)GetValue(XAxisProperty); }

@@ -32,9 +32,10 @@ namespace Sparrow.Chart
         }
 
         protected Line axisLine;
-        protected List<ContentPresenter> labels;
+        protected List<ContentControl> labels;
         protected List<Line> majorTickLines;
-        protected ContentPresenter header;
+        protected List<Line> minorTickLines;
+        protected ContentControl header;
         protected bool isInitialized;
         private bool isIntervalCountZero;
 
@@ -78,6 +79,7 @@ namespace Sparrow.Chart
             this.MinorLineStyle = (Style)styles["minorLineStyle"];
             this.LabelTemplate = (DataTemplate)styles["axisLabelTemplate"];
             this.CrossLineStyle = (Style)styles["crossLineStyle"];
+            this.MinorCrossLineStyle = (Style)styles["minorCrossLineStyle"];
         }    
       
 
@@ -141,7 +143,10 @@ namespace Sparrow.Chart
             }
 
             if (this.Chart != null && this.Chart.containers != null)
+            {
                 Chart.containers.Refresh();
+                Chart.containers.axisLinesconatiner.Refresh();
+            }
             RefreshSeries();
         }
 
@@ -384,7 +389,7 @@ namespace Sparrow.Chart
         }
 
         public static readonly DependencyProperty MinorLineSizeProperty =
-            DependencyProperty.Register("MinorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(4d));
+            DependencyProperty.Register("MinorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(6d));
 
 
         /// <summary>
@@ -423,7 +428,7 @@ namespace Sparrow.Chart
         }
 
         public static readonly DependencyProperty MajorLineSizeProperty =
-            DependencyProperty.Register("MajorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(8d));
+            DependencyProperty.Register("MajorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(10d));
 
 
         /// <summary>
@@ -506,6 +511,28 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty ShowCrossLinesProperty =
             DependencyProperty.Register("ShowCrossLines", typeof(bool), typeof(AxisBase), new PropertyMetadata(true));
 
+
+
+        public bool ShowMinorCrossLines
+        {
+            get { return (bool)GetValue(ShowMinorCrossLinesProperty); }
+            set { SetValue(ShowMinorCrossLinesProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowMinorCrossLinesProperty =
+            DependencyProperty.Register("ShowMinorCrossLines", typeof(bool), typeof(AxisBase), new PropertyMetadata(true));
+
+
+
+
+        public Style MinorCrossLineStyle
+        {
+            get { return (Style)GetValue(MinorCrossLineStyleProperty); }
+            set { SetValue(MinorCrossLineStyleProperty, value); }
+        }
+
+        public static readonly DependencyProperty MinorCrossLineStyleProperty =
+            DependencyProperty.Register("MinorCrossLineStyle", typeof(Style), typeof(AxisBase), new PropertyMetadata(null));
 
 
 

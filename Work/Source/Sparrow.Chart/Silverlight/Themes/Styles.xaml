@@ -8,16 +8,22 @@
     </Style>
     <Style TargetType="Line" x:Key="majorLineStyle">
         <Setter Property="Stroke" Value="#353535"/>
-        <Setter Property="StrokeThickness" Value="0.5"/>
+        <Setter Property="StrokeThickness" Value="1"/>
     </Style>
     <Style TargetType="Line" x:Key="minorLineStyle">
-        <Setter Property="Stroke" Value="#353535"/>
+        <Setter Property="Stroke" Value="#858585"/>
         <Setter Property="StrokeThickness" Value="0.5"/>
     </Style>
     <Style TargetType="Line" x:Key="crossLineStyle">
         <Setter Property="Stroke" Value="#353535"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="Line" x:Key="minorCrossLineStyle">
+        <Setter Property="Stroke" Value="#858585"/>
         <Setter Property="StrokeThickness" Value="0.5"/>
     </Style>
+    
     <Style TargetType="Border" x:Key="containerBorderStyle">
         <Setter Property="BorderBrush" Value="#838383"/>
         <Setter Property="BorderThickness" Value="0.5"/>
@@ -38,5 +44,8 @@
         <TextBlock Text="{Binding}" FontSize="12" FontWeight="Light" TextWrapping="Wrap">
         </TextBlock>
     </DataTemplate>
-
+    <DataTemplate x:Key="legendTitleTemplate">
+        <TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap">
+        </TextBlock>
+    </DataTemplate>
 </ResourceDictionary>

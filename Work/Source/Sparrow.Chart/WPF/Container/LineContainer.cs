@@ -98,6 +98,7 @@ namespace Sparrow.Chart
             if (series is LineSeries || series is HiLoSeries)
             {
                 var points = new PointCollection();
+                var lowPoints = new PointCollection();
                 var pointCount = 0;
                 PartsCollection partsCollection = new PartsCollection();
                 if (series is LineSeries)
@@ -111,6 +112,7 @@ namespace Sparrow.Chart
                 {
                     HiLoSeries lineSeries = series as HiLoSeries;
                     points = lineSeries.HighPoints;
+                    lowPoints = lineSeries.LowPoints;
                     pointCount = lineSeries.HighPoints.Count;
                     partsCollection = lineSeries.Parts;
                 }
@@ -123,25 +125,51 @@ namespace Sparrow.Chart
                 }
                 else
                 {
-                    for (int i = 0; i < pointCount - 1; i++)
+                    if (series is LineSeries)
                     {
-                        switch (RenderingMode)
+                        for (int i = 0; i < pointCount - 1; i++)
                         {
-                            case RenderingMode.GDIRendering:
-                                GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
-                                
-                                break;
-                            case RenderingMode.Default:
-                                break;
-                            case RenderingMode.WritableBitmap:
-                                this.WritableBitmap.Lock();
-                                WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());                               
-                                this.WritableBitmap.Unlock();
-                                break;
-                            default:
-                                break;
-                        }
 
+                            switch (RenderingMode)
+                            {
+                                case RenderingMode.GDIRendering:
+                                    GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
+
+                                    break;
+                                case RenderingMode.Default:
+                                    break;
+                                case RenderingMode.WritableBitmap:
+                                    this.WritableBitmap.Lock();
+                                    WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
+                                    this.WritableBitmap.Unlock();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < pointCount; i++)
+                        {
+
+                            switch (RenderingMode)
+                            {
+                                case RenderingMode.GDIRendering:
+                                    GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), lowPoints[i].AsDrawingPointF());
+
+                                    break;
+                                case RenderingMode.Default:
+                                    break;
+                                case RenderingMode.WritableBitmap:
+                                    this.WritableBitmap.Lock();
+                                    WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), lowPoints[i].AsDrawingPointF());
+                                    this.WritableBitmap.Unlock();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     }
                     this.collection.InvalidateBitmap();
                 }                

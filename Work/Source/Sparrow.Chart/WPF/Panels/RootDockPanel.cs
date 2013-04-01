@@ -42,10 +42,8 @@ namespace Sparrow.Chart
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
-            ContainerCollection container = (ContainerCollection)this.FindName("PART_containers");
-            base.ArrangeOverride(arrangeSize);
-            //if (container != null)
-            //    container.Refresh();
+            //ContainerCollection container = (ContainerCollection)this.FindName("PART_containers");
+            base.ArrangeOverride(arrangeSize);            
             return arrangeSize;
         }
         protected override Size MeasureOverride(Size constraint)

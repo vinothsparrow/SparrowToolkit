@@ -91,8 +91,8 @@ namespace Sparrow.Chart
             {
                 double xValue = GetReflectionValue(XPath, PointsSource, xValues.Count + 1);
                 double yValue = GetReflectionValue(YPath, PointsSource, yValues.Count + 1);
-                this.xValues.Add(xValue);
-                this.yValues.Add(yValue);
+                this.xValues.Add(xValue);                
+                this.yValues.Add(xValue);
                 this.Points.Add(new ChartPoint() { XValue = xValue, YValue = yValue });
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)

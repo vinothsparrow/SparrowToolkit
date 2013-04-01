@@ -90,6 +90,21 @@
     <Compile Include="..\WPF\Axis\AxisBase.cs">
       <Link>Axis\AxisBase.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Axis\CategoryXAxis.cs">
+      <Link>Axis\CategoryXAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\DateTimeXAxis.cs">
+      <Link>Axis\DateTimeXAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\DateTimeYAxis.cs">
+      <Link>Axis\DateTimeYAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\LinearXAxis.cs">
+      <Link>Axis\LinearXAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\LinearYAxis.cs">
+      <Link>Axis\LinearYAxis.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Axis\XAxis.cs">
       <Link>Axis\XAxis.cs</Link>
     </Compile>
@@ -248,6 +263,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Legend\Legend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

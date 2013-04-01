@@ -29,9 +29,8 @@ namespace Sparrow.Chart
     /// <summary>
     /// XAxis for Sparrow Chart
     /// </summary>
-    public class XAxis : AxisBase
+    public abstract class XAxis : AxisBase
     {
-
         public XAxis()
             : base()
         {           
@@ -53,24 +52,39 @@ namespace Sparrow.Chart
             if (this.ActualHeight > 0 && this.ActualWidth > 0)
             {
                 double xAxisWidthStep = this.ActualWidth / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
-                double xAxisWidthPosition = 0;               
+                double xAxisWidthPosition = 0;
+                double minorstep = 0;
                 axisLine.X2 = this.ActualWidth;                
                 Rect oldRect = new Rect(0, 0, 0, 0);
                
                 if (this.m_Labels.Count == labels.Count)
                 {
                     int k = 0;
+                    int minorCount = 0;
                     for (int i = 0; i < this.m_Labels.Count; i++)
                     {                        
                         xAxisWidthPosition = this.DataToPoint(m_startValue + (m_Interval * k));
-                        ContentPresenter label = labels[k];
+                        ContentControl label = labels[k];
                         label.Content = m_Labels[k];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         Line tickLine = majorTickLines[k];
                         double labelPadding = 0;
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         tickLine.X1 = xAxisWidthPosition ;
-                        tickLine.X2 = xAxisWidthPosition ;                        
+                        tickLine.X2 = xAxisWidthPosition ;
+                        if (!(i == this.m_Labels.Count - 1))
+                        {
+                            double minorWidth = xAxisWidthStep;
+                            minorstep = minorWidth / (MinorTicksCount + 1);
+                            for (int j = 0; j < this.MinorTicksCount; j++)
+                            {
+                                Line minorLine = minorTickLines[minorCount];
+                                minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
+                                minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
+                                minorLine.Y1 = 0;         
+                                minorCount++;
+                            }
+                        }
                         if (this.ShowMajorTicks)
                         {
                             labelPadding = tickLine.Y2;
@@ -89,12 +103,12 @@ namespace Sparrow.Chart
                         int offset = this.m_Labels.Count - labels.Count;
                         for (int j = 0; j < offset; j++)
                         {
-                            ContentPresenter label = new ContentPresenter();
-                            label.Content = m_Labels[this.m_Labels.Count - offset -1];
+                            ContentControl label = new ContentControl();
+                            label.Content = m_Labels[this.m_Labels.Count - offset - 1];
                             Binding labelTemplateBinding = new Binding();
                             labelTemplateBinding.Path = new PropertyPath("LabelTemplate");
                             labelTemplateBinding.Source = this;
-                            label.SetBinding(ContentPresenter.ContentTemplateProperty, labelTemplateBinding);
+                            label.SetBinding(ContentControl.ContentTemplateProperty, labelTemplateBinding);
                             label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                             labels.Add(label);
                             Line tickLine = new Line();
@@ -115,6 +129,28 @@ namespace Sparrow.Chart
                             ticklineVisibilityBinding.Source = this;
                             ticklineVisibilityBinding.Converter = new BooleanToVisibilityConverter();
                             tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
+                            double minorWidth = xAxisWidthStep;
+                            minorstep = minorWidth / (MinorTicksCount + 1);
+                            for (int k = 0; k < this.MinorTicksCount; k++)
+                            {
+                                Line minorLine = new Line();
+                                Binding minorstyleBinding = new Binding();
+                                minorstyleBinding.Path = new PropertyPath("MinorLineStyle");
+                                minorstyleBinding.Source = this;
+                                minorLine.SetBinding(Line.StyleProperty, minorstyleBinding);
+                                minorLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                                minorLine.X1 = (xAxisWidthPosition + minorstep);
+                                minorLine.X2 = (xAxisWidthPosition + minorstep);
+                                minorLine.Y1 = 0;
+                                Binding minortickSizeBinding = new Binding();
+                                minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                minortickSizeBinding.Source = this;
+                                minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
+
+                                minorTickLines.Add(minorLine);
+                                this.Children.Add(minorLine);
+                                minorstep += minorstep;
+                            }
                             majorTickLines.Add(tickLine);
                             this.Children.Add(label);
                             this.Children.Add(tickLine);
@@ -128,21 +164,40 @@ namespace Sparrow.Chart
                         {
                             this.Children.Remove(labels[labels.Count - 1]);
                             labels.RemoveAt(labels.Count - 1);
+                            for (int k = 0; k < this.MinorTicksCount; k++)
+                            {
+                                this.Children.Remove(minorTickLines[minorTickLines.Count - 1]);
+                                minorTickLines.RemoveAt(minorTickLines.Count - 1);
+                            }
                             this.Children.Remove(majorTickLines[majorTickLines.Count - 1]);
                             majorTickLines.RemoveAt(majorTickLines.Count - 1);
                         }
                     }
                     for (int i = 0; i < this.m_Labels.Count; i++)
                     {
-                        ContentPresenter label = labels[i];
+                        ContentControl label = labels[i];
                         label.Content = m_Labels[i];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         Line tickLine = majorTickLines[i];
                         double labelPadding = 0;
+                        int minorCount = 0;
                         tickLine.X1 = xAxisWidthPosition;
                         tickLine.X2 = xAxisWidthPosition;
                         tickLine.Y1 = 0;
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        if (!(i == this.m_Labels.Count - 1))
+                        {
+                            double minorWidth = xAxisWidthStep;
+                            minorstep = minorWidth / (MinorTicksCount + 1);
+                            for (int j = 0; j < this.MinorTicksCount; j++)
+                            {
+                                Line minorLine = minorTickLines[minorCount];
+                                minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
+                                minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
+                                minorLine.Y1 = 0;                                
+                                minorCount++;
+                            }
+                        }
                         if (this.ShowMajorTicks)
                         {
                             labelPadding = tickLine.Y2;
@@ -176,6 +231,7 @@ namespace Sparrow.Chart
                 this.Children.Clear();
                 double xAxisWidthStep = this.ActualWidth / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
                 double xAxisWidthPosition = this.DataToPoint(m_startValue);
+                double minorstep = 0;
                 //m_offset = this.DataToPoint(m_MinValue + m_Interval);
                 Rect oldRect = new Rect(0, 0, 0, 0);
                 axisLine = new Line();
@@ -187,17 +243,17 @@ namespace Sparrow.Chart
                 binding.Path = new PropertyPath("AxisLineStyle");
                 binding.Source = this;
                 axisLine.SetBinding(Line.StyleProperty, binding);
-                labels = new List<ContentPresenter>();
+                labels = new List<ContentControl>();
                 majorTickLines = new List<Line>();
-
+                minorTickLines = new List<Line>();
                 for (int i = 0; i < this.m_Labels.Count; i++)
                 {
-                    ContentPresenter label = new ContentPresenter();
+                    ContentControl label = new ContentControl();
                     label.Content = m_Labels[i];
                     Binding labelTemplateBinding = new Binding();
                     labelTemplateBinding.Path = new PropertyPath("LabelTemplate");
                     labelTemplateBinding.Source = this;
-                    label.SetBinding(ContentPresenter.ContentTemplateProperty, labelTemplateBinding);
+                    label.SetBinding(ContentControl.ContentTemplateProperty, labelTemplateBinding);
                     label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                     labels.Add(label);
                     Line tickLine = new Line();
@@ -221,6 +277,30 @@ namespace Sparrow.Chart
                     tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
                     majorTickLines.Add(tickLine);
                     this.Children.Add(tickLine);
+                    if (!(i == this.m_Labels.Count - 1))
+                    {
+                        double minorWidth = xAxisWidthStep;
+                        minorstep = minorWidth / (MinorTicksCount + 1);
+                        for (int j = 0; j < this.MinorTicksCount; j++)
+                        {
+                            Line minorLine = new Line();
+                            Binding minorstyleBinding = new Binding();
+                            minorstyleBinding.Path = new PropertyPath("MinorLineStyle");
+                            minorstyleBinding.Source = this;
+                            minorLine.SetBinding(Line.StyleProperty, minorstyleBinding);
+                            minorLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                            minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
+                            minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
+                            minorLine.Y1 = 0;
+                            Binding minortickSizeBinding = new Binding();
+                            minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
+                            minortickSizeBinding.Source = this;
+                            minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
+                            
+                            minorTickLines.Add(minorLine);
+                            this.Children.Add(minorLine);                           
+                        }
+                    }
                     if (this.ShowMajorTicks)
                     {
                         labelPadding = tickLine.Y2;
@@ -232,15 +312,16 @@ namespace Sparrow.Chart
                     this.Children.Add(label);                   
                     xAxisWidthPosition += xAxisWidthStep;
                 }
-                header = new ContentPresenter();
+                header = new ContentControl();
+                header.DataContext = null;
                 Binding contentBinding = new Binding();
                 contentBinding.Path = new PropertyPath("Header");
                 contentBinding.Source = this;
-                header.SetBinding(ContentPresenter.ContentProperty, contentBinding);
+                header.SetBinding(ContentControl.ContentProperty, contentBinding);
                 Binding headerTemplateBinding = new Binding();
                 headerTemplateBinding.Path = new PropertyPath("HeaderTemplate");
                 headerTemplateBinding.Source = this;
-                header.SetBinding(ContentPresenter.ContentTemplateProperty, headerTemplateBinding);
+                header.SetBinding(ContentControl.ContentTemplateProperty, headerTemplateBinding);
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
                 Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
@@ -320,15 +401,15 @@ namespace Sparrow.Chart
                 default:
                     return value.ToString(this.StringFormat);                    
             }
-        }        
+        }
 
-        public XType Type
+        internal XType Type
         {
             get { return (XType)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
-        public static readonly DependencyProperty TypeProperty =
+        internal static readonly DependencyProperty TypeProperty =
             DependencyProperty.Register("Type", typeof(XType), typeof(XAxis), new PropertyMetadata(XType.Double,OnTypeChanged));
         private static void OnTypeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
