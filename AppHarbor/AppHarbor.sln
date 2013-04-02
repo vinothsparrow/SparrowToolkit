@@ -26,7 +26,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "AppHarbor.Web", "http://loc
 		ProjOutputReferences = "{7C36FD68-10B6-4E57-B762-86908EAFC2C6}|ClientBin|false;"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Silverlight", "..\Work\Source\Sparrow.Chart\Silverlight\Sparrow.Chart.Silverlight.csproj", "{DDB73CF4-9C97-47C6-816C-11518A89CA56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Silverlight_SL4", "..\Work\Source\Sparrow.Chart\Silverlight\Sparrow.Chart.Silverlight_SL4.csproj", "{DDB73CF4-9C97-47C6-816C-11518A89CA56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
