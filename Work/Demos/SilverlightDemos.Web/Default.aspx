@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title>Sparrow Chart Toolkit Silverlight Demos</title>
+    <title>SilverlightDemos</title>
     <style type="text/css">
     html, body {
 	    height: 100%;
@@ -55,14 +55,14 @@
             throw new Error(errMsg);
         }
     </script>
-    <script type="text/javascript" src="splash.js"></script>
+    <script type="text/javascript" src="splashscreen.js"></script>
 </head>
 <body>
     <form id="form1" runat="server" style="height:100%">
     <div id="silverlightControlHost">
         <object data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="100%" height="100%">
-          <param name="splashscreensource" value="Splash.xaml"/>
           <param name="onSourceDownloadProgressChanged" value="onSourceDownloadProgressChanged" />
+		  <param name="splashscreensource" value="SplashScreen.xaml"/>
 		  <param name="source" value="ClientBin/SilverlightDemos.xap"/>
 		  <param name="onError" value="onSilverlightError" />
 		  <param name="background" value="white" />
