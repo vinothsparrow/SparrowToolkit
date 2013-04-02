@@ -26,6 +26,7 @@
             <sparrow:ColumnSeries Label="Series 1" PointsSource="{Binding Collection}" XPath="X" YPath="Y"/>
             <sparrow:ColumnSeries Label="Series 2" PointsSource="{Binding Collection}" XPath="X" YPath="Y"/>
             <sparrow:LineSeries Label="Series 3" PointsSource="{Binding Collection}" XPath="X" Stroke="Red" StrokeThickness="3" YPath="Y"/>
+
         </sparrow:SparrowChart>
     </Grid>
 </UserControl>
