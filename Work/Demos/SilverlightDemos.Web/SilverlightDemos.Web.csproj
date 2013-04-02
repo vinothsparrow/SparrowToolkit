@@ -85,9 +85,9 @@
     <Content Include="ClientBin\SilverlightDemos.xap" />
     <Content Include="Global.asax" />
     <Content Include="Silverlight.js" />
-    <Content Include="Default.aspx" />
-    <Content Include="Default.html" />
-    <Content Include="SplashScreen.js" />
+    <Content Include="Index.aspx" />
+    <Content Include="Index.html" />
+    <Content Include="ClientBin\SplashScreen.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -123,7 +123,7 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="SplashScreen.xaml">
+    <Page Include="ClientBin\SplashScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
