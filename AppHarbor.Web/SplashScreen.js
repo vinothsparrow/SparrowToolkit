@@ -1,4 +1,4 @@
 ﻿function onSourceDownloadProgressChanged(sender, eventArgs) {
-    sender.findName("uxStatus").Text = "Loading: " + Math.round((eventArgs.progress * 1000)) / 10 + "%";
-    sender.findName("uxProgressBar").ScaleY = eventArgs.progress * 356;
+    sender.findName("Progress").Text = (Math.round(eventArgs.progress * 100)).toString();
+    sender.findName("progressbar").ScaleX = 1 - (Math.round(eventArgs.progress * 100)) / 100;
 }
