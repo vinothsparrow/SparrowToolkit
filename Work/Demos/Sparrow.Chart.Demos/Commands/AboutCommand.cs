@@ -9,6 +9,7 @@ namespace Sparrow.Chart.Demos
 {
     public class AboutCommand : ICommand
     {
+        Sparrow.Chart.Demos.View.About about;
         public bool CanExecute(object parameter)
         {
             return true;
@@ -18,7 +19,7 @@ namespace Sparrow.Chart.Demos
 
         public void Execute(object parameter)
         {
-            Sparrow.Chart.Demos.View.About about = new View.About();
+            about = new View.About();
             about.Owner = (Window)parameter;
             about.ShowDialog();
             

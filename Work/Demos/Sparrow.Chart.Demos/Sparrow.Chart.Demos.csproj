@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\DemoBinaries\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -146,9 +146,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\Sparrow.Chart\Sparrow.Chart.csproj">
+    <ProjectReference Include="..\..\Source\Sparrow.Chart\WPF\Sparrow.Chart.Wpf.csproj">
       <Project>{561755e1-9492-4ec2-aca1-8cf76e6cac5a}</Project>
-      <Name>Sparrow.Chart</Name>
+      <Name>Sparrow.Chart.Wpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Source\Sparrow.Resources\Sparrow.Resources.csproj">
       <Project>{4ae312fe-9e56-4ced-8186-3b778ef58032}</Project>

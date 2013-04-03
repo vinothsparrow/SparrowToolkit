@@ -18,7 +18,7 @@
                     <Image Source="../Resources/sparrow.png" Height="40" Width="40"/>
                 </Paragraph>
                 <Paragraph FontSize="14" TextAlignment="Center">
-                    <Bold>Sparrow Chart WPF Toolkit</Bold></Paragraph>
+                    <Bold>Sparrow Chart Toolkit</Bold></Paragraph>
                 <Paragraph TextAlignment="Center">
                     <Bold>Version</Bold>
                     <Bold>
@@ -26,7 +26,7 @@
                     </Bold>
                 </Paragraph>
                 <Paragraph TextAlignment="Left" FontSize="12">
-                    For more information about Sparrow Chart WPF Toolkit, Please visit
+                    For more information about Sparrow Chart Toolkit, Please visit
                     <Hyperlink>
                         <Bold>http://sparrowtoolkit.codeplex.com/</Bold>
                     </Hyperlink>                                       

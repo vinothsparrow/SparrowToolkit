@@ -22,40 +22,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Width="12"
-                            Height="12"
-                            Background="Transparent">
-                        <Border Width="12"
-                                Height="12"
-                                SnapsToDevicePixels="true"
-                                Background="{StaticResource {x:Static SystemColors.WindowBrushKey}}"
-                                BorderBrush="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"
-                                BorderThickness="1">
-                            <Grid>
-                                <Rectangle Fill="#FF838383">
-                                    
-                                </Rectangle>
-                                <Line Stroke="White"
-                                      x:Name="ExpandImg"
-                                      StrokeThickness="1"
-                                      X1="0"
-                                      Y1="5"
-                                      X2="12"
-                                      Y2="5" />
-                                <Line Stroke="White"
-                                      StrokeThickness="1"
-                                      X1="5"
-                                      Y1="0"
-                                      X2="5"
-                                      Y2="12" />
-                            </Grid>
-                        </Border>
-                    </Border>
+                    <Grid Background="Transparent">
+                        <Path x:Name="notExpanded" Data="F1M568.254,-7.43524L568.159,-7.34277 567.977,-7.52246 546.559,-28.9417 525.484,-28.9417 549.787,-4.63446 557.439,3.01532 557.619,3.19629 550.067,10.7549 525.758,35.0583 546.834,35.0583 568.254,13.6429 578.792,3.10254 568.254,-7.43524z" Stretch="Uniform" Fill="#FF000000" Width="12" Height="12" >
+                        </Path>
+                        <Path x:Name="expanded" Data="F1M181.297,177.841L181.205,177.746 181.385,177.563 202.804,156.146 202.804,135.07 178.497,159.373 170.847,167.026 170.666,167.205 163.107,159.653 138.804,135.345 138.804,156.42 160.219,177.841 170.76,188.379 181.297,177.841z" Stretch="Uniform" Fill="#FF000000" Width="12" Height="12" Visibility="Collapsed"></Path>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked"
                                  Value="True">
                             <Setter Property="Visibility"
-                                    TargetName="ExpandImg"
+                                    TargetName="expanded"
+                                    Value="Visible" />
+                            <Setter Property="Visibility"
+                                    TargetName="notExpanded"
                                     Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>

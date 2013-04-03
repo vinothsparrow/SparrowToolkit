@@ -93,7 +93,7 @@ namespace Sparrow.Chart
                     int offset = (this.XAxis.m_Labels.Count) - xLines.Count;
                     for (int j = 0; j < offset; j++)
                     {
-                        Line line = xLines[this.XAxis.m_Labels.Count - offset - 1];
+                        Line line = new Line();
                         line.X1 = 0;
                         line.X2 = 0;
                         line.Y2 = this.ActualHeight;

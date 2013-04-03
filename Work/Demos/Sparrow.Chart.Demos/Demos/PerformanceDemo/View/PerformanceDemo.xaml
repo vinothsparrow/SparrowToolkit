@@ -14,13 +14,13 @@
             </Grid.ColumnDefinitions>
             <chart:SparrowChart Margin="5" RenderingMode="GDIRendering" SmoothingMode="HighSpeed" CompositingMode="SourceCopy" CompositingQuality="HighSpeed" Theme="Metro"  x:Name="Chart" >
                 <chart:SparrowChart.XAxis>
-                    <chart:XAxis ShowCrossLines="False" MinValue="0" MaxValue="100000"  Header="Point"  StringFormat="0.0"/>
+                    <chart:LinearXAxis ShowCrossLines="False" MinValue="0" MaxValue="100000"  Header="Point"  StringFormat="0.0"/>
                 </chart:SparrowChart.XAxis>
                 <chart:SparrowChart.YAxis>
-                    <chart:YAxis ShowCrossLines="False" StringFormat="0.0" Header="Value" >
-                    </chart:YAxis>
+                    <chart:LinearYAxis ShowCrossLines="False" StringFormat="0.0" Header="Value" >
+                    </chart:LinearYAxis>
                 </chart:SparrowChart.YAxis>
-                <chart:LineSeries>
+                <chart:LineSeries UseSinglePart="True">
                 </chart:LineSeries>
             </chart:SparrowChart>            
             <Grid Grid.Column="1" Margin="5,60,20,0">

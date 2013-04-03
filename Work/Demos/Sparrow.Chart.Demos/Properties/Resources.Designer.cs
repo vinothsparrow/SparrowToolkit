@@ -79,7 +79,7 @@ namespace Sparrow.Chart.Demos.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1.0.0.0.
+        ///   Looks up a localized string similar to 13.1.0.1.
         /// </summary>
         public static string version {
             get {
