@@ -52,13 +52,13 @@ namespace Sparrow.Chart
                 Source = new Uri(@"/Sparrow.Chart.WP8;component/Themes/Styles.xaml", UriKind.Relative)
 #endif
             };
-            this.TitleTemplate = (DataTemplate)styles["legendTitleTemplate"];
+            this.HeaderTemplate = (DataTemplate)styles["legendTitleTemplate"];
             this.Loaded += Legend_Loaded;
         }
 
         void Legend_Loaded(object sender, RoutedEventArgs e)
         {
-            ChangeOrientation();
+            ChangeLegendOrientation();
         }       
 
         public SparrowChart Chart
@@ -83,10 +83,10 @@ namespace Sparrow.Chart
 
         private static void OnLegendOrientationChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as Legend).ChangeOrientation();
+            (sender as Legend).ChangeLegendOrientation();
         }
 
-        internal void ChangeOrientation()
+        internal void ChangeLegendOrientation()
         {
             ItemsPresenter itemsPresenter = GetVisualChild<ItemsPresenter>(this);
             if (itemsPresenter != null)
@@ -106,6 +106,12 @@ namespace Sparrow.Chart
             }
         }
 
+        /// <summary>
+        /// http://svgvijay.blogspot.in/2013/01/how-to-get-datagrid-cell-in-wpf.html
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         private static T GetVisualChild<T>(DependencyObject parent) where T : DependencyObject
         {
             T child = default(T);
@@ -157,28 +163,28 @@ namespace Sparrow.Chart
                 default:
                     break;
             }
-
+            ChangeLegendOrientation();
         }
 
-        public object Title
+        public object Header
         {
-            get { return (object)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get { return (object)GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
         }
 
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register("Title", typeof(object), typeof(Legend), new PropertyMetadata(null));
+        public static readonly DependencyProperty HeaderProperty =
+            DependencyProperty.Register("Header", typeof(object), typeof(Legend), new PropertyMetadata(null));
 
 
 
-        public DataTemplate TitleTemplate
+        public DataTemplate HeaderTemplate
         {
-            get { return (DataTemplate)GetValue(TitleTemplateProperty); }
-            set { SetValue(TitleTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
+            set { SetValue(HeaderTemplateProperty, value); }
         }
 
-        public static readonly DependencyProperty TitleTemplateProperty =
-            DependencyProperty.Register("TitleTemplate", typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
+        public static readonly DependencyProperty HeaderTemplateProperty =
+            DependencyProperty.Register("HeaderTemplate", typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
 
 
 
