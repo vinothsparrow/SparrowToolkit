@@ -14,7 +14,7 @@
         </Grid.DataContext>
         <sparrow:SparrowChart>
             <sparrow:SparrowChart.Legend>
-                <sparrow:Legend Title="Legend"/>
+                <sparrow:Legend Header="Legend"/>
             </sparrow:SparrowChart.Legend>
             <sparrow:SparrowChart.XAxis>
                 <sparrow:LinearXAxis MinValue="0" MaxValue="6" Interval="1" Header="Data" ShowCrossLines="True"/>

@@ -67,7 +67,7 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            PathFigure figure = new PathFigure();
+            PathFigure figure = new PathFigure();            
             LineSegment startLineSegment = new LineSegment();
             LineSegment areaEndLineSegment = new LineSegment();
             LineSegment endLineSegment = new LineSegment();

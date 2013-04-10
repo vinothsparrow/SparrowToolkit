@@ -158,7 +158,7 @@ namespace Sparrow.Chart.Installer
         private void BrowseExecute()
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.Description = "Please select the Installation folder for Sparrow Chart WPF Toolkit";
+            dialog.Description = "Please select the Installation folder for Sparrow Chart Toolkit";
             //dialog.RootFolder = Environment.SpecialFolder.ProgramFilesX86;
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK)

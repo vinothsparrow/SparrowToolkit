@@ -11,6 +11,20 @@ namespace Sparrow.Chart
     /// </summary>
     public enum Theme
     {
+        Arctic,
+        Autmn,
+        Cold,
+        Flower,
+        Forest,
+        Grayscale,
+        Ground,
+        Lialac,
+        Natural,
+        Pastel,
+        Rainbow,
+        Spring,
+        Summer,
+        Warm,
         Metro,                
         Custom
     }

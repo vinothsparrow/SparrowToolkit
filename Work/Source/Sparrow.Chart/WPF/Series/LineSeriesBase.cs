@@ -28,10 +28,12 @@ namespace Sparrow.Chart
     /// </summary>
     public class LineSeriesBase : SeriesBase
     {
-        
+
         public void GeneratePointsFromSource()
         {
             xValues = this.GetReflectionValues(this.XPath, PointsSource, xValues, false);
+            yValues = new List<double>();
+
             yValues = this.GetReflectionValues(this.YPath, PointsSource, yValues, false);
 
             if (xValues != null && xValues.Count > 0)
@@ -106,7 +108,6 @@ namespace Sparrow.Chart
             }
 
         }
-             
 
         public string YPath
         {

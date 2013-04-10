@@ -32,29 +32,20 @@ using System.Drawing.Drawing2D;
 using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
 #endif
 
-#if DIRECTX2D
-using Sparrow.Directx2D;
-using Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
-using Microsoft.WindowsAPICodePack.DirectX.DirectWrite;
-#endif
 namespace Sparrow.Chart
 {
-    /// <summary>
-    /// LineSeries Container
-    /// </summary>
-    public class LineContainer : SeriesContainer
-    {       
-
-        public LineContainer()
+    public class HiLoOpenCloseContainer : SeriesContainer
+    {
+        public HiLoOpenCloseContainer()
             : base()
-        {                                 
+        {
+
         }
-       
         public override void Draw()
         {
             base.Draw();
         }
-#if DIRECTX2D
+        #if DIRECTX2D
         override protected void OnRender()
         {
             if (this.Directx2DGraphics.IsFrontBufferAvailable)
@@ -95,32 +86,26 @@ namespace Sparrow.Chart
 #if WPF
         override protected void DrawPath(SeriesBase series, System.Drawing.Pen pen)
         {
-            if (series is LineSeries || series is HiLoSeries || series is HiLoOpenCloseSeries)
+            if (series is HiLoOpenCloseSeries)
             {
                 var points = new PointCollection();
                 var lowPoints = new PointCollection();
+                var openPoints = new PointCollection();
+                var closePoints = new PointCollection();
+                var openOffPoints = new PointCollection();
+                var closeOffPoints = new PointCollection();
                 var pointCount = 0;
                 PartsCollection partsCollection = new PartsCollection();
-                if (series is LineSeries)
-                {
-                    LineSeries lineSeries = series as LineSeries;
-                    points = lineSeries.LinePoints;
-                    pointCount = lineSeries.LinePoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
-                else if(series is HiLoSeries)
-                {
-                    HiLoSeries lineSeries = series as HiLoSeries;
-                    points = lineSeries.HighPoints;
-                    lowPoints = lineSeries.LowPoints;
-                    pointCount = lineSeries.HighPoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
-                else if (series is HiLoOpenCloseSeries)
+                if (series is HiLoOpenCloseSeries)
                 {
                     HiLoOpenCloseSeries lineSeries = series as HiLoOpenCloseSeries;
                     points = lineSeries.HighPoints;
                     lowPoints = lineSeries.LowPoints;
+                    openPoints = lineSeries.OpenPoints;
+                    closePoints = lineSeries.ClosePoints;
+                    openOffPoints = lineSeries.openOffPoints;
+                    closeOffPoints = lineSeries.closeOffPoints;
+
                     pointCount = lineSeries.HighPoints.Count;
                     partsCollection = lineSeries.Parts;
                 }
@@ -133,30 +118,7 @@ namespace Sparrow.Chart
                 }
                 else
                 {
-                    if (series is LineSeries)
-                    {
-                        for (int i = 0; i < pointCount - 1; i++)
-                        {
-
-                            switch (RenderingMode)
-                            {
-                                case RenderingMode.GDIRendering:
-                                    GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
-
-                                    break;
-                                case RenderingMode.Default:
-                                    break;
-                                case RenderingMode.WritableBitmap:
-                                    this.WritableBitmap.Lock();
-                                    WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), points[i + 1].AsDrawingPointF());
-                                    this.WritableBitmap.Unlock();
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    else
+                    if (series is HiLoOpenCloseSeries)
                     {
                         for (int i = 0; i < pointCount; i++)
                         {
@@ -165,20 +127,23 @@ namespace Sparrow.Chart
                             {
                                 case RenderingMode.GDIRendering:
                                     GDIGraphics.DrawLine(pen, points[i].AsDrawingPointF(), lowPoints[i].AsDrawingPointF());
-
+                                    GDIGraphics.DrawLine(pen, openOffPoints[i].AsDrawingPointF(), openPoints[i].AsDrawingPointF());
+                                    GDIGraphics.DrawLine(pen, closeOffPoints[i].AsDrawingPointF(), closePoints[i].AsDrawingPointF());
                                     break;
                                 case RenderingMode.Default:
                                     break;
                                 case RenderingMode.WritableBitmap:
                                     this.WritableBitmap.Lock();
                                     WritableBitmapGraphics.DrawLine(pen, points[i].AsDrawingPointF(), lowPoints[i].AsDrawingPointF());
+                                    WritableBitmapGraphics.DrawLine(pen, openOffPoints[i].AsDrawingPointF(), openPoints[i].AsDrawingPointF());
+                                    WritableBitmapGraphics.DrawLine(pen, closeOffPoints[i].AsDrawingPointF(), closePoints[i].AsDrawingPointF());
                                     this.WritableBitmap.Unlock();
                                     break;
                                 default:
                                     break;
                             }
                         }
-                    }
+                    }                   
                     this.collection.InvalidateBitmap();
                 }                
             }        
@@ -186,25 +151,12 @@ namespace Sparrow.Chart
 #else
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
-            if (series is LineSeries || series is HiLoSeries)
+            if (series is HiLoOpenCloseSeries)
             {
                 var points = new PointCollection();
                 var pointCount = 0;
                 PartsCollection partsCollection = new PartsCollection();
-                if (series is LineSeries)
-                {
-                    LineSeries lineSeries = series as LineSeries;
-                    points = lineSeries.LinePoints;
-                    pointCount = lineSeries.LinePoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
-                else if (series is HiLoSeries)
-                {
-                    HiLoSeries lineSeries = series as HiLoSeries;
-                    points = lineSeries.HighPoints;
-                    pointCount = lineSeries.HighPoints.Count;
-                    partsCollection = lineSeries.Parts;
-                }
+                partsCollection = (series as HiLoOpenCloseSeries).Parts;
                 if (RenderingMode == RenderingMode.Default)
                 {
                     for (int i = 0; i < partsCollection.Count; i++)

@@ -53,14 +53,12 @@ namespace Sparrow.Chart
 #endif
             };
             this.HeaderTemplate = (DataTemplate)styles["legendTitleTemplate"];
-            this.Loaded += Legend_Loaded;
-        }
-
-        void Legend_Loaded(object sender, RoutedEventArgs e)
-        {
-            ChangeLegendOrientation();
-        }       
-
+            this.ItemTemplate = (DataTemplate)styles["defaultItemTemplate"];
+#if WINRT || WP7 || WP8
+            Loaded += Legend_Loaded;
+#endif
+        }           
+       
         public SparrowChart Chart
         {
             get { return (SparrowChart)GetValue(ChartProperty); }
@@ -68,70 +66,7 @@ namespace Sparrow.Chart
         }
 
         public static readonly DependencyProperty ChartProperty =
-            DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(Legend), new PropertyMetadata(null));
-
-
-
-        internal Orientation LegendOrientaion
-        {
-            get { return (Orientation)GetValue(LegendOrientaionProperty); }
-            set { SetValue(LegendOrientaionProperty, value); }
-        }
-
-        internal static readonly DependencyProperty LegendOrientaionProperty =
-            DependencyProperty.Register("LegendOrientaion", typeof(Orientation), typeof(Legend), new PropertyMetadata(Orientation.Horizontal,OnLegendOrientationChanged));
-
-        private static void OnLegendOrientationChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
-        {
-            (sender as Legend).ChangeLegendOrientation();
-        }
-
-        internal void ChangeLegendOrientation()
-        {
-            ItemsPresenter itemsPresenter = GetVisualChild<ItemsPresenter>(this);
-            if (itemsPresenter != null)
-            {
-                if (VisualTreeHelper.GetChildrenCount(itemsPresenter) > 0)
-                {
-#if WINRT
-                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 1) as StackPanel;
-#else
-                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as StackPanel;
-#endif
-                    if (itemsPanel != null)
-                    {
-                        itemsPanel.Orientation = this.LegendOrientaion;                       
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// http://svgvijay.blogspot.in/2013/01/how-to-get-datagrid-cell-in-wpf.html
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        private static T GetVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            T child = default(T);
-
-            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < numVisuals; i++)
-            {
-                DependencyObject v = (DependencyObject)VisualTreeHelper.GetChild(parent, i);
-                child = v as T;
-                if (child == null)
-                {
-                    child = GetVisualChild<T>(v);
-                }
-                if (child != null)
-                {
-                    break;
-                }
-            }
-            return child;
-        }
+            DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(Legend), new PropertyMetadata(null));              
        
         public Dock Dock
         {
@@ -139,33 +74,11 @@ namespace Sparrow.Chart
             set { SetValue(DockProperty, value); }
         }
 
+#if WPF || SILVERLIGHT
         public static readonly DependencyProperty DockProperty =
-            DependencyProperty.Register("Dock", typeof(Dock), typeof(Legend), new PropertyMetadata(Dock.Top,OnDockChanged));
-
-        private static void OnDockChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
-        {
-            (sender as Legend).DockChanged(args);
-        }
-        internal void DockChanged(DependencyPropertyChangedEventArgs args)
-        {
-            DockPanel.SetDock(this, this.Dock);
-
-            switch (this.Dock)
-            {
-                case Dock.Bottom:
-                case Dock.Top:
-                    this.LegendOrientaion = Orientation.Horizontal;
-                    break;
-                case Dock.Left:
-                case Dock.Right:
-                    this.LegendOrientaion = Orientation.Vertical;
-                    break;
-                default:
-                    break;
-            }
-            ChangeLegendOrientation();
-        }
-
+            DependencyProperty.Register("Dock", typeof(Dock), typeof(Legend), new PropertyMetadata(Dock.Top));
+#endif
+      
         public object Header
         {
             get { return (object)GetValue(HeaderProperty); }
@@ -205,7 +118,80 @@ namespace Sparrow.Chart
         }
 
         public static readonly DependencyProperty ShowIconProperty =
-            DependencyProperty.Register("ShowIcon", typeof(bool), typeof(Legend), new PropertyMetadata(true));        
+            DependencyProperty.Register("ShowIcon", typeof(bool), typeof(Legend), new PropertyMetadata(true));
+
+#if WINRT || WP7 || WP8
+        void Legend_Loaded(object sender, RoutedEventArgs e)
+        {
+            DockChanged();
+        }     
+
+        public static readonly DependencyProperty DockProperty =
+            DependencyProperty.Register("Dock", typeof(Dock), typeof(Legend), new PropertyMetadata(Dock.Top,OnDockChanged));
+
+        private static void OnDockChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as Legend).DockChanged();
+        }
+
+        internal void DockChanged()
+        {           
+            ItemsPresenter itemsPresenter = GetVisualChild<ItemsPresenter>(this);
+            if (itemsPresenter != null)
+            {
+                if (VisualTreeHelper.GetChildrenCount(itemsPresenter) > 0)
+                {
+#if WINRT
+                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 1) as StackPanel;
+#else
+                    StackPanel itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as StackPanel;
+#endif                   
+                    if (itemsPanel != null)
+                    {
+                        switch (Dock)
+                        {
+                            case Dock.Top:
+                            case Dock.Bottom:
+                                itemsPanel.Orientation = Orientation.Horizontal;
+                                break;
+                            case Dock.Left:
+                            case Dock.Right:
+                                itemsPanel.Orientation = Orientation.Vertical;
+                                break;
+                            default:
+                                break;
+                        }                       
+                    }
+                }
+            }
+        }        
+        /// <summary>
+        /// http://svgvijay.blogspot.in/2013/01/how-to-get-datagrid-cell-in-wpf.html
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        private static T GetVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            T child = default(T);
+
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                DependencyObject v = (DependencyObject)VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetVisualChild<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
+        }
+#endif
 
     }
 }

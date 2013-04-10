@@ -3,33 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <local:BooleanToVisibilityConverter x:Key="booleanToVisibility"/>
     <Style TargetType="local:Legend">
-        <Setter Property="Padding" Value="5"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="IsTabStop" Value="False"/>        
-        <Setter Property="FontSize" Value="12" />        
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"></StackPanel>
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ItemTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" >                        
-                        <Grid>
-                            <Rectangle Width="16" Height="16" Fill="{Binding IconColor}" Visibility="{Binding ShowIcon,Converter={StaticResource booleanToVisibility}}"/>
-                        </Grid>
-                        <TextBlock Text="{Binding Label}" FontSize="16"
-                     Margin="2"
-                     VerticalAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Padding" Value="6"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:Legend">
@@ -46,5 +20,15 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
+
 </ResourceDictionary>

@@ -113,7 +113,7 @@ namespace Sparrow.Chart
         }
         public Point CalculateColumnSeriesInfo()
         {
-            double width = 1 - SparrowChart.GetColumnMarginPercentage(this);
+            double width = 1 - SparrowChart.GetSeriesMarginPercentage(this);
             double mininumWidth = double.MaxValue;
             int position = Chart.columnSeries.IndexOf(this) + 1;
             int count = Chart.columnSeries.Count;

@@ -56,7 +56,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\x86\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;WINDOWS_PHONE;WP8</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -126,6 +126,9 @@
     <Compile Include="..\WPF\Container\ColumnContainer.cs">
       <Link>Container\ColumnContainer.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Container\HiLoOpenCloseContainer.cs">
+      <Link>Container\HiLoOpenCloseContainer.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Container\LineContainer.cs">
       <Link>Container\LineContainer.cs</Link>
     </Compile>
@@ -140,6 +143,21 @@
     </Compile>
     <Compile Include="..\WPF\Container\StepLineContainer.cs">
       <Link>Container\StepLineContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\BooleanToVisibilityConverter.cs">
+      <Link>Converters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\BorderThicknessToLeftAndRightConverter.cs">
+      <Link>Converters\BorderThicknessToLeftAndRightConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\BorderThicknessToTopBottomConverter.cs">
+      <Link>Converters\BorderThicknessToTopBottomConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\MajorSizeThicknessConverter.cs">
+      <Link>Converters\MajorSizeThicknessConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\StringToChartPointConverter.cs">
+      <Link>Converters\StringToChartPointConverter.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Legend\Legend.cs">
       <Link>Legend\Legend.cs</Link>
@@ -176,6 +194,9 @@
     </Compile>
     <Compile Include="..\WPF\SeriesParts\FillPartBase.cs">
       <Link>SeriesParts\FillPartBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\SeriesParts\HiLoOpenClosePart.cs">
+      <Link>SeriesParts\HiLoOpenClosePart.cs</Link>
     </Compile>
     <Compile Include="..\WPF\SeriesParts\LinePart.cs">
       <Link>SeriesParts\LinePart.cs</Link>
@@ -216,6 +237,9 @@
     <Compile Include="..\WPF\Series\FillSeriesBase.cs">
       <Link>Series\FillSeriesBase.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Series\HiLoOpenCloseSeries.cs">
+      <Link>Series\HiLoOpenCloseSeries.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Series\HiLoSeries.cs">
       <Link>Series\HiLoSeries.cs</Link>
     </Compile>
@@ -255,10 +279,6 @@
     <Compile Include="..\WPF\Utility\Utility.cs">
       <Link>Utility\Utility.cs</Link>
     </Compile>
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\BorderThicknessToLeftAndRightConverter.cs" />
-    <Compile Include="Converters\BorderThicknessToTopBottomConverter.cs" />
-    <Compile Include="Converters\MajorSizeThicknessConverter.cs" />
     <Compile Include="Panels\DockPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WPF</DefineConstants>
     <DocumentationFile>bin\Release\Sparrow.Chart.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -109,6 +109,7 @@
     <Compile Include="Axis\LinearYAxis.cs" />
     <Compile Include="Collections\Collections.cs" />
     <Compile Include="Container\ColumnContainer.cs" />
+    <Compile Include="Container\HiLoOpenCloseContainer.cs" />
     <Compile Include="Container\ScatterContainer.cs" />
     <Compile Include="Panels\ContainerCollection.cs" />
     <Compile Include="Container\AreaContainer.cs" />
@@ -125,12 +126,14 @@
     <Compile Include="Container\SeriesContainer.cs" />
     <Compile Include="Legend\Legend.cs" />
     <Compile Include="Legend\LegendItem.cs" />
+    <Compile Include="Panels\LegendPanel.cs" />
     <Compile Include="Panels\RootDockPanel.cs" />
     <Compile Include="Points\CategoryPoint.cs" />
     <Compile Include="Points\TimeSpanPoint.cs" />
     <Compile Include="SeriesParts\AreaPart.cs" />
     <Compile Include="SeriesParts\ColumnPart.cs" />
     <Compile Include="SeriesParts\FillPartBase.cs" />
+    <Compile Include="SeriesParts\HiLoOpenClosePart.cs" />
     <Compile Include="SeriesParts\LinePart.cs" />
     <Compile Include="SeriesParts\LinePartBase.cs" />
     <Compile Include="SeriesParts\LineSinglePart.cs" />
@@ -144,6 +147,7 @@
     <Compile Include="Series\BubbleSeries.cs" />
     <Compile Include="Series\ColumnSeries.cs" />
     <Compile Include="Series\FillSeriesBase.cs" />
+    <Compile Include="Series\HiLoOpenCloseSeries.cs" />
     <Compile Include="Series\HiLoSeries.cs" />
     <Compile Include="Series\LineSeries.cs" />
     <Compile Include="Series\LineSeriesBase.cs" />

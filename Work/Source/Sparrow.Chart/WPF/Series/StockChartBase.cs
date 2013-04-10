@@ -26,11 +26,13 @@ namespace Sparrow.Chart
     public class StockChartBase : SeriesBase
     {
         internal PointsCollection lowPoints;
-
-        public void GeneratePointsFromSource()
+        internal List<double> highValues;
+        internal List<double> lowValues;
+        public virtual void GeneratePointsFromSource()
         {
             xValues = this.GetReflectionValues(this.XPath, PointsSource, xValues, false);
             yValues = this.GetReflectionValues(this.LowPath, PointsSource, yValues, false);
+            lowValues = yValues;
             lowPoints = new PointsCollection();
             if (xValues != null && xValues.Count > 0)
             {
@@ -42,6 +44,7 @@ namespace Sparrow.Chart
             {
                 this.Points = GetPointsFromValues(xValues, yValues);               
             }
+            highValues = yValues;
         }
         override public void Refresh()
         {
@@ -130,25 +133,25 @@ namespace Sparrow.Chart
 
 
 
-        public Brush BearFillColor
+        public Brush BearFill
         {
-            get { return (Brush)GetValue(BearFillColorProperty); }
-            set { SetValue(BearFillColorProperty, value); }
+            get { return (Brush)GetValue(BearFillProperty); }
+            set { SetValue(BearFillProperty, value); }
         }
 
-        public static readonly DependencyProperty BearFillColorProperty =
-            DependencyProperty.Register("BearFillColor", typeof(Brush), typeof(StockChartBase), new PropertyMetadata(new SolidColorBrush(Colors.Green)));
+        public static readonly DependencyProperty BearFillProperty =
+            DependencyProperty.Register("BearFill", typeof(Brush), typeof(StockChartBase), new PropertyMetadata(new SolidColorBrush(Colors.Green)));
 
 
 
-        public Brush BullFillColor
+        public Brush BullFill
         {
-            get { return (Brush)GetValue(BullFillColorProperty); }
-            set { SetValue(BullFillColorProperty, value); }
+            get { return (Brush)GetValue(BullFillProperty); }
+            set { SetValue(BullFillProperty, value); }
         }
 
-        public static readonly DependencyProperty BullFillColorProperty =
-            DependencyProperty.Register("BullFillColor", typeof(Brush), typeof(StockChartBase), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
+        public static readonly DependencyProperty BullFillProperty =
+            DependencyProperty.Register("BullFill", typeof(Brush), typeof(StockChartBase), new PropertyMetadata(new SolidColorBrush(Colors.Red)));
 
         
         public PointCollection HighPoints

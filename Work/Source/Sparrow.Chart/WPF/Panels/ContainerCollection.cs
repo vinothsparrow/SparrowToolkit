@@ -199,11 +199,15 @@ namespace Sparrow.Chart
 
             if (this.XAxis != null)
             {
+                this.XAxis.m_MinValue = 0;
+                this.XAxis.m_MaxValue = 1;
                 this.XAxis.CalculateIntervalFromSeriesPoints();
                 this.XAxis.Refresh();
             }
             if (this.YAxis != null)
             {
+                this.YAxis.m_MinValue = 0;
+                this.YAxis.m_MaxValue = 1;
                 this.YAxis.CalculateIntervalFromSeriesPoints();
                 this.YAxis.Refresh();
             }

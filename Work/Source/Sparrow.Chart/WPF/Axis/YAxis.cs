@@ -253,7 +253,7 @@ namespace Sparrow.Chart
                
                 this.Children.Clear();
                 double yAxisHeightStep = this.ActualHeight / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
-                double yAxisHeightPosition = 0;
+                double yAxisHeightPosition = this.DataToPoint(m_startValue);
                 Rect oldRect = new Rect(0, 0, 0, 0);
                 axisLine = new Line();
                 Binding binding = new Binding();
@@ -373,10 +373,12 @@ namespace Sparrow.Chart
             if (this.Series != null)
                 foreach (SeriesBase series in Series)
                 {
-                    if(series.Points != null)
-                    foreach (var point in series.Points)
-                    {
-                        yValues.Add(point.YValue);
+                    if (series.Points != null)
+                    {                                              
+                        foreach (var point in series.Points)
+                        {
+                            yValues.Add(point.YValue);                            
+                        }
                     }
                 }
             if (yValues.Count > 1)

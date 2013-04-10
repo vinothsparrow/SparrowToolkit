@@ -114,12 +114,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sparrow.Resources\Sparrow.Resources.csproj">
-      <Project>{4ae312fe-9e56-4ced-8186-3b778ef58032}</Project>
-      <Name>Sparrow.Resources</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -128,6 +122,12 @@
   <ItemGroup>
     <Resource Include="Resources\sparrow.png" />
     <Resource Include="Resources\Stocks.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sparrow.Resources\Sparrow.Resources.csproj">
+      <Project>{4ae312fe-9e56-4ced-8186-3b778ef58032}</Project>
+      <Name>Sparrow.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

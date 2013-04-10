@@ -45,7 +45,10 @@ namespace Sparrow.Chart
         private bool isLegendUpdate;
         internal RootPanel rootDockPanel;
         internal Legend legend;
-        internal List<ColumnSeries> columnSeries;       
+        internal List<ColumnSeries> columnSeries;
+        internal List<HiLoOpenCloseSeries> hiLoOpenCloseSeries;
+        internal List<ColumnSeries> candleStickSeries; 
+
         ResourceDictionary styles;
         internal ObservableCollection<LegendItem> legendItems;
 
@@ -144,6 +147,8 @@ namespace Sparrow.Chart
             legendItems = new ObservableCollection<LegendItem>();
             ActualCategoryValues = new List<string>();
             columnSeries = new List<ColumnSeries>();
+            hiLoOpenCloseSeries = new List<HiLoOpenCloseSeries>();
+            candleStickSeries = new List<ColumnSeries>();
             styles = new ResourceDictionary()
             {
 #if X86
@@ -192,6 +197,10 @@ namespace Sparrow.Chart
                         if (series is ColumnSeries)
                         {
                             columnSeries.Add(series as ColumnSeries);                            
+                        }
+                        else if (series is HiLoOpenCloseSeries)
+                        {
+                            hiLoOpenCloseSeries.Add(series as HiLoOpenCloseSeries);
                         }
                         isLegendUpdate = false;
                         RefreshLegend();
@@ -293,19 +302,19 @@ namespace Sparrow.Chart
             if (this.Series != null)
                 foreach (var series in Series)
                 {
-                    if (series.Stroke == null)
+                    //if (series.Stroke == null)
+                    //{
+                        if (brushes.Count > 1)
+                            series.Stroke = brushes[series.Index % (brushes.Count)];
+                        else
+                            series.Stroke = brushes[brushes.Count];
+                    //}
+                    if (series.isFill)
                     {
                         if (brushes.Count > 1)
-                            series.Stroke = brushes[series.Index % (brushes.Count - 1)];
+                            (series as FillSeriesBase).Fill = brushes[series.Index % (brushes.Count)];
                         else
-                            series.Stroke = brushes[brushes.Count - 1];
-                    }
-                    if (series.isFill && (series as FillSeriesBase).Fill == null)
-                    {
-                        if (brushes.Count > 1)
-                            (series as FillSeriesBase).Fill = brushes[series.Index % (brushes.Count - 1)];
-                        else
-                            (series as FillSeriesBase).Fill = brushes[brushes.Count - 1];
+                            (series as FillSeriesBase).Fill = brushes[brushes.Count];
                     }
                 }
         }
@@ -373,6 +382,7 @@ namespace Sparrow.Chart
         
         public static readonly DependencyProperty AxisHeightProperty =
             DependencyProperty.Register("AxisHeight", typeof(Double), typeof(SparrowChart), new PropertyMetadata(30d));
+
 
 
 
@@ -472,15 +482,56 @@ namespace Sparrow.Chart
         {
             switch (Theme)
             {
+                case Theme.Arctic:
+                    brushes=Themes.ArcticBrushes();
+                    break;
+                case Theme.Autmn:
+                    brushes = Themes.AutmnBrushes();
+                    break;
+                case Theme.Cold:
+                    brushes = Themes.ColdBrushes();
+                    break;
+                case Theme.Flower:
+                    brushes = Themes.FlowerBrushes();
+                    break;
+                case Theme.Forest:
+                    brushes = Themes.ForestBrushes();
+                    break;
+                case Theme.Grayscale:
+                    brushes = Themes.GrayscaleBrushes();
+                    break;
+                case Theme.Ground:
+                    brushes = Themes.GroundBrushes();
+                    break;
+                case Theme.Lialac:
+                    brushes = Themes.LialacBrushes();
+                    break;
+                case Theme.Natural:
+                    brushes = Themes.NaturalBrushes();
+                    break;
+                case Theme.Pastel:
+                    brushes = Themes.PastelBrushes();
+                    break;
+                case Theme.Rainbow:
+                    brushes = Themes.RainbowBrushes();
+                    break;
+                case Theme.Spring:
+                    brushes = Themes.SpringBrushes();
+                    break;
+                case Theme.Summer:
+                    brushes = Themes.SummerBrushes();
+                    break;
+                case Theme.Warm:
+                    brushes = Themes.WarmBrushes();
+                    break;
                 case Theme.Metro:
                     brushes = Themes.MetroBrushes();
-                    break;                               
+                    break;
                 case Theme.Custom:
                     break;
                 default:
                     break;
-            }           
-           
+            }                                
             BrushTheme();
         }
 
@@ -537,18 +588,18 @@ namespace Sparrow.Chart
 
 
 
-        public static double GetColumnMarginPercentage(DependencyObject obj)
+        public static double GetSeriesMarginPercentage(DependencyObject obj)
         {
-            return (double)obj.GetValue(ColumnMarginPercentageProperty);
+            return (double)obj.GetValue(SeriesMarginPercentageProperty);
         }
 
-        public static void SetColumnMarginPercentage(DependencyObject obj, double value)
+        public static void SetSeriesMarginPercentage(DependencyObject obj, double value)
         {
-            obj.SetValue(ColumnMarginPercentageProperty, value);
+            obj.SetValue(SeriesMarginPercentageProperty, value);
         }
 
-        public static readonly DependencyProperty ColumnMarginPercentageProperty =
-            DependencyProperty.RegisterAttached("ColumnMarginPercentage", typeof(double), typeof(SparrowChart), new PropertyMetadata(0.3d));
+        public static readonly DependencyProperty SeriesMarginPercentageProperty =
+            DependencyProperty.RegisterAttached("SeriesMarginPercentage", typeof(double), typeof(SparrowChart), new PropertyMetadata(0.3d));
 
 
         public RenderingMode RenderingMode

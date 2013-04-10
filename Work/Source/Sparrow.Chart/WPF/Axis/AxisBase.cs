@@ -49,6 +49,7 @@ namespace Sparrow.Chart
         public AxisBase()
         {
             this.m_Labels = new List<string>();
+            this.m_labelValues = new List<double>();
             this.ActualType = ActualType.Double;
             GetStyles();
         }
@@ -80,8 +81,40 @@ namespace Sparrow.Chart
             this.LabelTemplate = (DataTemplate)styles["axisLabelTemplate"];
             this.CrossLineStyle = (Style)styles["crossLineStyle"];
             this.MinorCrossLineStyle = (Style)styles["minorCrossLineStyle"];
-        }    
-      
+        }
+
+
+        public double ZoomOffset
+        {
+            get { return (double)GetValue(ZoomOffsetProperty); }
+            set { SetValue(ZoomOffsetProperty, value); }
+        }
+
+        public static readonly DependencyProperty ZoomOffsetProperty =
+            DependencyProperty.Register("ZoomOffset", typeof(double), typeof(AxisBase), new PropertyMetadata(0d,OnZoomOffsetChanged));
+
+        private static void OnZoomOffsetChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as AxisBase).ZoomPropertyChanged(args);
+        }
+
+        public double ZoomCoefficient
+        {
+            get { return (double)GetValue(ZoomCoefficientProperty); }
+            set { SetValue(ZoomCoefficientProperty, value); }
+        }
+
+        public static readonly DependencyProperty ZoomCoefficientProperty =
+            DependencyProperty.Register("ZoomCoefficient", typeof(double), typeof(AxisBase), new PropertyMetadata(1d,OnZoomCoefficientChanged));
+
+        private static void OnZoomCoefficientChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as AxisBase).ZoomPropertyChanged(args);
+        }
+        internal void ZoomPropertyChanged(DependencyPropertyChangedEventArgs args)
+        {           
+            Refresh();
+        }
 
         /// <summary>
         /// Axis Minimum Value
@@ -128,8 +161,7 @@ namespace Sparrow.Chart
             switch (ActualType)
             {                 
                 case ActualType.Double:
-                case ActualType.Category:
-                    DateTime time = new DateTime();                    
+                case ActualType.Category:                    
                     if (!this.Interval.ToString().Contains(":"))
                         this.m_Interval = Double.Parse(this.Interval.ToString());
                     else
@@ -185,14 +217,29 @@ namespace Sparrow.Chart
             if (this.MinValue == null)
             {
                 m_MinValue = min;
+                
                 if (!isStartSet)
                 {
                     m_startValue = min;
                     isStartSet = true;
                 }
+                actualMinvalue = min;
             }
+            else
+            {
+                actualMinvalue = Double.Parse(this.MinValue.ToString());
+            }
+            
             if (this.MaxValue == null)
+            {
                 m_MaxValue = max;
+                actualMaxvalue = max;
+            }
+            else
+            {
+                actualMaxvalue = Double.Parse(this.MaxValue.ToString());
+            }
+            
         }   
     
         /// <summary>
@@ -208,15 +255,15 @@ namespace Sparrow.Chart
         internal void GenerateLabels()
         {           
             m_Labels.Clear();
+            m_labelValues.Clear();
             double value = m_MinValue;
             for (int i = 0; i <= m_IntervalCount; i++)
             {
-                if (value < m_MinValue)
+                if (value >= m_MinValue && value <= m_MaxValue)
                 {
-                    value += m_Interval;
-                    continue;
-                }
-                m_Labels.Add(GetOriginalLabel(value));
+                    m_Labels.Add(GetOriginalLabel(value));
+                    m_labelValues.Add(value);                    
+                }                
                 value += m_Interval;
                 if (isIntervalCountZero)
                     break;
@@ -248,13 +295,37 @@ namespace Sparrow.Chart
             isIntervalCountZero = false;
             if (CheckType())
             {
+               
+                if (ZoomCoefficient < 1 || (ZoomOffset > 0 && ZoomCoefficient < 1))
+                {
+                    m_MinValue = actualMinvalue + ZoomOffset * (actualMaxvalue - actualMinvalue); ;
+                    m_MaxValue = m_MinValue + ZoomCoefficient * (actualMaxvalue - actualMinvalue);
+                    if (m_MinValue < actualMinvalue)
+                    {
+                        m_MaxValue = m_MaxValue + (actualMinvalue - m_MinValue);
+                        m_MinValue = actualMinvalue;
+                    }
+
+                    if (m_MaxValue > actualMaxvalue)
+                    {
+                        m_MinValue = m_MinValue - (m_MaxValue - actualMaxvalue);
+                        m_MaxValue = actualMaxvalue;
+                    }
+                    m_startValue = m_MinValue;
+                }
+                else
+                {
+                    m_MaxValue = actualMaxvalue;
+                    m_MinValue = actualMinvalue;
+                    m_startValue = actualMinvalue;
+                }
                 if (this.Interval == null)
                 {
                     switch (ActualType)
                     {
                         case ActualType.Double:
                             //m_MinValue = Math.Floor(m_MinValue);                           
-                            this.m_Interval = AxisUtil.CalculateInetrval(Math.Floor(m_MinValue), Math.Ceiling(m_MaxValue), m_IntervalCount);
+                            this.m_Interval = AxisUtil.CalculateInetrval(m_MinValue, m_MaxValue, m_IntervalCount);
                             //m_MaxValue = m_MinValue + (m_IntervalCount * this.m_Interval);
                             break;
                         case ActualType.DateTime:
@@ -293,9 +364,11 @@ namespace Sparrow.Chart
                     m_IntervalCount = (m_IntervalCount > 0) ? m_IntervalCount : 1;
 
                 }
+                
                 //if ((m_MinValue >= m_startValue + m_Interval))
                 //    m_startValue = m_MinValue + (m_MinValue % m_Interval);
-                m_startValue = m_MinValue;
+                
+                
             }
             else
             {
@@ -350,8 +423,11 @@ namespace Sparrow.Chart
         internal double m_Interval;
         internal double m_MaxValue = 1;
         internal double m_MinValue = 0;
+        internal double actualMaxvalue = 1;
+        internal double actualMinvalue = 0;
         internal double m_IntervalCount = 5;
         internal List<string> m_Labels;
+        internal List<double> m_labelValues;
         internal double m_offset = 0;
         internal double m_startValue = 0;
         bool isStartSet;

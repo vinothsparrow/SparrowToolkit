@@ -100,6 +100,9 @@
     <Compile Include="..\WPF\Container\ColumnContainer.cs">
       <Link>Container\ColumnContainer.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Container\HiLoOpenCloseContainer.cs">
+      <Link>Container\HiLoOpenCloseContainer.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Container\LineContainer.cs">
       <Link>Container\LineContainer.cs</Link>
     </Compile>
@@ -139,6 +142,9 @@
     <Compile Include="..\WPF\Panels\ContainerCollection.cs">
       <Link>Panels\ContainerCollection.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Panels\LegendPanel.cs">
+      <Link>Panels\LegendPanel.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Panels\RootDockPanel.cs">
       <Link>Panels\RootDockPanel.cs</Link>
     </Compile>
@@ -165,6 +171,9 @@
     </Compile>
     <Compile Include="..\WPF\SeriesParts\FillPartBase.cs">
       <Link>SeriesParts\FillPartBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\SeriesParts\HiLoOpenClosePart.cs">
+      <Link>SeriesParts\HiLoOpenClosePart.cs</Link>
     </Compile>
     <Compile Include="..\WPF\SeriesParts\LinePart.cs">
       <Link>SeriesParts\LinePart.cs</Link>
@@ -204,6 +213,9 @@
     </Compile>
     <Compile Include="..\WPF\Series\FillSeriesBase.cs">
       <Link>Series\FillSeriesBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Series\HiLoOpenCloseSeries.cs">
+      <Link>Series\HiLoOpenCloseSeries.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Series\HiLoSeries.cs">
       <Link>Series\HiLoSeries.cs</Link>

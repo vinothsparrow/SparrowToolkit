@@ -62,7 +62,7 @@ namespace Sparrow.Chart
                     int k = 0;
                     int minorCount = 0;
                     for (int i = 0; i < this.m_Labels.Count; i++)
-                    {                        
+                    {
                         xAxisWidthPosition = this.DataToPoint(m_startValue + (m_Interval * k));
                         ContentControl label = labels[k];
                         label.Content = m_Labels[k];

@@ -90,7 +90,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINRT</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -160,6 +160,9 @@
     <Compile Include="..\WPF\Container\ColumnContainer.cs">
       <Link>Container\ColumnContainer.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Container\HiLoOpenCloseContainer.cs">
+      <Link>Container\HiLoOpenCloseContainer.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Container\LineContainer.cs">
       <Link>Container\LineContainer.cs</Link>
     </Compile>
@@ -223,6 +226,9 @@
     <Compile Include="..\WPF\SeriesParts\FillPartBase.cs">
       <Link>SeriesParts\FillPartBase.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\SeriesParts\HiLoOpenClosePart.cs">
+      <Link>SeriesParts\HiLoOpenClosePart.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\SeriesParts\LinePart.cs">
       <Link>SeriesParts\LinePart.cs</Link>
     </Compile>
@@ -261,6 +267,9 @@
     </Compile>
     <Compile Include="..\WPF\Series\FillSeriesBase.cs">
       <Link>Series\FillSeriesBase.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Series\HiLoOpenCloseSeries.cs">
+      <Link>Series\HiLoOpenCloseSeries.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Series\HiLoSeries.cs">
       <Link>Series\HiLoSeries.cs</Link>

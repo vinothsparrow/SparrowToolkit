@@ -194,7 +194,7 @@ namespace Sparrow.Chart
             {
                 if ((this.YAxis.m_Labels.Count) > yLines.Count)
                 {
-                    int offset = (this.YAxis.m_Labels.Count - 2) - yLines.Count;
+                    int offset = (this.YAxis.m_Labels.Count) - yLines.Count;
                     for (int j = 0; j < offset; j++)
                     {
                         Line line = new Line();
@@ -248,7 +248,7 @@ namespace Sparrow.Chart
                         yLines.RemoveAt(yLines.Count - 1);
                     }
                 }
-                for (int i = 0; i < YAxis.m_Labels.Count; i++)
+                for (int i = 0; i < YAxis.m_Labels.Count-1; i++)
                 {
                     Line line = yLines[i];
                     line.X2 = this.ActualWidth;
