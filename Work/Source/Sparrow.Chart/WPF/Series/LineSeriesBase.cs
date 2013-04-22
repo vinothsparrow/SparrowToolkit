@@ -8,6 +8,7 @@ using System.Windows;
 #if !WINRT
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.ComponentModel;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -45,16 +46,16 @@ namespace Sparrow.Chart
         {
             if (!isPointsGenerated)
                 base.Refresh();
-            if (!isRefreshed && IsRefresh)
+            if (IsRefresh)
             {
-#if WPF
-                Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.GenerateDatas));
+#if WPF               
+                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.GenerateDatas));               
 #elif WINRT
                 IAsyncAction action = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, this.GenerateDatas);
 #else
                 Dispatcher.BeginInvoke(new Action(this.GenerateDatas));
 #endif
-                isRefreshed = true;
+                //isRefreshed = true;
             }
         }
        

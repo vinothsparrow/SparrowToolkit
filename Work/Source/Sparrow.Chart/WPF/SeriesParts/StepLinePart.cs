@@ -70,11 +70,14 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            PointCollection pointsCollection = new PointCollection();
-            pointsCollection.Add(startPoint);
-            pointsCollection.Add(stepPoint);
-            pointsCollection.Add(endPoint);
-            lines.Points = pointsCollection;
+            if (lines != null)
+            {
+                PointCollection pointsCollection = new PointCollection();
+                pointsCollection.Add(startPoint);
+                pointsCollection.Add(stepPoint);
+                pointsCollection.Add(endPoint);
+                lines.Points = pointsCollection;
+            }
         }
         
     }

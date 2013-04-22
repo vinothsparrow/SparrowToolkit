@@ -16,45 +16,10 @@ using System.Windows.Threading;
 namespace Sparrow.Chart.Demos.Demos.LiveDatasDemo
 {
     public partial class LiveDatasDemo : UserControl
-    {
-        DataGenerator view;
-        DispatcherTimer timer;
-        PointsCollection collection;
-        double count;
+    {        
         public LiveDatasDemo()
-        {
-            view = new DataGenerator();
-            timer = new DispatcherTimer();
-            InitializeComponent();
-            timer.Start();
-            timer.Tick += timer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            collection=view.Generate();
-            (this.Chart.Series[0] as LineSeries).Points = collection;
-            count = 100; 
-        }
-        void timer_Tick(object sender, EventArgs e)
-        {
-            DateTime date = new DateTime(2009, 1, 1);
-            Random randomNumber = new Random();
-            double value = 1000;
-            Chart.IsRefresh = false;
-            for (int i = 0; i < 100; i++)
-            {
-                collection.RemoveAt(0);
-                collection.Add(new DoublePoint() { Data = count, Value = value });
-
-                if (randomNumber.NextDouble() > .5)
-                {
-                    value += randomNumber.NextDouble();
-                }
-                else
-                {
-                    value -= randomNumber.NextDouble();
-                }
-                count++;
-            }
-            Chart.IsRefresh = true;
-        }  
+        {           
+            InitializeComponent();            
+        }       
     }
 }

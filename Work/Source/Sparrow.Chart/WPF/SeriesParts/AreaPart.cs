@@ -67,20 +67,23 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            PathFigure figure = new PathFigure();            
-            LineSegment startLineSegment = new LineSegment();
-            LineSegment areaEndLineSegment = new LineSegment();
-            LineSegment endLineSegment = new LineSegment();
-            PathGeometry pathGeometry = new PathGeometry();
-            figure.StartPoint = startPoint;
-            startLineSegment.Point = areaStartPoint;
-            endLineSegment.Point = endPoint;
-            areaEndLineSegment.Point = areaEndPoint;
-            figure.Segments.Add(startLineSegment);
-            figure.Segments.Add(areaEndLineSegment);
-            figure.Segments.Add(endLineSegment);
-            pathGeometry.Figures = new PathFigureCollection() { figure };
-            areaPath.Data = pathGeometry;
+            if (areaPath != null)
+            {
+                PathFigure figure = new PathFigure();
+                LineSegment startLineSegment = new LineSegment();
+                LineSegment areaEndLineSegment = new LineSegment();
+                LineSegment endLineSegment = new LineSegment();
+                PathGeometry pathGeometry = new PathGeometry();
+                figure.StartPoint = startPoint;
+                startLineSegment.Point = areaStartPoint;
+                endLineSegment.Point = endPoint;
+                areaEndLineSegment.Point = areaEndPoint;
+                figure.Segments.Add(startLineSegment);
+                figure.Segments.Add(areaEndLineSegment);
+                figure.Segments.Add(endLineSegment);
+                pathGeometry.Figures = new PathFigureCollection() { figure };
+                areaPath.Data = pathGeometry;
+            }
         }
 
     }

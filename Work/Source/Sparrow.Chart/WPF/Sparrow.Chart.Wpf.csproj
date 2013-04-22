@@ -111,6 +111,10 @@
     <Compile Include="Container\ColumnContainer.cs" />
     <Compile Include="Container\HiLoOpenCloseContainer.cs" />
     <Compile Include="Container\ScatterContainer.cs" />
+    <Compile Include="Converters\HalfValueConverter.cs" />
+    <Compile Include="Converters\NegativeConverter.cs" />
+    <Compile Include="Converters\NegativeHalfConverter.cs" />
+    <Compile Include="Panels\AxesPanel.cs" />
     <Compile Include="Panels\ContainerCollection.cs" />
     <Compile Include="Container\AreaContainer.cs" />
     <Compile Include="Container\AxisCrossLinesContainer.cs" />
@@ -172,7 +176,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Axis\Axis.cs" />
+    <Compile Include="Axis\IAxis.cs" />
     <Compile Include="Utility\Enum.cs" />
     <Compile Include="Points\ChartPoint.cs" />
     <Compile Include="Points\DoublePoint.cs" />

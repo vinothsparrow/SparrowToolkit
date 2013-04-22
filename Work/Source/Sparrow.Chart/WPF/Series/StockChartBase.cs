@@ -49,7 +49,7 @@ namespace Sparrow.Chart
         override public void Refresh()
         {
             base.Refresh();
-            if (!isRefreshed && IsRefresh)
+            if (IsRefresh)
             {
 #if WPF
                 Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.GenerateDatas));
@@ -58,7 +58,7 @@ namespace Sparrow.Chart
 #else
                 Dispatcher.BeginInvoke(new Action(this.GenerateDatas));
 #endif
-                isRefreshed = true;
+               // isRefreshed = true;
             }
         }
 

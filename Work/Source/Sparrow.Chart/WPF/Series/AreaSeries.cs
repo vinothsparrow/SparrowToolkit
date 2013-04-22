@@ -91,7 +91,7 @@ namespace Sparrow.Chart
                     }
                 }
                 endPoint = NormalizePoint(new Point(this.Points[this.Points.Count - 1].XValue, yMin));
-                startPoint = NormalizePoint(new Point(xMin, yMin));
+                startPoint = NormalizePoint(new Point(this.Points[0].XValue, yMin));
                 startPoint.X = startPoint.X - this.StrokeThickness;                
                 if (AreaPoints.Count > 0)
                 {

@@ -67,11 +67,44 @@ namespace Sparrow.Chart
                         ContentControl label = labels[k];
                         label.Content = m_Labels[k];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        RotateTransform labelRotation = new RotateTransform();
+                        labelRotation.Angle = LabelAngle;                        
+                        Rect originalRect=new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height);
+                        
+                        Rect rotatedRect = GetRotatedRect(originalRect, labelRotation);
+                        //label.RenderTransformOrigin = new Point(0.5, 0.5);
+                        label.RenderTransform = labelRotation;  
                         Line tickLine = majorTickLines[k];
                         double labelPadding = 0;
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         tickLine.X1 = xAxisWidthPosition ;
                         tickLine.X2 = xAxisWidthPosition ;
+                        switch (MajorTicksPosition)
+                        {
+                            case TickPosition.Inside:
+                                if (this.ShowMajorTicks)
+                                {
+                                    labelPadding = 0;
+                                    desiredHeight = 0;
+                                }
+                                break;
+                            case TickPosition.Cross:
+                                if (this.ShowMajorTicks)
+                                {
+                                    labelPadding = tickLine.Y2;
+                                    desiredHeight = tickLine.Y2;
+                                }
+                                break;
+                            case TickPosition.Outside:
+                                if (this.ShowMajorTicks)
+                                {
+                                    labelPadding = tickLine.Y2;
+                                    desiredHeight = tickLine.Y2;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         if (!(i == this.m_Labels.Count - 1))
                         {
                             double minorWidth = xAxisWidthStep;
@@ -81,19 +114,42 @@ namespace Sparrow.Chart
                                 Line minorLine = minorTickLines[minorCount];
                                 minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
                                 minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
-                                minorLine.Y1 = 0;         
+                                switch (MinorTicksPosition)
+                                {
+                                    case TickPosition.Inside:
+                                        minorLine.Y1 = 0;  
+                                        break;
+                                    case TickPosition.Cross:
+                                        //minorLine.Y1 = MinorLineSize / 2;  
+                                        break;
+                                    case TickPosition.Outside:
+                                        minorLine.Y1 = 0;  
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                       
                                 minorCount++;
                             }
                         }
-                        if (this.ShowMajorTicks)
+                        
+                        //Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                        //Canvas.SetTop(label, desiredHeight);                        
+                        if (this.LabelAngle == 0)
                         {
-                            labelPadding = tickLine.Y2;
-                            desiredHeight = tickLine.Y2;
+                            Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                            Canvas.SetTop(label, desiredHeight);
+                            labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
                         }
-                        Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
-                        Canvas.SetTop(label, desiredHeight);                        
+                        else
+                        {
+                            Canvas.SetLeft(label, xAxisWidthPosition - (rotatedRect.Width / 2) - rotatedRect.X);
+                            Canvas.SetTop(label, desiredHeight - rotatedRect.Y);
+                            labelSize = Math.Max(labelSize, rotatedRect.Height);  
+                           
+                        }
                         k++;
-                        labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
+                       
                     }                    
                 }
                 else
@@ -110,6 +166,11 @@ namespace Sparrow.Chart
                             labelTemplateBinding.Source = this;
                             label.SetBinding(ContentControl.ContentTemplateProperty, labelTemplateBinding);
                             label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                            RotateTransform labelRotation = new RotateTransform();
+                            labelRotation.Angle = LabelAngle;
+                            Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
+                           // label.RenderTransformOrigin = new Point(0.5, 0.5);
+                            label.RenderTransform = labelRotation;      
                             labels.Add(label);
                             Line tickLine = new Line();
                             Binding styleBinding = new Binding();
@@ -119,11 +180,52 @@ namespace Sparrow.Chart
                             tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                             tickLine.X1 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
                             tickLine.X2 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
-                            tickLine.Y1 = 0;
-                            Binding tickSizeBinding = new Binding();
-                            tickSizeBinding.Path = new PropertyPath("MajorLineSize");
-                            tickSizeBinding.Source = this;
-                            tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+
+                            switch (this.MajorTicksPosition)
+                            {
+                                case TickPosition.Inside:
+                                    tickLine.Y1 = 0;
+                                    Binding tickSizeInsideBinding = new Binding();
+                                    tickSizeInsideBinding.Path = new PropertyPath("MajorLineSize");
+                                    tickSizeInsideBinding.Source = this;
+                                    tickSizeInsideBinding.Converter = new NegativeConverter();
+                                    tickLine.SetBinding(Line.Y2Property, tickSizeInsideBinding);
+                                    if (this.ShowMajorTicks)
+                                    {
+                                        desiredHeight = 0;
+                                    }
+                                    break;
+                                case TickPosition.Cross:
+                                    Binding tickSizeNegativeCrossBinding = new Binding();
+                                    tickSizeNegativeCrossBinding.Path = new PropertyPath("MajorLineSize");
+                                    tickSizeNegativeCrossBinding.Source = this;
+                                    tickSizeNegativeCrossBinding.Converter = new NegativeHalfConverter();
+                                    tickLine.SetBinding(Line.Y1Property, tickSizeNegativeCrossBinding);
+                                    Binding tickSizeCrossBinding = new Binding();
+                                    tickSizeCrossBinding.Path = new PropertyPath("MajorLineSize");
+                                    tickSizeCrossBinding.Source = this;
+                                    tickSizeCrossBinding.Converter = new HalfValueConverter();
+                                    tickLine.SetBinding(Line.Y2Property, tickSizeCrossBinding);
+                                    if (this.ShowMajorTicks)
+                                    {
+                                        desiredHeight = MajorLineSize / 2;
+                                    }
+                                    break;
+                                case TickPosition.Outside:
+                                    tickLine.Y1 = 0;
+                                    Binding tickSizeBinding = new Binding();
+                                    tickSizeBinding.Path = new PropertyPath("MajorLineSize");
+                                    tickSizeBinding.Source = this;
+                                    tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+                                    if (this.ShowMajorTicks)
+                                    {
+                                        desiredHeight = MajorLineSize;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                            
                             Binding ticklineVisibilityBinding = new Binding();
                             ticklineVisibilityBinding.Path = new PropertyPath("ShowMajorTicks");
                             ticklineVisibilityBinding.Source = this;
@@ -141,12 +243,39 @@ namespace Sparrow.Chart
                                 minorLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                                 minorLine.X1 = (xAxisWidthPosition + minorstep);
                                 minorLine.X2 = (xAxisWidthPosition + minorstep);
-                                minorLine.Y1 = 0;
-                                Binding minortickSizeBinding = new Binding();
-                                minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
-                                minortickSizeBinding.Source = this;
-                                minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
+                                switch (MinorTicksPosition)
+                                {
+                                    case TickPosition.Inside:
+                                        minorLine.Y1 = 0;
+                                        Binding minortickInsideSizeBinding = new Binding();
+                                        minortickInsideSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                        minortickInsideSizeBinding.Source = this;
+                                        minortickInsideSizeBinding.Converter = new NegativeConverter();
+                                        minorLine.SetBinding(Line.Y2Property, minortickInsideSizeBinding);
+                                        break;
+                                    case TickPosition.Cross:
+                                        Binding minortickNegativeCrossSizeBinding = new Binding();
+                                        minortickNegativeCrossSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                        minortickNegativeCrossSizeBinding.Source = this;
+                                        minortickNegativeCrossSizeBinding.Converter = new NegativeHalfConverter();
+                                        minorLine.SetBinding(Line.Y1Property, minortickNegativeCrossSizeBinding);
 
+                                        Binding minortickCrossSizeBinding = new Binding();
+                                        minortickCrossSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                        minortickCrossSizeBinding.Source = this;
+                                        minortickCrossSizeBinding.Converter = new HalfValueConverter();
+                                        minorLine.SetBinding(Line.Y2Property, minortickCrossSizeBinding);
+                                        break;
+                                    case TickPosition.Outside:
+                                        minorLine.Y1 = 0;
+                                        Binding minortickSizeBinding = new Binding();
+                                        minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                        minortickSizeBinding.Source = this;
+                                        minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 minorTickLines.Add(minorLine);
                                 this.Children.Add(minorLine);
                                 minorstep += minorstep;
@@ -178,13 +307,18 @@ namespace Sparrow.Chart
                         ContentControl label = labels[i];
                         label.Content = m_Labels[i];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        RotateTransform labelRotation = new RotateTransform();
+                        labelRotation.Angle = LabelAngle;
+                        Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
+                        //label.RenderTransformOrigin = new Point(0.5, 0.5);
+                        label.RenderTransform = labelRotation;      
                         Line tickLine = majorTickLines[i];
                         double labelPadding = 0;
                         int minorCount = 0;
                         tickLine.X1 = xAxisWidthPosition;
-                        tickLine.X2 = xAxisWidthPosition;
-                        tickLine.Y1 = 0;
+                        tickLine.X2 = xAxisWidthPosition;                        
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                        
                         if (!(i == this.m_Labels.Count - 1))
                         {
                             double minorWidth = xAxisWidthStep;
@@ -193,29 +327,36 @@ namespace Sparrow.Chart
                             {
                                 Line minorLine = minorTickLines[minorCount];
                                 minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
-                                minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
-                                minorLine.Y1 = 0;                                
+                                minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));                                                                
                                 minorCount++;
                             }
                         }
-                        if (this.ShowMajorTicks)
+
+                        if (this.LabelAngle == 0)
                         {
-                            labelPadding = tickLine.Y2;
-                            desiredHeight = tickLine.Y2;
+                            Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                            Canvas.SetTop(label, desiredHeight);
+                            labelSize = Math.Max(labelSize, label.DesiredSize.Height);
                         }
-                        Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
-                        Canvas.SetTop(label, desiredHeight);
+                        else
+                        {
+                            Canvas.SetLeft(label, xAxisWidthPosition - (rotatedRect.Width / 2) - rotatedRect.X);
+                            Canvas.SetTop(label, desiredHeight - rotatedRect.Y);
+                            labelSize = Math.Max(labelSize, rotatedRect.Height);
+
+                        }
                         xAxisWidthPosition += xAxisWidthStep;
-                        labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
                     }  
                 }
+                desiredHeight += labelSize;   
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
                 Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
-                Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
-                desiredHeight += header.DesiredSize.Height + labelSize;              
+                Canvas.SetTop(header, desiredHeight);
+                desiredHeight += header.DesiredSize.Height;
+                this.Chart.AxisHeight = desiredHeight;
             }
-            if (this.Chart.AxisHeight < desiredHeight)
-                this.Chart.AxisHeight = desiredHeight + 1;
+            //if (this.Chart.AxisHeight < desiredHeight)
+                
         }
 
         internal void Initialize()
@@ -255,7 +396,13 @@ namespace Sparrow.Chart
                     labelTemplateBinding.Source = this;
                     label.SetBinding(ContentControl.ContentTemplateProperty, labelTemplateBinding);
                     label.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                    RotateTransform labelRotation = new RotateTransform();
+                    labelRotation.Angle = LabelAngle;
+                    Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
+                    //label.RenderTransformOrigin = new Point(0.5, 0.5);
+                    label.RenderTransform = labelRotation;                    
                     labels.Add(label);
+                    
                     Line tickLine = new Line();
                     double labelPadding = 0;
                     Binding styleBinding = new Binding();
@@ -264,12 +411,57 @@ namespace Sparrow.Chart
                     tickLine.SetBinding(Line.StyleProperty, styleBinding);
                     tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                     tickLine.X1 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
-                    tickLine.X2 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);
-                    tickLine.Y1 = 0;
-                    Binding tickSizeBinding = new Binding();
-                    tickSizeBinding.Path=new PropertyPath("MajorLineSize");
-                    tickSizeBinding.Source = this;
-                    tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+                    tickLine.X2 = xAxisWidthPosition - (tickLine.DesiredSize.Width / 2);                   
+                    
+                    switch (this.MajorTicksPosition)
+                    {
+                        case TickPosition.Inside:
+                            tickLine.Y1 = 0;
+                            Binding tickSizeInsideBinding = new Binding();
+                            tickSizeInsideBinding.Path = new PropertyPath("MajorLineSize");
+                            tickSizeInsideBinding.Source = this;
+                            tickSizeInsideBinding.Converter = new NegativeConverter();
+                            tickLine.SetBinding(Line.Y2Property, tickSizeInsideBinding);
+                            if (this.ShowMajorTicks)
+                            {
+                                labelPadding = 0;
+                                desiredHeight = 0;
+                            }
+                            break;
+                        case TickPosition.Cross:
+                            Binding tickSizeNegativeCrossBinding = new Binding();
+                            tickSizeNegativeCrossBinding.Path = new PropertyPath("MajorLineSize");
+                            tickSizeNegativeCrossBinding.Source = this;
+                            tickSizeNegativeCrossBinding.Converter = new NegativeHalfConverter();
+                            tickLine.SetBinding(Line.Y1Property, tickSizeNegativeCrossBinding);
+                       
+                            Binding tickSizeCrossBinding = new Binding();
+                            tickSizeCrossBinding.Path = new PropertyPath("MajorLineSize");
+                            tickSizeCrossBinding.Source = this;
+                            tickSizeCrossBinding.Converter = new HalfValueConverter();
+                            tickLine.SetBinding(Line.Y2Property, tickSizeCrossBinding);
+                            if (this.ShowMajorTicks)
+                            {
+                                labelPadding = tickLine.Y2;
+                                desiredHeight = MajorLineSize / 2;
+                            }
+                            break;
+                        case TickPosition.Outside:
+                            tickLine.Y1 = 0;
+                            Binding tickSizeBinding = new Binding();
+                            tickSizeBinding.Path = new PropertyPath("MajorLineSize");
+                            tickSizeBinding.Source = this;
+                            tickLine.SetBinding(Line.Y2Property, tickSizeBinding);
+                            if (this.ShowMajorTicks)
+                            {
+                                labelPadding = tickLine.Y2;
+                                desiredHeight = MajorLineSize;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    
                     Binding ticklineVisibilityBinding = new Binding();
                     ticklineVisibilityBinding.Path = new PropertyPath("ShowMajorTicks");
                     ticklineVisibilityBinding.Source = this;
@@ -291,24 +483,59 @@ namespace Sparrow.Chart
                             minorLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                             minorLine.X1 = (xAxisWidthPosition + minorstep * (j + 1));
                             minorLine.X2 = (xAxisWidthPosition + minorstep * (j + 1));
-                            minorLine.Y1 = 0;
-                            Binding minortickSizeBinding = new Binding();
-                            minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
-                            minortickSizeBinding.Source = this;
-                            minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
-                            
+
+                            switch (MinorTicksPosition)
+                            {
+                                case TickPosition.Inside:
+                                    minorLine.Y1 = 0;
+                                    Binding minortickInsideSizeBinding = new Binding();
+                                    minortickInsideSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                    minortickInsideSizeBinding.Source = this;
+                                    minortickInsideSizeBinding.Converter = new NegativeConverter();
+                                    minorLine.SetBinding(Line.Y2Property, minortickInsideSizeBinding);
+                                    break;
+                                case TickPosition.Cross:
+                                    Binding minortickNegativeCrossSizeBinding = new Binding();
+                                    minortickNegativeCrossSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                    minortickNegativeCrossSizeBinding.Source = this;
+                                    minortickNegativeCrossSizeBinding.Converter = new NegativeHalfConverter();
+                                    minorLine.SetBinding(Line.Y1Property, minortickNegativeCrossSizeBinding);
+
+                                    Binding minortickCrossSizeBinding = new Binding();
+                                    minortickCrossSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                    minortickCrossSizeBinding.Source = this;
+                                    minortickCrossSizeBinding.Converter = new HalfValueConverter();
+                                    minorLine.SetBinding(Line.Y2Property, minortickCrossSizeBinding);
+                                    break;
+                                case TickPosition.Outside:
+                                    minorLine.Y1 = 0;
+                                    Binding minortickSizeBinding = new Binding();
+                                    minortickSizeBinding.Path = new PropertyPath("MinorLineSize");
+                                    minortickSizeBinding.Source = this;
+                                    minorLine.SetBinding(Line.Y2Property, minortickSizeBinding);
+                                    break;
+                                default:
+                                    break;
+                            }
+                                                        
                             minorTickLines.Add(minorLine);
                             this.Children.Add(minorLine);                           
                         }
                     }
-                    if (this.ShowMajorTicks)
+                    if (this.LabelAngle == 0)
                     {
-                        labelPadding = tickLine.Y2;
-                        desiredHeight = MajorLineSize;
+                        Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
+                        Canvas.SetTop(label, desiredHeight);
+                        labelSize = Math.Max(labelSize, label.DesiredSize.Height);
                     }
-                    Canvas.SetLeft(label, xAxisWidthPosition - (label.DesiredSize.Width / 2));
-                    Canvas.SetTop(label, desiredHeight);
-                    labelSize = Math.Max(labelSize, label.DesiredSize.Height);  
+                    else
+                    {
+                        Canvas.SetLeft(label, xAxisWidthPosition - (rotatedRect.Width / 2) - rotatedRect.X);
+                        Canvas.SetTop(label, desiredHeight - rotatedRect.Y);
+                        labelSize = Math.Max(labelSize, rotatedRect.Height);
+
+                    }
+                    //labelSize = Math.Max(labelSize, label.ActualHeight);  
                     this.Children.Add(label);                   
                     xAxisWidthPosition += xAxisWidthStep;
                 }
@@ -323,15 +550,17 @@ namespace Sparrow.Chart
                 headerTemplateBinding.Source = this;
                 header.SetBinding(ContentControl.ContentTemplateProperty, headerTemplateBinding);
                 header.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                desiredHeight+=labelSize;
                 Canvas.SetLeft(header, (this.ActualWidth / 2) - (header.DesiredSize.Width / 2));
                 Canvas.SetTop(header, (this.ActualHeight / 2) - (header.DesiredSize.Height / 2) + desiredHeight);
-                desiredHeight += header.DesiredSize.Height + labelSize;
+                desiredHeight += header.DesiredSize.Height ;
                 this.Children.Add(header);
                 this.Children.Add(axisLine);
                 isInitialized = true;
+                this.Chart.AxisHeight = desiredHeight;
             }
-            if (this.Chart.AxisHeight < desiredHeight)
-                this.Chart.AxisHeight = desiredHeight + 1;
+           // if (this.Chart.AxisHeight < desiredHeight)
+                
         }
 
         protected override void GetStyles()
@@ -348,7 +577,7 @@ namespace Sparrow.Chart
 #endif
        
         internal override void InvalidateVisuals()
-        {
+        {            
             if (!isInitialized)
                 Initialize();
             else

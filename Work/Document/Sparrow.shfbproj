@@ -18,7 +18,7 @@
     <OutputPath>Help\</OutputPath>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
-    <SyntaxFilters>Standard</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, XamlUsage</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <PresentationStyle>VS2010</PresentationStyle>
@@ -28,8 +28,8 @@
     <FeedbackEMailAddress>vinothsparrow%40live.com</FeedbackEMailAddress>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.dll" xmlns="" />
-      <DocumentationSource sourceFile="..\Source\Sparrow.Chart\bin\Release\Sparrow.Chart.xml" xmlns="" />
+      <DocumentationSource sourceFile="..\DemoBinaries\Sparrow.Chart.dll" />
+      <DocumentationSource sourceFile="..\DemoBinaries\Sparrow.Chart.xml" />
     </DocumentationSources>
     <WebsiteSdkLinkType>None</WebsiteSdkLinkType>
     <HtmlSdkLinkType>None</HtmlSdkLinkType>
@@ -62,6 +62,8 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <CleanIntermediates>True</CleanIntermediates>
+    <ProjectSummary>Sparrow Chart Toolkit For WPF</ProjectSummary>
+    <VisibleItems>Protected, SealedProtected</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

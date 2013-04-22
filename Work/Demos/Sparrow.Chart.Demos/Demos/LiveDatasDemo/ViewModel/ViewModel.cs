@@ -3,106 +3,44 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 
 namespace Sparrow.Chart.Demos.Demos.LiveDatasDemo
 {
-    public class DataGenerator
+    public class DataGenerator : ViewModelBase
     {
-        public int DataCount = 100;
-        private int RateOfData = 1000;
-        private ObservableCollection<Data> Data;
-        private Random randomNumber;
-        int myindex = 0;
-        public ObservableCollection<Data> DynamicData { get; set; }
-
-        public PointsCollection Generate()
+        private ObservableCollection<Data> collection;
+        public ObservableCollection<Data> Collection 
         {
-            PointsCollection collection = new PointsCollection();
-            DateTime date = new DateTime(2009, 1, 1);
-            double value = 1000;
-            for (int i = 0; i < this.DataCount; i++)
-            {
-                collection.Add(new DoublePoint() { Data = i, Value = value });
-
-                if (randomNumber.NextDouble() > .5)
-                {
-                    value += randomNumber.NextDouble();
-                }
-                else
-                {
-                    value -= randomNumber.NextDouble();
-                }
-            }
-            return collection;
+            get { return collection; }
+            set { collection = value; OnPropertyChanged("Collection");}
         }
 
+        private ObservableCollection<Data> collection1;
+        public ObservableCollection<Data> Collection1
+        {
+            get { return collection1; }
+            set { collection1 = value; OnPropertyChanged("Collection1"); }
+        }
+
+        private DispatcherTimer timer;
+        private double phase;
+        static double increment = Math.PI * 0.1;
         public DataGenerator()
-        {
-            randomNumber = new Random();
-            DynamicData = new ObservableCollection<Data>();
-            Data = new ObservableCollection<Data>();
-            Data = GenerateData();
-        }
-        public void AddData()
-        {
-            for (int i = 0; i < RateOfData; i++)
-            {
-                myindex++;
-                if (myindex < 1000)
-                {
-                    DynamicData.Add(this.Data[myindex]);
-                }
-                else if (myindex > 1000)
-                {
-                    DynamicData.RemoveAt(0);
-                    DynamicData.Add(this.Data[(myindex % (this.Data.Count - 1))]);
-                }
-            }
-
+        {           
+            Collection = Datas.FourierSeries(2.0, phase, 1000);
+            Collection1 = Datas.FourierSeries(1.0, phase, 1000);
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(20);
+            timer.Tick += OnTick;
+            timer.Start();
         }
 
-        public void LoadData()
+        void OnTick(object sender, EventArgs e)
         {
-            for (int i = 0; i < 1000; i++)
-            {
-                myindex++;
-                if (myindex < Data.Count)
-                {
-                    DynamicData.Add(this.Data[myindex]);
-                }
-            }
-
-        }
-        public ObservableCollection<Data> GenerateData()
-        {
-            ObservableCollection<Data> datas = new ObservableCollection<Data>();
-
-            DateTime date = new DateTime(2009, 1, 1);
-            double value = 1000;
-            double value1 = 1001;
-            double value2 = 1002;
-            for (int i = 0; i < this.DataCount; i++)
-            {
-                datas.Add(new Data(date, value, value1, value2));
-                date = date.Add(TimeSpan.FromSeconds(5));
-
-                if ((randomNumber.NextDouble() + value2) < 1004.85)
-                {
-                    double random = randomNumber.NextDouble();
-                    value += random;
-                    value1 += random;
-                    value2 += random;
-                }
-                else
-                {
-                    double random = randomNumber.NextDouble();
-                    value -= random;
-                    value1 -= random;
-                    value2 -= random;
-                }
-            }
-
-            return datas;
+          Collection1 = Datas.FourierSeries(2.0, phase, 1000);
+          Collection = Datas.FourierSeries(1.0, phase, 1000);
+          phase += increment;          
         }
     }
 }

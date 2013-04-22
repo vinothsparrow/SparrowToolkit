@@ -69,8 +69,11 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
-            Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
+            if (ellipse != null)
+            {
+                Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
+                Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
+            }
         }
 
     }

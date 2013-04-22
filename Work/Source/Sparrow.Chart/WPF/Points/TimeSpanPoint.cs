@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Sparrow.Chart
 {
+    /// <summary>
+    /// TimeSpan Point for Series.Points
+    /// </summary>
     public class TimeSpanPoint : ChartPoint
     {
         private TimeSpan m_timeSpan;

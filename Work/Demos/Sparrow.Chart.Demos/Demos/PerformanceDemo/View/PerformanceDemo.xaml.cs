@@ -34,7 +34,7 @@ namespace Sparrow.Chart.Demos.Demos.PerformanceDemo
             if (stopWatch != null)
             {
                 stopWatch.Stop();
-                text.Text = stopWatch.ElapsedMilliseconds.ToString() + " ms";
+                //text.Text = stopWatch.ElapsedMilliseconds.ToString() + " ms";
             }
         }
 

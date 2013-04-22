@@ -30,6 +30,54 @@ namespace Sparrow.Chart
     }
 
     /// <summary>
+    /// Set the axis tick position
+    /// </summary>
+    public enum TickPosition
+    {
+        Inside,
+        Cross,
+        Outside
+    }
+
+    /// <summary>
+    /// Set the XAxis Position for Sparrow Chart
+    /// </summary>
+    public enum XAxisPosition
+    {
+        Bottom,
+        Top
+    }
+
+    /// <summary>
+    /// Set the YAxis Position for Sparrow Chart
+    /// </summary>
+    public enum YAxisPosition
+    {
+        Left,
+        Right
+    }
+
+    /// <summary>
+    /// Set the Axis Position for Sparrow Chart
+    /// </summary>
+    internal enum AxisPosition
+    {
+        Left,
+        Top,
+        Right,
+        Bottom
+    }
+
+    /// <summary>
+    /// Set the Legend position for Sparrow Chart
+    /// </summary>
+    public enum LegendPosition
+    {
+        Inside,
+        Outside
+    }
+
+    /// <summary>
     /// Set ValueType of XAxis
     /// </summary>
     public enum XType
@@ -106,6 +154,7 @@ namespace Sparrow.Chart
         SourceOver
     }
    
+
 
 #if !WPF
 

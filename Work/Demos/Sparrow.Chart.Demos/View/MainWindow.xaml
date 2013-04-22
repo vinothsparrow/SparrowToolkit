@@ -2,9 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MinHeight="410" MinWidth="410"
         xmlns:local="clr-namespace:Sparrow.Chart.Demos"  Icon="../Resources/Stocks.ico"  ShowIconOnTitleBar="False"
-        xmlns:cpu="clr-namespace:CPUPerformance"  BorderBrush="Black" BorderThickness="1"  Foreground="Black"            
+        xmlns:cpu="clr-namespace:CPUPerformance"  BorderBrush="Black" BorderThickness="1"            
         xmlns:chart="http://sparrowtoolkit.codeplex.com/wpf" WindowStartupLocation="CenterScreen"
-        Title="Sparrow Chart Demos Browser" Height="700" Width="950">    
+        Title="Sparrow Chart Demos Browser" Height="700" Width="950" Foreground="Black" >    
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,8 +20,8 @@
             <chart:SparrowButton FontSize="10" Command="{Binding AboutCommand}" CommandParameter="{Binding ElementName=mainWindow}" Content="About"/>
         </chart:WindowCommands>
     </chart:SparrowWindow.WindowCommands>
-    <Grid>
-        <Grid.Resources>
+    <Grid >       
+            <Grid.Resources>
             <local:SampleToContentConverter x:Key="sampleToContentConverter"/>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -29,11 +29,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TreeView x:Name="demos" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Center"
-                          BorderThickness="0"
-                          Background="#FFF" 
+                          BorderThickness="0"                         
                           ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                           ItemsSource="{Binding Categories}"
-                          ItemTemplate="{StaticResource SampleTemplate}" Margin="5,10" />        
+                          ItemTemplate="{StaticResource SampleTemplate}" Margin="5,10" >
+           
+        </TreeView>
         <GridSplitter Background="#FF707070" BorderBrush="#FF707070" Margin="0,20" BorderThickness="0.5" />
         <Grid Grid.Column="1">
             <ScrollViewer x:Name="contentArea" Content="{Binding ElementName=demos,Path=SelectedItem,Converter={StaticResource sampleToContentConverter}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" SnapsToDevicePixels="True">                

@@ -45,9 +45,13 @@ namespace Sparrow.Chart
         private bool isLegendUpdate;
         internal RootPanel rootDockPanel;
         internal Legend legend;
+        internal Grid innerChartPanel;
+        internal Grid outerChartPanel;
         internal List<ColumnSeries> columnSeries;
         internal List<HiLoOpenCloseSeries> hiLoOpenCloseSeries;
-        internal List<ColumnSeries> candleStickSeries; 
+        internal List<ColumnSeries> candleStickSeries;
+        internal double m_axisheight;
+        internal double m_axiswidth;
 
         ResourceDictionary styles;
         internal ObservableCollection<LegendItem> legendItems;
@@ -66,7 +70,7 @@ namespace Sparrow.Chart
             if (containers != null)
                 containers.Chart = this;
             rootDockPanel = (RootPanel)this.GetTemplateChild("Part_rootDockPanel");
-            legend = (Legend)this.GetTemplateChild("Part_Legend"); 
+            
             //containers.MouseMove += OnMouseMove;
             //containers.MouseLeave += OnMouseLeave;
             //containers.MouseLeftButtonDown += OnMousePress;
@@ -77,8 +81,7 @@ namespace Sparrow.Chart
             containers = this.GetTemplateChild("PART_containers") as ContainerCollection;
             if (containers != null)
                 containers.Chart = this;
-            rootDockPanel = this.GetTemplateChild("Part_rootDockPanel") as RootPanel;
-           
+            rootDockPanel = this.GetTemplateChild("Part_rootDockPanel") as RootPanel;            
 #endif
 #if WPF
             containers.ClipToBounds = true;  
@@ -93,13 +96,16 @@ namespace Sparrow.Chart
 #endif                       
             BrushTheme();       
             base.OnApplyTemplate();
+            legend = (Legend)this.GetTemplateChild("Part_Legend");
+            innerChartPanel = (Grid)this.GetTemplateChild("Part_InnerChartPanel");
+            outerChartPanel = (Grid)this.GetTemplateChild("Part_OuterChartPanel");
             RefreshLegend();  
         }
 
         public void RefreshLegend()
         {
-            if (!isLegendUpdate)
-            {
+            //if (!isLegendUpdate)
+            //{
                 if (this.Legend != null)
                 {
                     this.legendItems.Clear();
@@ -115,9 +121,35 @@ namespace Sparrow.Chart
                     }
                     this.Legend.ItemsSource = this.legendItems;                   
                     isLegendUpdate = true;
+                    switch (this.Legend.LegendPosition)
+                    {
+                        case LegendPosition.Inside:
+                            if (this.outerChartPanel != null && this.outerChartPanel.Children.Contains(this.Legend))
+                            {
+                                this.outerChartPanel.Children.Remove(this.Legend);
+                            }
+                            if (this.innerChartPanel != null && !this.innerChartPanel.Children.Contains(this.Legend))
+                            {
+                                this.innerChartPanel.Children.Add(this.Legend);
+                            }
+                            break;
+                        case LegendPosition.Outside:
+                            if (this.innerChartPanel != null && this.innerChartPanel.Children.Contains(this.Legend))
+                            {
+                                this.innerChartPanel.Children.Remove(this.Legend);
+                            }
+                            if (this.outerChartPanel != null && !this.outerChartPanel.Children.Contains(this.Legend))
+                            {
+                                this.outerChartPanel.Children.Add(this.Legend);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    
                 }
 
-            }
+            //}
         }
 
         void OnMouseRelease(object sender, MouseEventArgs e)
@@ -142,6 +174,10 @@ namespace Sparrow.Chart
         {            
             this.DefaultStyleKey = typeof(SparrowChart);
             this.Series = new SeriesCollection();
+            this.XAxes = new Axes();
+            this.XAxes.CollectionChanged += OnAxesCollectionChanged;
+            this.YAxes = new Axes();
+            this.YAxes.CollectionChanged += OnAxesCollectionChanged;
             this.Series.CollectionChanged += OnSeriesCollectionChanged;
             brushes = Themes.MetroBrushes();
             legendItems = new ObservableCollection<LegendItem>();
@@ -173,6 +209,11 @@ namespace Sparrow.Chart
            
         }
 
+        void OnAxesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
+        }
+
         void OnSeriesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -191,8 +232,14 @@ namespace Sparrow.Chart
                         BindingOperations.SetBinding(series, SeriesBase.RenderingModeProperty, renderingModeBinding);
                         series.Chart = this;
                         series.Index = indexCount;
-                        series.XAxis = XAxis;
-                        series.YAxis = YAxis;                       
+                        Binding xAxisBinding = new Binding();
+                        xAxisBinding.Source = this;
+                        xAxisBinding.Path = new PropertyPath("XAxis");
+                        BindingOperations.SetBinding(series, SeriesBase.XAxisProperty, xAxisBinding);
+                        Binding yAxisBinding = new Binding();
+                        yAxisBinding.Source = this;
+                        yAxisBinding.Path = new PropertyPath("YAxis");
+                        BindingOperations.SetBinding(series, SeriesBase.YAxisProperty, yAxisBinding);                   
                         indexCount++;
                         if (series is ColumnSeries)
                         {
@@ -220,7 +267,8 @@ namespace Sparrow.Chart
                     break;
                     
             }
-            
+            if (this.containers != null)
+                this.containers.Refresh();
         }
 #if WPF
         /// <summary>
@@ -302,14 +350,14 @@ namespace Sparrow.Chart
             if (this.Series != null)
                 foreach (var series in Series)
                 {
-                    //if (series.Stroke == null)
-                    //{
+                    if (series.Stroke == null)
+                    {
                         if (brushes.Count > 1)
                             series.Stroke = brushes[series.Index % (brushes.Count)];
                         else
                             series.Stroke = brushes[brushes.Count];
-                    //}
-                    if (series.isFill)
+                    }
+                    if (series.isFill && (series as FillSeriesBase).Fill == null)
                     {
                         if (brushes.Count > 1)
                             (series as FillSeriesBase).Fill = brushes[series.Index % (brushes.Count)];
@@ -319,15 +367,15 @@ namespace Sparrow.Chart
                 }
         }
 
-        protected override Size MeasureOverride(Size constraint)
-        {                                
-            if (rootDockPanel != null)
-            {                
-                rootDockPanel.Measure(constraint);               
-            }
+        //protected override Size MeasureOverride(Size constraint)
+        //{                                
+        //    if (rootDockPanel != null)
+        //    {                
+        //        rootDockPanel.Measure(constraint);               
+        //    }
            
-            return base.MeasureOverride(constraint);
-        }
+        //    return base.MeasureOverride(constraint);
+        //}
 
 
         public XAxis XAxis
@@ -350,7 +398,32 @@ namespace Sparrow.Chart
             seriesBinding.Source = this;
             this.XAxis.SetBinding(AxisBase.SeriesProperty, seriesBinding);
             this.XAxis.Chart = this;
+            this.XAxes.Add(this.XAxis);
         }
+
+
+
+        public Axes XAxes
+        {
+            get { return (Axes)GetValue(XAxesProperty); }
+            set { SetValue(XAxesProperty, value); }
+        }
+
+        public static readonly DependencyProperty XAxesProperty =
+            DependencyProperty.Register("XAxes", typeof(Axes), typeof(SparrowChart), new PropertyMetadata(null));
+
+
+
+        public Axes YAxes
+        {
+            get { return (Axes)GetValue(YAxesProperty); }
+            set { SetValue(YAxesProperty, value); }
+        }
+
+        public static readonly DependencyProperty YAxesProperty =
+            DependencyProperty.Register("YAxes", typeof(Axes), typeof(SparrowChart), new PropertyMetadata(null));
+
+
 
         public YAxis YAxis
         {
@@ -372,6 +445,7 @@ namespace Sparrow.Chart
             seriesBinding.Source = this;
             this.YAxis.SetBinding(AxisBase.SeriesProperty, seriesBinding);
             this.YAxis.Chart = this;
+            this.YAxes.Add(this.YAxis);
         }
         public Double AxisHeight
         {
@@ -610,7 +684,6 @@ namespace Sparrow.Chart
 
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(SparrowChart), new PropertyMetadata(RenderingMode.Default));
-
        
     }
 }

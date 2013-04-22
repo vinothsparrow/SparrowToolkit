@@ -32,12 +32,12 @@ namespace Sparrow.Chart
     public class LineSeries : LineSeriesBase
     {
         override public void GenerateDatas()
-        {
-            LinePoints.Clear();
-            if (!isPointsGenerated)
-                Parts.Clear();
+        {            
             if (this.Points != null && this.seriesContainer != null)
             {
+                LinePoints = new PointCollection();
+                if (!isPointsGenerated)
+                    Parts.Clear();
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
                 IntializePoints();
@@ -58,9 +58,12 @@ namespace Sparrow.Chart
                         {
                             for (int i = 0; i < this.LinePoints.Count - 1; i++)
                             {
-                                LinePart linePart = new LinePart(this.LinePoints[i], this.LinePoints[i + 1]);
-                                SetBindingForStrokeandStrokeThickness(linePart);
-                                this.Parts.Add(linePart);
+                                if (CheckValue(this.LinePoints[i].X) && CheckValue(this.LinePoints[i].Y) && CheckValue(this.LinePoints[i + 1].X) && CheckValue(this.LinePoints[i + 1].Y))
+                                {
+                                    LinePart linePart = new LinePart(this.LinePoints[i], this.LinePoints[i + 1]);
+                                    SetBindingForStrokeandStrokeThickness(linePart);
+                                    this.Parts.Add(linePart);
+                                }
                             }
                         }
                         else
@@ -78,11 +81,14 @@ namespace Sparrow.Chart
                         {
                             foreach (LinePart part in this.Parts)
                             {
-                                part.X1 = this.LinePoints[i].X;
-                                part.Y1 = this.LinePoints[i].Y;
-                                part.X2 = this.LinePoints[i + 1].X;
-                                part.Y2 = this.LinePoints[i + 1].Y;
-                                part.Refresh();
+                                if (CheckValue(this.LinePoints[i].X) && CheckValue(this.LinePoints[i].Y) && CheckValue(this.LinePoints[i + 1].X) && CheckValue(this.LinePoints[i + 1].Y))
+                                {
+                                    part.X1 = this.LinePoints[i].X;
+                                    part.Y1 = this.LinePoints[i].Y;
+                                    part.X2 = this.LinePoints[i + 1].X;
+                                    part.Y2 = this.LinePoints[i + 1].Y;
+                                    part.Refresh();
+                                }
                                 i++;
                             }
                         }

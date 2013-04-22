@@ -42,7 +42,7 @@ namespace Sparrow.Chart
             this.X2 = endPoint.X;
             this.Y1 = startPoint.Y;
             this.Y2 = endPoint.Y;
-        }        
+        }
 
         public override UIElement CreatePart()
         {
@@ -56,10 +56,13 @@ namespace Sparrow.Chart
         }
         public override void Refresh()
         {
-            linePart.X1 = this.X1;
-            linePart.X2 = this.X2;
-            linePart.Y1 = this.Y1;
-            linePart.Y2 = this.Y2;
+            if (this.linePart != null)
+            { 
+                linePart.X1 = this.X1;
+                linePart.X2 = this.X2;
+                linePart.Y1 = this.Y1;
+                linePart.Y2 = this.Y2;
+            }
         }
     }
 }

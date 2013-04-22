@@ -54,4 +54,12 @@ namespace Sparrow.Chart
         }
     }
 
+    public class Axes : ObservableCollection<AxisBase>
+    {
+        public Axes()
+        {
+
+        }
+    }
+
 }

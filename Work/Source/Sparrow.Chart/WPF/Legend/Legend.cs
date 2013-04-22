@@ -54,7 +54,7 @@ namespace Sparrow.Chart
             };
             this.HeaderTemplate = (DataTemplate)styles["legendTitleTemplate"];
             this.ItemTemplate = (DataTemplate)styles["defaultItemTemplate"];
-#if WINRT || WP7 || WP8
+#if WINRT || WP7 || WP8 || SILVERLIGHT4
             Loaded += Legend_Loaded;
 #endif
         }           
@@ -74,7 +74,20 @@ namespace Sparrow.Chart
             set { SetValue(DockProperty, value); }
         }
 
-#if WPF || SILVERLIGHT
+
+
+        public LegendPosition LegendPosition
+        {
+            get { return (LegendPosition)GetValue(LegendPositionProperty); }
+            set { SetValue(LegendPositionProperty, value); }
+        }
+
+        public static readonly DependencyProperty LegendPositionProperty =
+            DependencyProperty.Register("LegendPosition", typeof(LegendPosition), typeof(Legend), new PropertyMetadata(LegendPosition.Outside));
+
+
+
+#if WPF || SILVERLIGHT && !SILVERLIGHT4
         public static readonly DependencyProperty DockProperty =
             DependencyProperty.Register("Dock", typeof(Dock), typeof(Legend), new PropertyMetadata(Dock.Top));
 #endif
@@ -120,7 +133,7 @@ namespace Sparrow.Chart
         public static readonly DependencyProperty ShowIconProperty =
             DependencyProperty.Register("ShowIcon", typeof(bool), typeof(Legend), new PropertyMetadata(true));
 
-#if WINRT || WP7 || WP8
+#if WINRT || WP7 || WP8 || SILVERLIGHT4
         void Legend_Loaded(object sender, RoutedEventArgs e)
         {
             DockChanged();

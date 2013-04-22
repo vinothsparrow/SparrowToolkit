@@ -153,20 +153,23 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            line1.X1 = point1.X;
-            line1.X2 = point2.X;
-            line1.Y1 = point1.Y;
-            line1.Y2 = point2.Y;
+            if (line1 != null && line2 != null && line3 != null)
+            {
+                line1.X1 = point1.X;
+                line1.X2 = point2.X;
+                line1.Y1 = point1.Y;
+                line1.Y2 = point2.Y;
 
-            line2.X1 = point3.X;
-            line2.X2 = point4.X;
-            line2.Y1 = point3.Y;
-            line2.Y2 = point4.Y;
+                line2.X1 = point3.X;
+                line2.X2 = point4.X;
+                line2.Y1 = point3.Y;
+                line2.Y2 = point4.Y;
 
-            line3.X1 = point5.X;
-            line3.X2 = point6.X;
-            line3.Y1 = point5.Y;
-            line3.Y2 = point6.Y;
+                line3.X1 = point5.X;
+                line3.X2 = point6.X;
+                line3.Y1 = point5.Y;
+                line3.Y2 = point6.Y;
+            }
         }
     }
 }

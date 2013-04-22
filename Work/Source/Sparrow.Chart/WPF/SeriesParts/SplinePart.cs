@@ -78,16 +78,19 @@ namespace Sparrow.Chart
 
         public override void Refresh()
         {
-            PathFigure figure = new PathFigure();
-            BezierSegment bezierPoints = new BezierSegment();
-            PathGeometry pathGeometry = new PathGeometry();
-            figure.StartPoint = startPoint;
-            bezierPoints.Point1 = firstControlPoint;
-            bezierPoints.Point2 = endControlPoint;
-            bezierPoints.Point3 = endPoint;
-            figure.Segments.Add(bezierPoints);
-            pathGeometry.Figures = new PathFigureCollection() { figure };
-            splinePath.Data = pathGeometry;
+            if (splinePath != null)
+            {
+                PathFigure figure = new PathFigure();
+                BezierSegment bezierPoints = new BezierSegment();
+                PathGeometry pathGeometry = new PathGeometry();
+                figure.StartPoint = startPoint;
+                bezierPoints.Point1 = firstControlPoint;
+                bezierPoints.Point2 = endControlPoint;
+                bezierPoints.Point3 = endPoint;
+                figure.Segments.Add(bezierPoints);
+                pathGeometry.Figures = new PathFigureCollection() { figure };
+                splinePath.Data = pathGeometry;
+            }
         }
     }
 }

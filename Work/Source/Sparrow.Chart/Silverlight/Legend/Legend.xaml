@@ -25,7 +25,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <local:LegendPanel DockPosition="{Binding Dock, RelativeSource={RelativeSource FindAncestor, AncestorType=local:Legend}}" Orientation="Horizontal"/>
+                    <StackPanel/>
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>

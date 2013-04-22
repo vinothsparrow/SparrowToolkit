@@ -17,6 +17,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -29,11 +30,12 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Bin\Release\Sparrow.Chart.Silverlight.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -58,9 +61,6 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WPF\Axis\Axis.cs">
-      <Link>Axis\Axis.cs</Link>
-    </Compile>
     <Compile Include="..\WPF\Axis\AxisBase.cs">
       <Link>Axis\AxisBase.cs</Link>
     </Compile>
@@ -72,6 +72,9 @@
     </Compile>
     <Compile Include="..\WPF\Axis\DateTimeYAxis.cs">
       <Link>Axis\DateTimeYAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\IAxis.cs">
+      <Link>Axis\IAxis.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Axis\LinearXAxis.cs">
       <Link>Axis\LinearXAxis.cs</Link>
@@ -127,8 +130,17 @@
     <Compile Include="..\WPF\Converters\BorderThicknessToTopBottomConverter.cs">
       <Link>Converters\BorderThicknessToTopBottomConverter.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Converters\HalfValueConverter.cs">
+      <Link>Converters\HalfValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Converters\MajorSizeThicknessConverter.cs">
       <Link>Converters\MajorSizeThicknessConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\NegativeConverter.cs">
+      <Link>Converters\NegativeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\NegativeHalfConverter.cs">
+      <Link>Converters\NegativeHalfConverter.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Converters\StringToChartPointConverter.cs">
       <Link>Converters\StringToChartPointConverter.cs</Link>
@@ -138,6 +150,9 @@
     </Compile>
     <Compile Include="..\WPF\Legend\LegendItem.cs">
       <Link>Legend\LegendItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Panels\AxesPanel.cs">
+      <Link>Panels\AxesPanel.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Panels\ContainerCollection.cs">
       <Link>Panels\ContainerCollection.cs</Link>

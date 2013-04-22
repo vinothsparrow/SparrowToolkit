@@ -36,12 +36,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Canvas >
+                <!--<Canvas >
                     <Line X1="0" Y1="8" X2="0" Y2="205" Stroke="Black" Grid.Row="0" Grid.RowSpan="2" StrokeThickness="3"/>
-                </Canvas>
+                </Canvas>-->
                 <chart:SparrowButton Margin="10,20,0,0"  Content="Load 100000 Points" Click="SparrowButton_Click_1" FontFamily="Segoe UI" FontSize="26px" FontWeight="Light" Width="255" HorizontalAlignment="Left" BorderThickness="0" Grid.Row="2"  Grid.Column="1"/>
-                <TextBlock Margin="10,0,0,0" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="22px" Text="Time Taken" Grid.Row="0" Grid.Column="1" />
-                <TextBlock Margin="10,-10,0,0" FontFamily="Segoe UI" FontWeight="Light" Foreground="#545454" FontSize="85px" x:Name="text"  Grid.Row="1" Grid.Column="1" />
+                <!--<TextBlock Margin="10,0,0,0" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="22px" Text="Time Taken" Grid.Row="0" Grid.Column="1" />
+                <TextBlock Margin="10,-10,0,0" FontFamily="Segoe UI" FontWeight="Light" Foreground="#545454" FontSize="85px" x:Name="text"  Grid.Row="1" Grid.Column="1" />-->
             </Grid>
         </Grid>
     </Grid>

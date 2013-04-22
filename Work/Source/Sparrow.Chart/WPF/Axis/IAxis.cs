@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 namespace Sparrow.Chart
 {
 
-    public interface Axis
+    public interface IAxis
     {        
 
         object MinValue

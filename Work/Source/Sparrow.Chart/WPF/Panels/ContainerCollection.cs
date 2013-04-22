@@ -214,7 +214,7 @@ namespace Sparrow.Chart
            
             foreach (SeriesBase series in this.Series)
             {
-                if (Containers.Count > 0)
+                if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
                     series.seriesContainer = Containers[series.Index];
                 series.Refresh();
             }

@@ -6,6 +6,7 @@ using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using System.Windows.Media;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -21,9 +22,9 @@ using Windows.UI.Xaml.Shapes;
 namespace Sparrow.Chart
 {
     /// <summary>
-    /// AxisBase
+    /// Base for Axis
     /// </summary>
-    public class AxisBase : Canvas, Axis
+    public class AxisBase : Canvas, IAxis
     {
         protected ResourceDictionary styles;
        
@@ -84,11 +85,15 @@ namespace Sparrow.Chart
         }
 
 
+        /// <summary>
+        /// Gets or Sets the ZoomOffset for Axis
+        /// </summary>
         public double ZoomOffset
         {
             get { return (double)GetValue(ZoomOffsetProperty); }
             set { SetValue(ZoomOffsetProperty, value); }
         }
+
 
         public static readonly DependencyProperty ZoomOffsetProperty =
             DependencyProperty.Register("ZoomOffset", typeof(double), typeof(AxisBase), new PropertyMetadata(0d,OnZoomOffsetChanged));
@@ -98,6 +103,9 @@ namespace Sparrow.Chart
             (sender as AxisBase).ZoomPropertyChanged(args);
         }
 
+        /// <summary>
+        /// Gets or Sets the ZoomCoefficient for Axis
+        /// </summary>
         public double ZoomCoefficient
         {
             get { return (double)GetValue(ZoomCoefficientProperty); }
@@ -259,11 +267,11 @@ namespace Sparrow.Chart
             double value = m_MinValue;
             for (int i = 0; i <= m_IntervalCount; i++)
             {
-                if (value >= m_MinValue && value <= m_MaxValue)
-                {
+                //if (value >= m_MinValue && value <= m_MaxValue)
+                //{
                     m_Labels.Add(GetOriginalLabel(value));
                     m_labelValues.Add(value);                    
-                }                
+                //}                
                 value += m_Interval;
                 if (isIntervalCountZero)
                     break;
@@ -398,7 +406,7 @@ namespace Sparrow.Chart
             }
             
             RefreshSeries();
-            if (this.Chart.containers != null && this.Chart.containers.axisLinesconatiner != null)
+            if (this.Chart != null && this.Chart.containers != null && this.Chart.containers.axisLinesconatiner != null)
                 this.Chart.containers.axisLinesconatiner.Refresh();
         }
 
@@ -408,8 +416,9 @@ namespace Sparrow.Chart
         }
 
         public virtual void Refresh()
-        {           
-           InvalidateVisuals();
+        {
+            if (this.Chart != null)
+                InvalidateVisuals();
         }
 
         internal void RefreshSeries()
@@ -420,17 +429,46 @@ namespace Sparrow.Chart
                     series.RefreshWithoutAxis(this);
                 }
         }
+
+        public Rect GetRotatedRect(Rect rect, RotateTransform rotate)
+        {
+#if !WINRT
+            Point leftTop = rotate.Transform(new Point(rect.Left, rect.Top));
+            Point rightTop = rotate.Transform(new Point(rect.Right, rect.Top));
+            Point leftBottom = rotate.Transform(new Point(rect.Left, rect.Bottom));
+            Point rightBottom = rotate.Transform(new Point(rect.Right, rect.Bottom));
+            double left = Math.Min(Math.Min(leftTop.X, rightTop.X), Math.Min(leftBottom.X, rightBottom.X));
+            double top = Math.Min(Math.Min(leftTop.Y, rightTop.Y), Math.Min(leftBottom.Y, rightBottom.Y));
+            double right = Math.Max(Math.Max(leftTop.X, rightTop.X), Math.Max(leftBottom.X, rightBottom.X));
+            double bottom = Math.Max(Math.Max(leftTop.Y, rightTop.Y), Math.Max(leftBottom.Y, rightBottom.Y));
+            return new Rect(left, top, right - left, bottom - top);
+#else
+            Point leftTop = rotate.TransformPoint(new Point(rect.Left, rect.Top));
+            Point rightTop = rotate.TransformPoint(new Point(rect.Right, rect.Top));
+            Point leftBottom = rotate.TransformPoint(new Point(rect.Left, rect.Bottom));
+            Point rightBottom = rotate.TransformPoint(new Point(rect.Right, rect.Bottom));
+            double left = Math.Min(Math.Min(leftTop.X, rightTop.X), Math.Min(leftBottom.X, rightBottom.X));
+            double top = Math.Min(Math.Min(leftTop.Y, rightTop.Y), Math.Min(leftBottom.Y, rightBottom.Y));
+            double right = Math.Max(Math.Max(leftTop.X, rightTop.X), Math.Max(leftBottom.X, rightBottom.X));
+            double bottom = Math.Max(Math.Max(leftTop.Y, rightTop.Y), Math.Max(leftBottom.Y, rightBottom.Y));
+            return new Rect(left, top, right - left, bottom - top);
+#endif
+        }
+
         internal double m_Interval;
         internal double m_MaxValue = 1;
         internal double m_MinValue = 0;
         internal double actualMaxvalue = 1;
         internal double actualMinvalue = 0;
         internal double m_IntervalCount = 5;
+        
         internal List<string> m_Labels;
         internal List<double> m_labelValues;
         internal double m_offset = 0;
         internal double m_startValue = 0;
         bool isStartSet;
+        protected bool isAxisHeightSet;
+        protected bool isAxisWidthSet;
 
         /// <summary>
         /// Axis Line Style
@@ -508,6 +546,34 @@ namespace Sparrow.Chart
 
 
         /// <summary>
+        /// Gets or Sets the Axis MajorTicks position
+        /// </summary>
+        public TickPosition MajorTicksPosition
+        {
+            get { return (TickPosition)GetValue(MajorTicksPositionProperty); }
+            set { SetValue(MajorTicksPositionProperty, value); }
+        }
+
+        public static readonly DependencyProperty MajorTicksPositionProperty =
+            DependencyProperty.Register("MajorTicksPosition", typeof(TickPosition), typeof(AxisBase), new PropertyMetadata(TickPosition.Outside));
+
+
+
+        /// <summary>
+        /// Gets or Sets the Axis MinorTicks position
+        /// </summary>
+        public TickPosition MinorTicksPosition
+        {
+            get { return (TickPosition)GetValue(MinorTicksPositionProperty); }
+            set { SetValue(MinorTicksPositionProperty, value); }
+        }
+
+        public static readonly DependencyProperty MinorTicksPositionProperty =
+            DependencyProperty.Register("MinorTicksPosition", typeof(TickPosition), typeof(AxisBase), new PropertyMetadata(TickPosition.Outside));
+
+
+
+        /// <summary>
         /// Major Tick Line Visible only if ShowMajorTicks is set to True
         /// </summary>
         public bool ShowMajorTicks
@@ -575,6 +641,17 @@ namespace Sparrow.Chart
 
         public static readonly DependencyProperty LabelTemplateProperty =
             DependencyProperty.Register("LabelTemplate", typeof(DataTemplate), typeof(AxisBase), new PropertyMetadata(null));
+
+
+
+        public double LabelAngle
+        {
+            get { return (double)GetValue(LabelAngleProperty); }
+            set { SetValue(LabelAngleProperty, value); }
+        }
+
+        public static readonly DependencyProperty LabelAngleProperty =
+            DependencyProperty.Register("LabelAngle", typeof(double), typeof(AxisBase), new PropertyMetadata(0d));
 
 
 

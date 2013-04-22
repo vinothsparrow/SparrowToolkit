@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Sparrow.Chart
 {
+    /// <summary>
+    /// Category Point for Series.Points
+    /// </summary>
     public class CategoryPoint : ChartPoint
     {
         public CategoryPoint()

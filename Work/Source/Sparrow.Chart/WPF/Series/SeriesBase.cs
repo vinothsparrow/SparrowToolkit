@@ -91,7 +91,15 @@ namespace Sparrow.Chart
             result.X = ((pt.X - xMin) * (seriesContainer.collection.ActualWidth / (xMax - xMin)));
             result.Y = (seriesContainer.collection.ActualHeight - ((pt.Y - yMin) * seriesContainer.collection.ActualHeight) / (yMax - yMin));
             return result;
-        }       
+        }
+
+        protected bool CheckValue(double value)
+        {
+            bool isOk = true;
+            if (double.IsNaN(value) || double.IsInfinity(value) || double.IsNegativeInfinity(value) || double.IsPositiveInfinity(value) || value == double.MaxValue || value == double.MinValue)
+                isOk = false;
+            return isOk;
+        }
 
         public virtual void Refresh()
         {

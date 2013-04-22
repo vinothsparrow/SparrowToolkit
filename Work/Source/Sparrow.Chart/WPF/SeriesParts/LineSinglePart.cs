@@ -42,7 +42,8 @@ namespace Sparrow.Chart
         }
         public override void Refresh()
         {
-            linePart.Points = this.LinePoints;     
+            if (linePart != null)
+                linePart.Points = this.LinePoints;     
         }
     }
 }

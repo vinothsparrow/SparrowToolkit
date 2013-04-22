@@ -66,9 +66,12 @@ namespace Sparrow.Chart
                     {
                         for (int i = 0; i <= this.startEndPoints.Count - 2; i += 2)
                         {
-                            ColumnPart columnPart = new ColumnPart(startEndPoints[i].X, startEndPoints[i].Y, startEndPoints[i + 1].X, startEndPoints[i + 1].Y);
-                            SetBindingForStrokeandStrokeThickness(columnPart);
-                            this.Parts.Add(columnPart);
+                            if (CheckValue(startEndPoints[i].X) && CheckValue(startEndPoints[i].Y) && CheckValue(startEndPoints[i + 1].X) && CheckValue(startEndPoints[i + 1].Y))
+                            {
+                                ColumnPart columnPart = new ColumnPart(startEndPoints[i].X, startEndPoints[i].Y, startEndPoints[i + 1].X, startEndPoints[i + 1].Y);
+                                SetBindingForStrokeandStrokeThickness(columnPart);
+                                this.Parts.Add(columnPart);
+                            }
                             //}
                             //else
                             //{
@@ -84,11 +87,14 @@ namespace Sparrow.Chart
                         int i = 0;
                         foreach (ColumnPart part in this.Parts)
                         {
-                            part.X1 = startEndPoints[i].X;
-                            part.Y1 = startEndPoints[i].Y;
-                            part.X2 = startEndPoints[i + 1].X;
-                            part.Y2 = startEndPoints[i + 1].Y;
-                            part.Refresh();
+                            if (CheckValue(startEndPoints[i].X) && CheckValue(startEndPoints[i].Y) && CheckValue(startEndPoints[i + 1].X) && CheckValue(startEndPoints[i + 1].Y))
+                            {
+                                part.X1 = startEndPoints[i].X;
+                                part.Y1 = startEndPoints[i].Y;
+                                part.X2 = startEndPoints[i + 1].X;
+                                part.Y2 = startEndPoints[i + 1].Y;
+                                part.Refresh();
+                            }
                             i += 2;
                         }
 

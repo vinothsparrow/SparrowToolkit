@@ -83,6 +83,8 @@
       <DependentUpon>CPUView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\CategoryModel.cs" />
+    <Compile Include="Utils\Datas.cs" />
+    <Compile Include="Utils\ViewModelBase.cs" />
     <Compile Include="ViewModel\DemoViewModel.cs" />
     <Compile Include="View\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>

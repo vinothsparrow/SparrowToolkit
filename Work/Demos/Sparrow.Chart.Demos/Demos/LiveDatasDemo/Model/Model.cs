@@ -7,6 +7,10 @@ namespace Sparrow.Chart.Demos.Demos.LiveDatasDemo
 {
     public class Data
     {
+        public Data()
+        {
+
+        }
         public Data(DateTime date, double value, double value1, double value2)
         {
             Date = date;

@@ -117,9 +117,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WPF\Axis\Axis.cs">
-      <Link>Axis\Axis.cs</Link>
-    </Compile>
     <Compile Include="..\WPF\Axis\AxisBase.cs">
       <Link>Axis\AxisBase.cs</Link>
     </Compile>
@@ -131,6 +128,9 @@
     </Compile>
     <Compile Include="..\WPF\Axis\DateTimeYAxis.cs">
       <Link>Axis\DateTimeYAxis.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Axis\IAxis.cs">
+      <Link>Axis\IAxis.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Axis\LinearXAxis.cs">
       <Link>Axis\LinearXAxis.cs</Link>
@@ -187,14 +187,26 @@
     <Compile Include="..\WPF\Converters\BorderThicknessToTopBottomConverter.cs">
       <Link>Converters\BorderThicknessToTopBottomConverter.cs</Link>
     </Compile>
+    <Compile Include="..\WPF\Converters\HalfValueConverter.cs">
+      <Link>Converters\HalfValueConverter.cs</Link>
+    </Compile>
     <Compile Include="..\WPF\Converters\MajorSizeThicknessConverter.cs">
       <Link>Converters\MajorSizeThicknessConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\NegativeConverter.cs">
+      <Link>Converters\NegativeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Converters\NegativeHalfConverter.cs">
+      <Link>Converters\NegativeHalfConverter.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Legend\Legend.cs">
       <Link>Legend\Legend.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Legend\LegendItem.cs">
       <Link>Legend\LegendItem.cs</Link>
+    </Compile>
+    <Compile Include="..\WPF\Panels\AxesPanel.cs">
+      <Link>Panels\AxesPanel.cs</Link>
     </Compile>
     <Compile Include="..\WPF\Panels\ContainerCollection.cs">
       <Link>Panels\ContainerCollection.cs</Link>

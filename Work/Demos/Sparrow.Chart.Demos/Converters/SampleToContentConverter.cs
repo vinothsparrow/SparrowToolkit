@@ -9,13 +9,13 @@ using System.Windows.Data;
 namespace Sparrow.Chart.Demos
 {
     public class SampleToContentConverter : IValueConverter
-   {        
+    {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is SampleModel)
             {
                 if (!(value as SampleModel).IsIntialized)
-                    (value as SampleModel).View = (UserControl)Activator.CreateInstance(Type.GetType((value as SampleModel).ViewClass)); 
+                    (value as SampleModel).View = (UserControl)Activator.CreateInstance(Type.GetType((value as SampleModel).ViewClass));
                 return (value as SampleModel).View;
             }
             return null;

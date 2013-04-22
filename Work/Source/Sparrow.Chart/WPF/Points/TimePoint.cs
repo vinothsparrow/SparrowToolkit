@@ -6,7 +6,7 @@ using System.Text;
 namespace Sparrow.Chart
 {
     /// <summary>
-    /// TimePoint
+    /// TimePoint for Series.Points
     /// </summary>
     public class TimePoint : ChartPoint
     {

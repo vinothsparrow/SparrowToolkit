@@ -6,7 +6,7 @@ using System.Text;
 namespace Sparrow.Chart
 {
     /// <summary>
-    /// DoublePoint
+    /// DoublePoint for Series.Points
     /// </summary>
     public class DoublePoint : ChartPoint
     {
