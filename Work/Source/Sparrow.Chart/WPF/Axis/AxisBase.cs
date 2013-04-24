@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 #if !WINRT
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Media;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
@@ -24,40 +18,46 @@ namespace Sparrow.Chart
     /// <summary>
     /// Base for Axis
     /// </summary>
-    public class AxisBase : Canvas, IAxis
+    public abstract class AxisBase : Canvas, IAxis
     {
-        protected ResourceDictionary styles;
-       
+
+
+        /// <summary>
+        /// Invalidates the visuals.
+        /// </summary>
         internal virtual void InvalidateVisuals()
         {
         }
 
-        protected Line axisLine;
-        protected List<ContentControl> labels;
-        protected List<Line> majorTickLines;
-        protected List<Line> minorTickLines;
+        protected ResourceDictionary Styles;
+        protected Line AxisLine;
+        protected List<ContentControl> Labels;
+        protected List<Line> MajorTickLines;
+        protected List<Line> MinorTickLines;
         protected ContentControl header;
-        protected bool isInitialized;
-        private bool isIntervalCountZero;
+        protected bool IsInitialized;
 
-        private ActualType actualType;
-        internal ActualType ActualType 
-        {
-            get { return actualType; }
-            set { actualType = value; }
-        }
+        private bool _isIntervalCountZero;
 
+        internal ActualType ActualType { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AxisBase"/> class.
+        /// </summary>
         public AxisBase()
         {
-            this.m_Labels = new List<string>();
-            this.m_labelValues = new List<double>();
+            this.MLabels = new List<string>();
+            this.MLabelValues = new List<double>();
             this.ActualType = ActualType.Double;
             GetStyles();
         }
 
+        /// <summary>
+        /// Gets the styles.
+        /// </summary>
         protected virtual void GetStyles()
         {
-            styles = new ResourceDictionary()
+            Styles = new ResourceDictionary()
             {
 #if X86
                 Source = new Uri(@"/Sparrow.Chart.DirectX2D_x86;component/Themes/Styles.xaml", UriKind.Relative)
@@ -76,18 +76,22 @@ namespace Sparrow.Chart
 #endif
             };
 
-            this.AxisLineStyle = (Style)styles["axisLineStyle"];
-            this.MajorLineStyle = (Style)styles["majorLineStyle"];
-            this.MinorLineStyle = (Style)styles["minorLineStyle"];
-            this.LabelTemplate = (DataTemplate)styles["axisLabelTemplate"];
-            this.CrossLineStyle = (Style)styles["crossLineStyle"];
-            this.MinorCrossLineStyle = (Style)styles["minorCrossLineStyle"];
+            this.AxisLineStyle = (Style)Styles["axisLineStyle"];
+            this.MajorLineStyle = (Style)Styles["majorLineStyle"];
+            this.MinorLineStyle = (Style)Styles["minorLineStyle"];
+            this.LabelTemplate = (DataTemplate)Styles["axisLabelTemplate"];
+            this.CrossLineStyle = (Style)Styles["crossLineStyle"];
+            this.MinorCrossLineStyle = (Style)Styles["minorCrossLineStyle"];
         }
 
 
+
         /// <summary>
-        /// Gets or Sets the ZoomOffset for Axis
+        /// Gets or sets the zoom offset.
         /// </summary>
+        /// <value>
+        /// The zoom offset.
+        /// </value>
         public double ZoomOffset
         {
             get { return (double)GetValue(ZoomOffsetProperty); }
@@ -95,26 +99,45 @@ namespace Sparrow.Chart
         }
 
 
+        /// <summary>
+        /// The zoom offset property
+        /// </summary>
         public static readonly DependencyProperty ZoomOffsetProperty =
             DependencyProperty.Register("ZoomOffset", typeof(double), typeof(AxisBase), new PropertyMetadata(0d,OnZoomOffsetChanged));
 
+        /// <summary>
+        /// Called when [zoom offset changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnZoomOffsetChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as AxisBase).ZoomPropertyChanged(args);
         }
 
         /// <summary>
-        /// Gets or Sets the ZoomCoefficient for Axis
+        /// Gets or sets the zoom coefficient.
         /// </summary>
+        /// <value>
+        /// The zoom coefficient.
+        /// </value>
         public double ZoomCoefficient
         {
             get { return (double)GetValue(ZoomCoefficientProperty); }
             set { SetValue(ZoomCoefficientProperty, value); }
         }
 
+        /// <summary>
+        /// The zoom coefficient property
+        /// </summary>
         public static readonly DependencyProperty ZoomCoefficientProperty =
             DependencyProperty.Register("ZoomCoefficient", typeof(double), typeof(AxisBase), new PropertyMetadata(1d,OnZoomCoefficientChanged));
 
+        /// <summary>
+        /// Called when [zoom coefficient changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnZoomCoefficientChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as AxisBase).ZoomPropertyChanged(args);
@@ -125,45 +148,82 @@ namespace Sparrow.Chart
         }
 
         /// <summary>
-        /// Axis Minimum Value
+        /// Gets or sets the min value.
         /// </summary>
+        /// <value>
+        /// The min value.
+        /// </value>
         public object MinValue
         {
             get { return (object)GetValue(MinValueProperty); }
             set { SetValue(MinValueProperty, value); }
         }
 
+        /// <summary>
+        /// The min value property
+        /// </summary>
         public static readonly DependencyProperty MinValueProperty =
             DependencyProperty.Register("MinValue", typeof(object), typeof(AxisBase), new PropertyMetadata(null,OnMinValueChanged));
 
+        /// <summary>
+        /// Called when [min value changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnMinValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as AxisBase).MinValueChnaged(args);
         }
+
+        /// <summary>
+        /// Mins the value chnaged.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void MinValueChnaged(DependencyPropertyChangedEventArgs args)
         {
-            this.m_MinValue =Double.Parse(this.MinValue.ToString());
-            this.m_startValue = Double.Parse(this.MinValue.ToString()); 
-            if (this.Chart != null && this.Chart.containers != null)
-                Chart.containers.Refresh();
-            RefreshSeries();
-        }
-        private static void OnMaxValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
-        {
-            (sender as AxisBase).MaxValueChnaged(args);
-        }
-        internal void MaxValueChnaged(DependencyPropertyChangedEventArgs args)
-        {
-            this.m_MaxValue = Double.Parse(this.MaxValue.ToString());
-            if (this.Chart != null && this.Chart.containers != null)
-                Chart.containers.Refresh();
+            this.MMinValue =Double.Parse(this.MinValue.ToString());
+            this.MStartValue = Double.Parse(this.MinValue.ToString()); 
+            if (this.Chart != null && this.Chart.Containers != null)
+                Chart.Containers.Refresh();
             RefreshSeries();
         }
 
+        /// <summary>
+        /// Called when [max value changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        private static void OnMaxValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as AxisBase).MaxValueChanged(args);
+        }
+
+        /// <summary>
+        /// Maxes the value changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        internal void MaxValueChanged(DependencyPropertyChangedEventArgs args)
+        {
+            this.MMaxValue = Double.Parse(this.MaxValue.ToString());
+            if (this.Chart != null && this.Chart.Containers != null)
+                Chart.Containers.Refresh();
+            RefreshSeries();
+        }
+
+        /// <summary>
+        /// Called when [interval changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnIntervalChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as AxisBase).IntervalChanged(args);
         }
+
+        /// <summary>
+        /// Intervals the changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void IntervalChanged(DependencyPropertyChangedEventArgs args)
         {
             switch (ActualType)
@@ -171,28 +231,31 @@ namespace Sparrow.Chart
                 case ActualType.Double:
                 case ActualType.Category:                    
                     if (!this.Interval.ToString().Contains(":"))
-                        this.m_Interval = Double.Parse(this.Interval.ToString());
+                        this.MInterval = Double.Parse(this.Interval.ToString());
                     else
-                        this.m_Interval = (DateTime.Now + (TimeSpan)TimeSpan.Parse(Interval.ToString())).ToOADate() - DateTime.Now.ToOADate();
+                        this.MInterval = (DateTime.Now + (TimeSpan)TimeSpan.Parse(Interval.ToString())).ToOADate() - DateTime.Now.ToOADate();
                     break;
                 case ActualType.DateTime:
-                    this.m_Interval = (DateTime.Now + (TimeSpan)TimeSpan.Parse(Interval.ToString())).ToOADate() - DateTime.Now.ToOADate();
+                    this.MInterval = (DateTime.Now + (TimeSpan)TimeSpan.Parse(Interval.ToString())).ToOADate() - DateTime.Now.ToOADate();
                     break;
                 default:
                     break;
             }
 
-            if (this.Chart != null && this.Chart.containers != null)
+            if (this.Chart != null && this.Chart.Containers != null)
             {
-                Chart.containers.Refresh();
-                Chart.containers.axisLinesconatiner.Refresh();
+                Chart.Containers.Refresh();
+                Chart.Containers.AxisLinesconatiner.Refresh();
             }
             RefreshSeries();
         }
 
         /// <summary>
-        /// Maximum Value for Axis
+        /// Gets or sets the max value.
         /// </summary>
+        /// <value>
+        /// The max value.
+        /// </value>
         public object MaxValue
         {
             get { return (object)GetValue(MaxValueProperty); }
@@ -204,8 +267,11 @@ namespace Sparrow.Chart
 
 
         /// <summary>
-        /// Interval for Axis
+        /// Gets or sets the interval.
         /// </summary>
+        /// <value>
+        /// The interval.
+        /// </value>
         public object Interval
         {
             get { return (object)GetValue(IntervalProperty); }
@@ -216,36 +282,36 @@ namespace Sparrow.Chart
             DependencyProperty.Register("Interval", typeof(object), typeof(AxisBase), new PropertyMetadata(null,OnIntervalChanged));
 
         /// <summary>
-        /// Add Minimum Value to Axis
+        /// Adds the min max.
         /// </summary>
-        /// <param name="min">Minimum Value To be added to Axis</param>
-        /// <param name="max">maximum Value To be added to Axis</param>
-        public void AddMinMax(double min, double max)
+        /// <param name="min">The min.</param>
+        /// <param name="max">The max.</param>
+        internal void AddMinMax(double min, double max)
         {
             if (this.MinValue == null)
             {
-                m_MinValue = min;
+                MMinValue = min;
                 
-                if (!isStartSet)
+                if (!_isStartSet)
                 {
-                    m_startValue = min;
-                    isStartSet = true;
+                    MStartValue = min;
+                    _isStartSet = true;
                 }
-                actualMinvalue = min;
+                ActualMinvalue = min;
             }
             else
             {
-                actualMinvalue = Double.Parse(this.MinValue.ToString());
+                ActualMinvalue = Double.Parse(this.MinValue.ToString());
             }
             
             if (this.MaxValue == null)
             {
-                m_MaxValue = max;
-                actualMaxvalue = max;
+                MMaxValue = max;
+                ActualMaxvalue = max;
             }
             else
             {
-                actualMaxvalue = Double.Parse(this.MaxValue.ToString());
+                ActualMaxvalue = Double.Parse(this.MaxValue.ToString());
             }
             
         }   
@@ -257,75 +323,102 @@ namespace Sparrow.Chart
         public void AddInterval(double interval)
         {
             if (this.Interval == null)
-                m_Interval = interval;            
+                MInterval = interval;            
         }
 
+        /// <summary>
+        /// Generates the labels.
+        /// </summary>
         internal void GenerateLabels()
         {           
-            m_Labels.Clear();
-            m_labelValues.Clear();
-            double value = m_MinValue;
-            for (int i = 0; i <= m_IntervalCount; i++)
+            MLabels.Clear();
+            MLabelValues.Clear();
+            double value = MMinValue;
+            for (int i = 0; i <= MIntervalCount; i++)
             {
                 //if (value >= m_MinValue && value <= m_MaxValue)
                 //{
-                    m_Labels.Add(GetOriginalLabel(value));
-                    m_labelValues.Add(value);                    
+                    MLabels.Add(GetOriginalLabel(value));
+                    MLabelValues.Add(value);                    
                 //}                
-                value += m_Interval;
-                if (isIntervalCountZero)
+                value += MInterval;
+                if (_isIntervalCountZero)
                     break;
             }           
         }
 
+        /// <summary>
+        /// Determines whether [is rect intersect] [the specified source].
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="relativeTo">The relative to.</param>
+        /// <returns>
+        ///   <c>true</c> if [is rect intersect] [the specified source]; otherwise, <c>false</c>.
+        /// </returns>
         protected bool IsRectIntersect(Rect source, Rect relativeTo)
         {
             return !(relativeTo.Left > source.Right || relativeTo.Right < source.Left || relativeTo.Top > source.Bottom || relativeTo.Bottom < source.Top);
         }
 
 
+        /// <summary>
+        /// Datas to point.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public virtual double DataToPoint(double value)
         {
             return 0;            
         }
 
+        /// <summary>
+        /// Calculates the interval from series points.
+        /// </summary>
         public virtual void CalculateIntervalFromSeriesPoints()
         {
 
         }
+        /// <summary>
+        /// Gets the original label.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public virtual string GetOriginalLabel(double value)
         {
             return string.Empty;
         }
 
+        /// <summary>
+        /// Calculates the auto interval.
+        /// </summary>
         protected void CalculateAutoInterval()
         {
-            isIntervalCountZero = false;
+            _isIntervalCountZero = false;
             if (CheckType())
             {
                
                 if (ZoomCoefficient < 1 || (ZoomOffset > 0 && ZoomCoefficient < 1))
                 {
-                    m_MinValue = actualMinvalue + ZoomOffset * (actualMaxvalue - actualMinvalue); ;
-                    m_MaxValue = m_MinValue + ZoomCoefficient * (actualMaxvalue - actualMinvalue);
-                    if (m_MinValue < actualMinvalue)
+                    MMinValue = ActualMinvalue + ZoomOffset * (ActualMaxvalue - ActualMinvalue); ;
+                    MMaxValue = MMinValue + ZoomCoefficient * (ActualMaxvalue - ActualMinvalue);
+                    if (MMinValue < ActualMinvalue)
                     {
-                        m_MaxValue = m_MaxValue + (actualMinvalue - m_MinValue);
-                        m_MinValue = actualMinvalue;
+                        MMaxValue = MMaxValue + (ActualMinvalue - MMinValue);
+                        MMinValue = ActualMinvalue;
                     }
 
-                    if (m_MaxValue > actualMaxvalue)
+                    if (MMaxValue > ActualMaxvalue)
                     {
-                        m_MinValue = m_MinValue - (m_MaxValue - actualMaxvalue);
-                        m_MaxValue = actualMaxvalue;
+                        MMinValue = MMinValue - (MMaxValue - ActualMaxvalue);
+                        MMaxValue = ActualMaxvalue;
                     }
-                    m_startValue = m_MinValue;
+                    MStartValue = MMinValue;
                 }
                 else
                 {
-                    m_MaxValue = actualMaxvalue;
-                    m_MinValue = actualMinvalue;
-                    m_startValue = actualMinvalue;
+                    MMaxValue = ActualMaxvalue;
+                    MMinValue = ActualMinvalue;
+                    MStartValue = ActualMinvalue;
                 }
                 if (this.Interval == null)
                 {
@@ -333,43 +426,43 @@ namespace Sparrow.Chart
                     {
                         case ActualType.Double:
                             //m_MinValue = Math.Floor(m_MinValue);                           
-                            this.m_Interval = AxisUtil.CalculateInetrval(m_MinValue, m_MaxValue, m_IntervalCount);
+                            this.MInterval = AxisUtil.CalculateInetrval(MMinValue, MMaxValue, MIntervalCount);
                             //m_MaxValue = m_MinValue + (m_IntervalCount * this.m_Interval);
                             break;
                         case ActualType.DateTime:
-                            this.m_Interval = (m_MaxValue - m_MinValue) / m_IntervalCount;
+                            this.MInterval = (MMaxValue - MMinValue) / MIntervalCount;
                             break;
                         default:
                             break;
                     }
                    
-                    this.m_Interval = (m_MaxValue - m_MinValue) / m_IntervalCount;
+                    this.MInterval = (MMaxValue - MMinValue) / MIntervalCount;
                 }
                 else
                 {
                     switch (ActualType)
                     {
                         case ActualType.Double:
-                            this.m_IntervalCount = (int)Math.Abs((m_MaxValue - m_MinValue) / m_Interval);
-                            double temp_max = (this.m_IntervalCount * this.m_Interval) + m_MinValue;
-                            if (temp_max >= this.m_MaxValue)
-                                this.m_MaxValue = temp_max;
-                            if(temp_max<this.m_MaxValue)
+                            this.MIntervalCount = (int)Math.Abs((MMaxValue - MMinValue) / MInterval);
+                            double tempMax = (this.MIntervalCount * this.MInterval) + MMinValue;
+                            if (tempMax >= this.MMaxValue)
+                                this.MMaxValue = tempMax;
+                            if(tempMax<this.MMaxValue)
                             {
-                                this.m_MaxValue = temp_max + this.m_Interval;
-                                m_IntervalCount++;
+                                this.MMaxValue = tempMax + this.MInterval;
+                                MIntervalCount++;
                             }
                             
                             break;
                         case ActualType.DateTime:
-                            this.m_IntervalCount = (int)Math.Abs((m_MaxValue - m_MinValue) / m_Interval);
+                            this.MIntervalCount = (int)Math.Abs((MMaxValue - MMinValue) / MInterval);
                             break;
                         default:
                             break;
                     }
-                    if (m_IntervalCount <= 1)
-                        isIntervalCountZero = true;
-                    m_IntervalCount = (m_IntervalCount > 0) ? m_IntervalCount : 1;
+                    if (MIntervalCount <= 1)
+                        _isIntervalCountZero = true;
+                    MIntervalCount = (MIntervalCount > 0) ? MIntervalCount : 1;
 
                 }
                 
@@ -382,45 +475,55 @@ namespace Sparrow.Chart
             {
                 if (this.Interval == null)
                 {
-                    this.m_Interval = 1;
-                    m_startValue = m_MinValue;
+                    this.MInterval = 1;
+                    MStartValue = MMinValue;
                 }
                 else
                 {
-                    m_IntervalCount = (int)(((int)m_MaxValue - (int)m_MinValue) / (int)m_Interval);
-                    double temp_max = (this.m_IntervalCount * this.m_Interval) + m_MinValue;
-                    if (temp_max >= this.m_MaxValue)
-                        this.m_MaxValue = temp_max;
+                    MIntervalCount = (int)(((int)MMaxValue - (int)MMinValue) / (int)MInterval);
+                    double tempMax = (this.MIntervalCount * this.MInterval) + MMinValue;
+                    if (tempMax >= this.MMaxValue)
+                        this.MMaxValue = tempMax;
                     else
-                    if (temp_max < this.m_MaxValue)
+                    if (tempMax < this.MMaxValue)
                     {
-                        this.m_MaxValue = temp_max + this.m_Interval;
-                        m_IntervalCount++;
+                        this.MMaxValue = tempMax + this.MInterval;
+                        MIntervalCount++;
                     }                    
-                    if ((m_MinValue >= m_startValue + m_Interval))
-                        m_startValue = m_startValue + m_Interval;
+                    if ((MMinValue >= MStartValue + MInterval))
+                        MStartValue = MStartValue + MInterval;
                 }
-                this.m_IntervalCount = (int)Math.Abs(((int)m_MaxValue - (int)m_MinValue) / (int)m_Interval);
-                m_IntervalCount = (m_IntervalCount > 0) ? m_IntervalCount : 1;
+                this.MIntervalCount = (int)Math.Abs(((int)MMaxValue - (int)MMinValue) / (int)MInterval);
+                MIntervalCount = (MIntervalCount > 0) ? MIntervalCount : 1;
                 
             }
             
             RefreshSeries();
-            if (this.Chart != null && this.Chart.containers != null && this.Chart.containers.axisLinesconatiner != null)
-                this.Chart.containers.axisLinesconatiner.Refresh();
+            if (this.Chart != null && this.Chart.Containers != null && this.Chart.Containers.AxisLinesconatiner != null)
+                this.Chart.Containers.AxisLinesconatiner.Refresh();
         }
 
+        /// <summary>
+        /// Checks the type.
+        /// </summary>
+        /// <returns></returns>
         protected virtual bool CheckType()
         {
             return true;
         }
 
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
         public virtual void Refresh()
         {
             if (this.Chart != null)
                 InvalidateVisuals();
         }
 
+        /// <summary>
+        /// Refreshes the series.
+        /// </summary>
         internal void RefreshSeries()
         {
             if (Series != null)
@@ -430,6 +533,12 @@ namespace Sparrow.Chart
                 }
         }
 
+        /// <summary>
+        /// Gets the rotated rect.
+        /// </summary>
+        /// <param name="rect">The rect.</param>
+        /// <param name="rotate">The rotate.</param>
+        /// <returns></returns>
         public Rect GetRotatedRect(Rect rect, RotateTransform rotate)
         {
 #if !WINRT
@@ -455,24 +564,29 @@ namespace Sparrow.Chart
 #endif
         }
 
-        internal double m_Interval;
-        internal double m_MaxValue = 1;
-        internal double m_MinValue = 0;
-        internal double actualMaxvalue = 1;
-        internal double actualMinvalue = 0;
-        internal double m_IntervalCount = 5;
+        internal double MInterval;
+        internal double MMaxValue = 1;
+        internal double MMinValue = 0;
+        internal double ActualMaxvalue = 1;
+        internal double ActualMinvalue = 0;
+        internal double MIntervalCount = 5;
         
-        internal List<string> m_Labels;
-        internal List<double> m_labelValues;
-        internal double m_offset = 0;
-        internal double m_startValue = 0;
-        bool isStartSet;
-        protected bool isAxisHeightSet;
-        protected bool isAxisWidthSet;
+        internal List<string> MLabels;
+        internal List<double> MLabelValues;
+        internal double MOffset = 0;
+        internal double MStartValue = 0;
+
+        bool _isStartSet;
+
+        protected bool IsAxisHeightSet;
+        protected bool IsAxisWidthSet;
 
         /// <summary>
-        /// Axis Line Style
+        /// Gets or sets the axis line style.
         /// </summary>
+        /// <value>
+        /// The axis line style.
+        /// </value>
         public Style AxisLineStyle
         {
             get;
@@ -480,204 +594,325 @@ namespace Sparrow.Chart
         }
 
         /// <summary>
-        /// String Format for AxisLabel
+        /// Gets or sets the string format.
         /// </summary>
+        /// <value>
+        /// The string format.
+        /// </value>
         public string StringFormat
         {
             get { return (string)GetValue(StringFormatProperty); }
             set { SetValue(StringFormatProperty, value); }
         }
 
+        /// <summary>
+        /// The string format property
+        /// </summary>
         public static readonly DependencyProperty StringFormatProperty =
             DependencyProperty.Register("StringFormat", typeof(string), typeof(AxisBase), new PropertyMetadata(string.Empty));
 
 
-
         /// <summary>
-        /// Minor Line Size
+        /// Gets or sets the size of the minor line.
         /// </summary>
+        /// <value>
+        /// The size of the minor line.
+        /// </value>
         public double MinorLineSize
         {
             get { return (double)GetValue(MinorLineSizeProperty); }
             set { SetValue(MinorLineSizeProperty, value); }
         }
 
+        /// <summary>
+        /// The minor line size property
+        /// </summary>
         public static readonly DependencyProperty MinorLineSizeProperty =
             DependencyProperty.Register("MinorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(6d));
 
 
         /// <summary>
-        /// Minor Line Style
+        /// Gets or sets the minor line style.
         /// </summary>
+        /// <value>
+        /// The minor line style.
+        /// </value>
         public Style MinorLineStyle
         {
             get { return (Style)GetValue(MinorLineStyleProperty); }
             set { SetValue(MinorLineStyleProperty, value); }
         }
 
+        /// <summary>
+        /// The minor line style property
+        /// </summary>
         public static readonly DependencyProperty MinorLineStyleProperty =
             DependencyProperty.Register("MinorLineStyle", typeof(Style), typeof(AxisBase), new PropertyMetadata(null));
 
 
         /// <summary>
-        /// Major Line Style
+        /// Gets or sets the major line style.
         /// </summary>
+        /// <value>
+        /// The major line style.
+        /// </value>
         public Style MajorLineStyle
         {
             get { return (Style)GetValue(MajorLineStyleProperty); }
             set { SetValue(MajorLineStyleProperty, value); }
         }
 
+        /// <summary>
+        /// The major line style property
+        /// </summary>
         public static readonly DependencyProperty MajorLineStyleProperty =
             DependencyProperty.Register("MajorLineStyle", typeof(Style), typeof(AxisBase), new PropertyMetadata(null));
 
 
         /// <summary>
-        /// Major Line Size
+        /// Gets or sets the size of the major line.
         /// </summary>
+        /// <value>
+        /// The size of the major line.
+        /// </value>
         public double MajorLineSize
         {
             get { return (double)GetValue(MajorLineSizeProperty); }
             set { SetValue(MajorLineSizeProperty, value); }
         }
 
+        /// <summary>
+        /// The major line size property
+        /// </summary>
         public static readonly DependencyProperty MajorLineSizeProperty =
             DependencyProperty.Register("MajorLineSize", typeof(double), typeof(AxisBase), new PropertyMetadata(10d));
 
 
         /// <summary>
-        /// Gets or Sets the Axis MajorTicks position
+        /// Gets or sets the major ticks position.
         /// </summary>
+        /// <value>
+        /// The major ticks position.
+        /// </value>
         public TickPosition MajorTicksPosition
         {
             get { return (TickPosition)GetValue(MajorTicksPositionProperty); }
             set { SetValue(MajorTicksPositionProperty, value); }
         }
 
+        /// <summary>
+        /// The major ticks position property
+        /// </summary>
         public static readonly DependencyProperty MajorTicksPositionProperty =
             DependencyProperty.Register("MajorTicksPosition", typeof(TickPosition), typeof(AxisBase), new PropertyMetadata(TickPosition.Outside));
 
 
-
         /// <summary>
-        /// Gets or Sets the Axis MinorTicks position
+        /// Gets or sets the minor ticks position.
         /// </summary>
+        /// <value>
+        /// The minor ticks position.
+        /// </value>
         public TickPosition MinorTicksPosition
         {
             get { return (TickPosition)GetValue(MinorTicksPositionProperty); }
             set { SetValue(MinorTicksPositionProperty, value); }
         }
 
+        /// <summary>
+        /// The minor ticks position property
+        /// </summary>
         public static readonly DependencyProperty MinorTicksPositionProperty =
             DependencyProperty.Register("MinorTicksPosition", typeof(TickPosition), typeof(AxisBase), new PropertyMetadata(TickPosition.Outside));
 
 
 
         /// <summary>
-        /// Major Tick Line Visible only if ShowMajorTicks is set to True
+        /// Gets or sets a value indicating whether [show major ticks].
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show major ticks]; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowMajorTicks
         {
             get { return (bool)GetValue(ShowMajorTicksProperty); }
             set { SetValue(ShowMajorTicksProperty, value); }
         }
 
+        /// <summary>
+        /// The show major ticks property
+        /// </summary>
         public static readonly DependencyProperty ShowMajorTicksProperty =
             DependencyProperty.Register("ShowMajorTicks", typeof(bool), typeof(AxisBase), new PropertyMetadata(true));
 
 
         /// <summary>
-        /// 
+        /// Gets or sets the minor ticks count.
         /// </summary>
+        /// <value>
+        /// The minor ticks count.
+        /// </value>
         public int MinorTicksCount
         {
             get { return (int)GetValue(MinorTicksCountProperty); }
             set { SetValue(MinorTicksCountProperty, value);}
         }
 
+        /// <summary>
+        /// The minor ticks count property
+        /// </summary>
         public static readonly DependencyProperty MinorTicksCountProperty =
             DependencyProperty.Register("MinorTicksCount", typeof(int), typeof(AxisBase), new PropertyMetadata(0));
 
 
 
+        /// <summary>
+        /// Gets or sets the header.
+        /// </summary>
+        /// <value>
+        /// The header.
+        /// </value>
         public object Header
         {
             get { return (object)GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
         }
 
+        /// <summary>
+        /// The header property
+        /// </summary>
         public static readonly DependencyProperty HeaderProperty =
             DependencyProperty.Register("Header", typeof(object), typeof(AxisBase), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the header template.
+        /// </summary>
+        /// <value>
+        /// The header template.
+        /// </value>
         public DataTemplate HeaderTemplate
         {
             get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
             set { SetValue(HeaderTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// The header template property
+        /// </summary>
         public static readonly DependencyProperty HeaderTemplateProperty =
             DependencyProperty.Register("HeaderTemplate", typeof(DataTemplate), typeof(AxisBase), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the chart.
+        /// </summary>
+        /// <value>
+        /// The chart.
+        /// </value>
         public SparrowChart Chart
         {
             get { return (SparrowChart)GetValue(ChartProperty); }
             set { SetValue(ChartProperty, value); }
         }
 
+        /// <summary>
+        /// The chart property
+        /// </summary>
         public static readonly DependencyProperty ChartProperty =
             DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(AxisBase), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the label template.
+        /// </summary>
+        /// <value>
+        /// The label template.
+        /// </value>
         public DataTemplate LabelTemplate
         {
             get { return (DataTemplate)GetValue(LabelTemplateProperty); }
             set { SetValue(LabelTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// The label template property
+        /// </summary>
         public static readonly DependencyProperty LabelTemplateProperty =
             DependencyProperty.Register("LabelTemplate", typeof(DataTemplate), typeof(AxisBase), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the label angle.
+        /// </summary>
+        /// <value>
+        /// The label angle.
+        /// </value>
         public double LabelAngle
         {
             get { return (double)GetValue(LabelAngleProperty); }
             set { SetValue(LabelAngleProperty, value); }
         }
 
+        /// <summary>
+        /// The label angle property
+        /// </summary>
         public static readonly DependencyProperty LabelAngleProperty =
             DependencyProperty.Register("LabelAngle", typeof(double), typeof(AxisBase), new PropertyMetadata(0d));
 
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show cross lines].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show cross lines]; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowCrossLines
         {
             get { return (bool)GetValue(ShowCrossLinesProperty); }
             set { SetValue(ShowCrossLinesProperty, value); }
         }
 
+        /// <summary>
+        /// The show cross lines property
+        /// </summary>
         public static readonly DependencyProperty ShowCrossLinesProperty =
             DependencyProperty.Register("ShowCrossLines", typeof(bool), typeof(AxisBase), new PropertyMetadata(true));
 
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show minor cross lines].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [show minor cross lines]; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowMinorCrossLines
         {
             get { return (bool)GetValue(ShowMinorCrossLinesProperty); }
             set { SetValue(ShowMinorCrossLinesProperty, value); }
         }
 
+        /// <summary>
+        /// The show minor cross lines property
+        /// </summary>
         public static readonly DependencyProperty ShowMinorCrossLinesProperty =
             DependencyProperty.Register("ShowMinorCrossLines", typeof(bool), typeof(AxisBase), new PropertyMetadata(true));
 
 
 
 
+        /// <summary>
+        /// Gets or sets the minor cross line style.
+        /// </summary>
+        /// <value>
+        /// The minor cross line style.
+        /// </value>
         public Style MinorCrossLineStyle
         {
             get { return (Style)GetValue(MinorCrossLineStyleProperty); }
@@ -689,23 +924,41 @@ namespace Sparrow.Chart
 
 
 
+        /// <summary>
+        /// Gets or sets the cross line style.
+        /// </summary>
+        /// <value>
+        /// The cross line style.
+        /// </value>
         public Style CrossLineStyle
         {
             get { return (Style)GetValue(CrossLineStyleProperty); }
             set { SetValue(CrossLineStyleProperty, value); }
         }
 
+        /// <summary>
+        /// The cross line style property
+        /// </summary>
         public static readonly DependencyProperty CrossLineStyleProperty =
             DependencyProperty.Register("CrossLineStyle", typeof(Style), typeof(AxisBase), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the series.
+        /// </summary>
+        /// <value>
+        /// The series.
+        /// </value>
         public SeriesCollection Series
         {
             get { return (SeriesCollection)GetValue(SeriesProperty); }
             set { SetValue(SeriesProperty, value); }
         }
 
+        /// <summary>
+        /// The series property
+        /// </summary>
         public static readonly DependencyProperty SeriesProperty =
             DependencyProperty.Register("Series", typeof(SeriesCollection), typeof(AxisBase), new PropertyMetadata(null));
     }

@@ -1,46 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 #if !WINRT
-using System.Windows.Data;
 using System.Windows.Media;
-using System.Collections;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 namespace Sparrow.Chart
 {
     public class BubbleSeries : FillSeriesBase
     {
-        internal List<double> sizeValues;
+        internal List<double> SizeValues;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BubbleSeries"/> class.
+        /// </summary>
         public BubbleSeries()
         {
             BubblePoints = new PointCollection();
-            isFill = true;
-            sizeValues = new List<double>();
+            IsFill = true;
+            SizeValues = new List<double>();
         }
 
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         public override void GenerateDatas()
         {
             BubblePoints.Clear();
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 Parts.Clear();
             Point endPoint = new Point(0, 0);
             Point startPoint = new Point(0, 0);            
             if (PointsSource != null)
-                sizeValues = this.GetReflectionValues(this.SizePath, PointsSource, sizeValues, false);
+                SizeValues = this.GetReflectionValues(this.SizePath, PointsSource, SizeValues, false);
 
-            if (this.Points != null && this.seriesContainer != null && this.Points.Count > 1)
+            if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 1)
             {
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
@@ -56,16 +53,16 @@ namespace Sparrow.Chart
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
                         for (int i = 0; i < BubblePoints.Count; i++)
                         {
                             ScatterPart scatterPart = new ScatterPart(BubblePoints[i]);
-                            scatterPart.Size = sizeValues[i];
+                            scatterPart.Size = SizeValues[i];
                             SetBindingForStrokeandStrokeThickness(scatterPart);
                             this.Parts.Add(scatterPart);
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
@@ -80,33 +77,55 @@ namespace Sparrow.Chart
                     }
                 }
 
-                this.seriesContainer.Invalidate();
+                this.SeriesContainer.Invalidate();
             }
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new ScatterContainer();
         }
 
+        /// <summary>
+        /// Gets or sets the bubble points.
+        /// </summary>
+        /// <value>
+        /// The bubble points.
+        /// </value>
         public PointCollection BubblePoints
         {
             get { return (PointCollection)GetValue(BubblePointsPointsProperty); }
             set { SetValue(BubblePointsPointsProperty, value); }
         }
 
+        /// <summary>
+        /// The bubble points points property
+        /// </summary>
         public static readonly DependencyProperty BubblePointsPointsProperty =
             DependencyProperty.Register("BubblePointsPoints", typeof(PointCollection), typeof(BubbleSeries), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the size path.
+        /// </summary>
+        /// <value>
+        /// The size path.
+        /// </value>
         public string SizePath
         {
             get { return (string)GetValue(SizePathProperty); }
             set { SetValue(SizePathProperty, value); }
         }
 
+        /// <summary>
+        /// The size path property
+        /// </summary>
         public static readonly DependencyProperty SizePathProperty =
             DependencyProperty.Register("SizePath", typeof(string), typeof(BubbleSeries), new PropertyMetadata(string.Empty));
 

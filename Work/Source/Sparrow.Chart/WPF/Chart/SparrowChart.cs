@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
@@ -38,38 +36,48 @@ namespace Sparrow.Chart
 #endif
     public class SparrowChart : Control
     {        
-        internal ContainerCollection containers;
-        internal int indexCount = 0;
-        bool isMouseDragging;
-        bool isMouseClick;
-        private bool isLegendUpdate;
-        internal RootPanel rootDockPanel;
+        internal ContainerCollection Containers;
+        internal int IndexCount = 0;
+        bool _isMouseDragging;
+        bool _isMouseClick;
+        private bool _isLegendUpdate;
+        internal RootPanel RootDockPanel;
         internal Legend legend;
-        internal Grid innerChartPanel;
-        internal Grid outerChartPanel;
-        internal List<ColumnSeries> columnSeries;
-        internal List<HiLoOpenCloseSeries> hiLoOpenCloseSeries;
-        internal List<ColumnSeries> candleStickSeries;
-        internal double m_axisheight;
-        internal double m_axiswidth;
+        internal Grid InnerChartPanel;
+        internal Grid OuterChartPanel;
+        internal List<ColumnSeries> ColumnSeries;
+        internal List<HiLoOpenCloseSeries> HiLoOpenCloseSeries;
+        internal List<ColumnSeries> CandleStickSeries;
+        internal double MAxisheight;
+        internal double MAxiswidth;
 
         ResourceDictionary styles;
-        internal ObservableCollection<LegendItem> legendItems;
+        internal ObservableCollection<LegendItem> LegendItems;
 
-        private static List<string> actualCategoryValues;
+        private static List<string> _actualCategoryValues;
+
+        /// <summary>
+        /// Gets or sets the actual category values.
+        /// </summary>
+        /// <value>
+        /// The actual category values.
+        /// </value>
         internal static List<string> ActualCategoryValues
         {
-            get { return actualCategoryValues; }
-            set { actualCategoryValues = value; }
+            get { return _actualCategoryValues; }
+            set { _actualCategoryValues = value; }
         }
 
 #if !WINRT
+        /// <summary>
+        /// When overridden in a derived class, is invoked whenever application code or internal processes (such as a rebuilding layout pass) call <see cref="M:System.Windows.Controls.Control.ApplyTemplate" />. In simplest terms, this means the method is called just before a UI element displays in an application. For more information, see Remarks.
+        /// </summary>
         public override void OnApplyTemplate()
         {            
-            containers = (ContainerCollection)this.GetTemplateChild("PART_containers");
-            if (containers != null)
-                containers.Chart = this;
-            rootDockPanel = (RootPanel)this.GetTemplateChild("Part_rootDockPanel");
+            Containers = (ContainerCollection)this.GetTemplateChild("PART_containers");
+            if (Containers != null)
+                Containers.Chart = this;
+            RootDockPanel = (RootPanel)this.GetTemplateChild("Part_rootDockPanel");
             
             //containers.MouseMove += OnMouseMove;
             //containers.MouseLeave += OnMouseLeave;
@@ -77,73 +85,73 @@ namespace Sparrow.Chart
             //containers.MouseLeftButtonUp += OnMouseRelease;
 #else
         protected override void OnApplyTemplate()
-        { 
-            containers = this.GetTemplateChild("PART_containers") as ContainerCollection;
-            if (containers != null)
-                containers.Chart = this;
-            rootDockPanel = this.GetTemplateChild("Part_rootDockPanel") as RootPanel;            
+        {
+            Containers = this.GetTemplateChild("PART_containers") as ContainerCollection;
+            if (Containers != null)
+                Containers.Chart = this;
+            RootDockPanel = this.GetTemplateChild("Part_rootDockPanel") as RootPanel;            
 #endif
 #if WPF
-            containers.ClipToBounds = true;  
+            Containers.ClipToBounds = true;  
 #else
             foreach (SeriesBase series in Series)
             {
-                Binding dataContextBinding = new Binding();
-                dataContextBinding.Path = new PropertyPath("DataContext");
-                dataContextBinding.Source = this;
+                Binding dataContextBinding = new Binding {Path = new PropertyPath("DataContext"), Source = this};
                 BindingOperations.SetBinding(series, SeriesBase.DataContextProperty, dataContextBinding);
             }
 #endif                       
             BrushTheme();       
             base.OnApplyTemplate();
             legend = (Legend)this.GetTemplateChild("Part_Legend");
-            innerChartPanel = (Grid)this.GetTemplateChild("Part_InnerChartPanel");
-            outerChartPanel = (Grid)this.GetTemplateChild("Part_OuterChartPanel");
+            InnerChartPanel = (Grid)this.GetTemplateChild("Part_InnerChartPanel");
+            OuterChartPanel = (Grid)this.GetTemplateChild("Part_OuterChartPanel");
             RefreshLegend();  
         }
 
+        /// <summary>
+        /// Refreshes the legend.
+        /// </summary>
         public void RefreshLegend()
         {
             //if (!isLegendUpdate)
             //{
                 if (this.Legend != null)
                 {
-                    this.legendItems.Clear();
+                    this.LegendItems.Clear();
                     foreach (SeriesBase series in this.Series)
                     {
-                        LegendItem legendItem = new LegendItem();
-                        legendItem.Series = series;
-                        Binding showIconBinding = new Binding();
-                        showIconBinding.Path = new PropertyPath("ShowIcon");
-                        showIconBinding.Source = this.Legend;
+                        LegendItem legendItem = new LegendItem {Series = series};
+                        Binding showIconBinding = new Binding
+                            {
+                                Path = new PropertyPath("ShowIcon"),
+                                Source = this.Legend
+                            };
                         BindingOperations.SetBinding(legendItem, LegendItem.ShowIconProperty, showIconBinding);
-                        this.legendItems.Add(legendItem);
+                        this.LegendItems.Add(legendItem);
                     }
-                    this.Legend.ItemsSource = this.legendItems;                   
-                    isLegendUpdate = true;
+                    this.Legend.ItemsSource = this.LegendItems;                   
+                    _isLegendUpdate = true;
                     switch (this.Legend.LegendPosition)
                     {
                         case LegendPosition.Inside:
-                            if (this.outerChartPanel != null && this.outerChartPanel.Children.Contains(this.Legend))
+                            if (this.OuterChartPanel != null && this.OuterChartPanel.Children.Contains(this.Legend))
                             {
-                                this.outerChartPanel.Children.Remove(this.Legend);
+                                this.OuterChartPanel.Children.Remove(this.Legend);
                             }
-                            if (this.innerChartPanel != null && !this.innerChartPanel.Children.Contains(this.Legend))
+                            if (this.InnerChartPanel != null && !this.InnerChartPanel.Children.Contains(this.Legend))
                             {
-                                this.innerChartPanel.Children.Add(this.Legend);
+                                this.InnerChartPanel.Children.Add(this.Legend);
                             }
                             break;
                         case LegendPosition.Outside:
-                            if (this.innerChartPanel != null && this.innerChartPanel.Children.Contains(this.Legend))
+                            if (this.InnerChartPanel != null && this.InnerChartPanel.Children.Contains(this.Legend))
                             {
-                                this.innerChartPanel.Children.Remove(this.Legend);
+                                this.InnerChartPanel.Children.Remove(this.Legend);
                             }
-                            if (this.outerChartPanel != null && !this.outerChartPanel.Children.Contains(this.Legend))
+                            if (this.OuterChartPanel != null && !this.OuterChartPanel.Children.Contains(this.Legend))
                             {
-                                this.outerChartPanel.Children.Add(this.Legend);
+                                this.OuterChartPanel.Children.Add(this.Legend);
                             }
-                            break;
-                        default:
                             break;
                     }
                     
@@ -168,8 +176,11 @@ namespace Sparrow.Chart
         void OnMouseMove(object sender, MouseEventArgs e)
         {
             
-        }              
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SparrowChart"/> class.
+        /// </summary>
         public SparrowChart()
         {            
             this.DefaultStyleKey = typeof(SparrowChart);
@@ -179,12 +190,12 @@ namespace Sparrow.Chart
             this.YAxes = new Axes();
             this.YAxes.CollectionChanged += OnAxesCollectionChanged;
             this.Series.CollectionChanged += OnSeriesCollectionChanged;
-            brushes = Themes.MetroBrushes();
-            legendItems = new ObservableCollection<LegendItem>();
+            _brushes = Themes.MetroBrushes();
+            LegendItems = new ObservableCollection<LegendItem>();
             ActualCategoryValues = new List<string>();
-            columnSeries = new List<ColumnSeries>();
-            hiLoOpenCloseSeries = new List<HiLoOpenCloseSeries>();
-            candleStickSeries = new List<ColumnSeries>();
+            ColumnSeries = new List<ColumnSeries>();
+            HiLoOpenCloseSeries = new List<HiLoOpenCloseSeries>();
+            CandleStickSeries = new List<ColumnSeries>();
             styles = new ResourceDictionary()
             {
 #if X86
@@ -209,11 +220,21 @@ namespace Sparrow.Chart
            
         }
 
+        /// <summary>
+        /// Called when [axes collection changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         void OnAxesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             
         }
 
+        /// <summary>
+        /// Called when [series collection changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         void OnSeriesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
@@ -222,34 +243,30 @@ namespace Sparrow.Chart
                     
                     foreach (SeriesBase series in e.NewItems)
                     {
-                        Binding dataContextBinding = new Binding();
-                        dataContextBinding.Path = new PropertyPath("DataContext");
-                        dataContextBinding.Source = this;
-                        BindingOperations.SetBinding(series, SeriesBase.DataContextProperty, dataContextBinding);                       
-                        Binding renderingModeBinding = new Binding();
-                        renderingModeBinding.Path = new PropertyPath("RenderingMode");
-                        renderingModeBinding.Source = this;
+                        Binding dataContextBinding = new Binding {Path = new PropertyPath("DataContext"), Source = this};
+                        BindingOperations.SetBinding(series, SeriesBase.DataContextProperty, dataContextBinding);
+                        Binding renderingModeBinding = new Binding
+                            {
+                                Path = new PropertyPath("RenderingMode"),
+                                Source = this
+                            };
                         BindingOperations.SetBinding(series, SeriesBase.RenderingModeProperty, renderingModeBinding);
                         series.Chart = this;
-                        series.Index = indexCount;
-                        Binding xAxisBinding = new Binding();
-                        xAxisBinding.Source = this;
-                        xAxisBinding.Path = new PropertyPath("XAxis");
+                        series.Index = IndexCount;
+                        Binding xAxisBinding = new Binding {Source = this, Path = new PropertyPath("XAxis")};
                         BindingOperations.SetBinding(series, SeriesBase.XAxisProperty, xAxisBinding);
-                        Binding yAxisBinding = new Binding();
-                        yAxisBinding.Source = this;
-                        yAxisBinding.Path = new PropertyPath("YAxis");
+                        Binding yAxisBinding = new Binding {Source = this, Path = new PropertyPath("YAxis")};
                         BindingOperations.SetBinding(series, SeriesBase.YAxisProperty, yAxisBinding);                   
-                        indexCount++;
+                        IndexCount++;
                         if (series is ColumnSeries)
                         {
-                            columnSeries.Add(series as ColumnSeries);                            
+                            ColumnSeries.Add(series as ColumnSeries);                            
                         }
                         else if (series is HiLoOpenCloseSeries)
                         {
-                            hiLoOpenCloseSeries.Add(series as HiLoOpenCloseSeries);
+                            HiLoOpenCloseSeries.Add(series as HiLoOpenCloseSeries);
                         }
-                        isLegendUpdate = false;
+                        _isLegendUpdate = false;
                         RefreshLegend();
                     }                   
                     break;
@@ -263,12 +280,10 @@ namespace Sparrow.Chart
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     break;
-                default:
-                    break;
                     
             }
-            if (this.containers != null)
-                this.containers.Refresh();
+            if (this.Containers != null)
+                this.Containers.Refresh();
         }
 #if WPF
         /// <summary>
@@ -345,6 +360,9 @@ namespace Sparrow.Chart
             }
         }
 #endif
+        /// <summary>
+        /// Brushes the theme.
+        /// </summary>
         private void BrushTheme()
         {
             if (this.Series != null)
@@ -352,17 +370,18 @@ namespace Sparrow.Chart
                 {
                     if (series.Stroke == null)
                     {
-                        if (brushes.Count > 1)
-                            series.Stroke = brushes[series.Index % (brushes.Count)];
+                        if (_brushes.Count > 1)
+                            series.Stroke = _brushes[series.Index % (_brushes.Count)];
                         else
-                            series.Stroke = brushes[brushes.Count];
+                            series.Stroke = _brushes[_brushes.Count];
                     }
-                    if (series.isFill && (series as FillSeriesBase).Fill == null)
+                    var fillSeriesBase = series as FillSeriesBase;
+                    if (fillSeriesBase != null && (series.IsFill && fillSeriesBase.Fill == null))
                     {
-                        if (brushes.Count > 1)
-                            (series as FillSeriesBase).Fill = brushes[series.Index % (brushes.Count)];
+                        if (_brushes.Count > 1)
+                            fillSeriesBase.Fill = _brushes[series.Index % (_brushes.Count)];
                         else
-                            (series as FillSeriesBase).Fill = brushes[brushes.Count];
+                            fillSeriesBase.Fill = _brushes[_brushes.Count];
                     }
                 }
         }
@@ -378,42 +397,73 @@ namespace Sparrow.Chart
         //}
 
 
+        /// <summary>
+        /// Gets or sets the X axis.
+        /// </summary>
+        /// <value>
+        /// The X axis.
+        /// </value>
         public XAxis XAxis
         {
             get { return (XAxis)GetValue(XAxisProperty); }
             set { SetValue(XAxisProperty, value); }
         }
-        
+
+        /// <summary>
+        /// The X axis property
+        /// </summary>
         public static readonly DependencyProperty XAxisProperty =
             DependencyProperty.Register("XAxis", typeof(XAxis), typeof(SparrowChart), new PropertyMetadata(null,OnXAxisChanged));
 
+        /// <summary>
+        /// Called when [X axis changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnXAxisChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as SparrowChart).XAxisChanged(args);
         }
+
+        /// <summary>
+        /// Xs the axis changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void XAxisChanged(DependencyPropertyChangedEventArgs args)
         {
-            Binding seriesBinding = new Binding();
-            seriesBinding.Path = new PropertyPath("Series");
-            seriesBinding.Source = this;
+            Binding seriesBinding = new Binding {Path = new PropertyPath("Series"), Source = this};
             this.XAxis.SetBinding(AxisBase.SeriesProperty, seriesBinding);
             this.XAxis.Chart = this;
             this.XAxes.Add(this.XAxis);
         }
 
 
-
+        /// <summary>
+        /// Gets or sets the X axes.
+        /// </summary>
+        /// <value>
+        /// The X axes.
+        /// </value>
         public Axes XAxes
         {
             get { return (Axes)GetValue(XAxesProperty); }
             set { SetValue(XAxesProperty, value); }
         }
 
+        /// <summary>
+        /// The X axes property
+        /// </summary>
         public static readonly DependencyProperty XAxesProperty =
             DependencyProperty.Register("XAxes", typeof(Axes), typeof(SparrowChart), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the Y axes.
+        /// </summary>
+        /// <value>
+        /// The Y axes.
+        /// </value>
         public Axes YAxes
         {
             get { return (Axes)GetValue(YAxesProperty); }
@@ -425,19 +475,39 @@ namespace Sparrow.Chart
 
 
 
+        /// <summary>
+        /// Gets or sets the Y axis.
+        /// </summary>
+        /// <value>
+        /// The Y axis.
+        /// </value>
         public YAxis YAxis
         {
             get { return (YAxis)GetValue(YAxisProperty); }
             set { SetValue(YAxisProperty, value); }
         }
-        
+
+        /// <summary>
+        /// The Y axis property
+        /// </summary>
         public static readonly DependencyProperty YAxisProperty =
             DependencyProperty.Register("YAxis", typeof(YAxis), typeof(SparrowChart), new PropertyMetadata(null,OnYAxisChanged));
 
+        /// <summary>
+        /// Called when [Y axis changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnYAxisChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as SparrowChart).YAxisChanged(args);
+            var sparrowChart = sender as SparrowChart;
+            if (sparrowChart != null) sparrowChart.YAxisChanged(args);
         }
+
+        /// <summary>
+        /// Ys the axis changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void YAxisChanged(DependencyPropertyChangedEventArgs args)
         {
             Binding seriesBinding = new Binding();
@@ -447,44 +517,80 @@ namespace Sparrow.Chart
             this.YAxis.Chart = this;
             this.YAxes.Add(this.YAxis);
         }
+
+        /// <summary>
+        /// Gets or sets the height of the axis.
+        /// </summary>
+        /// <value>
+        /// The height of the axis.
+        /// </value>
         public Double AxisHeight
         {
             get { return (Double)GetValue(AxisHeightProperty); }
             set { SetValue(AxisHeightProperty, value); }
         }
 
-        
+
+        /// <summary>
+        /// The axis height property
+        /// </summary>
         public static readonly DependencyProperty AxisHeightProperty =
             DependencyProperty.Register("AxisHeight", typeof(Double), typeof(SparrowChart), new PropertyMetadata(30d));
 
 
-
-
+        /// <summary>
+        /// Gets or sets the width of the axis.
+        /// </summary>
+        /// <value>
+        /// The width of the axis.
+        /// </value>
         public Double AxisWidth
         {
             get { return (Double)GetValue(AxisWidthProperty); }
             set { SetValue(AxisWidthProperty, value); }
         }
-        
+
+        /// <summary>
+        /// The axis width property
+        /// </summary>
         public static readonly DependencyProperty AxisWidthProperty =
             DependencyProperty.Register("AxisWidth", typeof(Double), typeof(SparrowChart), new PropertyMetadata(30d));
 
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is refresh.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is refresh; otherwise, <c>false</c>.
+        /// </value>
         public bool IsRefresh
         {
             get { return (bool)GetValue(IsRefreshProperty); }
             set { SetValue(IsRefreshProperty, value); }
         }
 
+        /// <summary>
+        /// The is refresh property
+        /// </summary>
         public static readonly DependencyProperty IsRefreshProperty =
             DependencyProperty.Register("IsRefresh", typeof(bool), typeof(SparrowChart), new PropertyMetadata(true,OnIsRefreshChanged));
 
+        /// <summary>
+        /// Called when [is refresh changed].
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnIsRefreshChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             SparrowChart sender = obj as SparrowChart;
-            sender.IsRefreshChanged(args);
+            if (sender != null) sender.IsRefreshChanged(args);
         }
+
+        /// <summary>
+        /// Determines whether [is refresh changed] [the specified args].
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void IsRefreshChanged(DependencyPropertyChangedEventArgs args)
         {
             foreach (SeriesBase series in Series)
@@ -496,29 +602,58 @@ namespace Sparrow.Chart
 
         }
 
+        /// <summary>
+        /// Gets or sets the series.
+        /// </summary>
+        /// <value>
+        /// The series.
+        /// </value>
         public SeriesCollection Series
         {
             get { return (SeriesCollection)GetValue(SeriesProperty); }
             set { SetValue(SeriesProperty, value); }
         }
 
+        /// <summary>
+        /// The series property
+        /// </summary>
         public static readonly DependencyProperty SeriesProperty =
             DependencyProperty.Register("Series", typeof(SeriesCollection), typeof(SparrowChart), new PropertyMetadata(null));
 
 
+        /// <summary>
+        /// Gets or sets the legend.
+        /// </summary>
+        /// <value>
+        /// The legend.
+        /// </value>
         public Legend Legend
         {
             get { return (Legend)GetValue(LegendProperty); }
             set { SetValue(LegendProperty, value); }
         }
 
+        /// <summary>
+        /// The legend property
+        /// </summary>
         public static readonly DependencyProperty LegendProperty =
             DependencyProperty.Register("Legend", typeof(Legend), typeof(SparrowChart), new PropertyMetadata(null,OnLegendChanged));
 
+        /// <summary>
+        /// Called when [legend changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnLegendChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as SparrowChart).LegendChanged(args);
+            var sparrowChart = sender as SparrowChart;
+            if (sparrowChart != null) sparrowChart.LegendChanged(args);
         }
+
+        /// <summary>
+        /// Legends the changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void LegendChanged(DependencyPropertyChangedEventArgs args)
         {
             if (this.Legend != null)
@@ -528,78 +663,106 @@ namespace Sparrow.Chart
             }
         }
 
+        /// <summary>
+        /// Gets or sets the legend dock.
+        /// </summary>
+        /// <value>
+        /// The legend dock.
+        /// </value>
         internal Dock LegendDock
         {
             get { return (Dock)GetValue(LegendDockProperty); }
             set { SetValue(LegendDockProperty, value); }
         }
 
+        /// <summary>
+        /// The legend dock property
+        /// </summary>
         public static readonly DependencyProperty LegendDockProperty =
             DependencyProperty.Register("LegendDock", typeof(Dock), typeof(SparrowChart), new PropertyMetadata(Dock.Top));
 
 
+        /// <summary>
+        /// Gets or sets the theme.
+        /// </summary>
+        /// <value>
+        /// The theme.
+        /// </value>
         public Theme Theme
         {
             get { return (Theme)GetValue(ThemeProperty); }
             set { SetValue(ThemeProperty, value); }
         }
 
+        /// <summary>
+        /// The theme property
+        /// </summary>
         public static readonly DependencyProperty ThemeProperty =
             DependencyProperty.Register("Theme", typeof(Theme), typeof(SparrowChart), new PropertyMetadata(Theme.Metro,OnThemeChanged));
 
+        /// <summary>
+        /// Called when [theme changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void OnThemeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as SparrowChart).ThemeChanged(args);
+            var sparrowChart = sender as SparrowChart;
+            if (sparrowChart != null) sparrowChart.ThemeChanged(args);
         }
 
+        /// <summary>
+        /// Themes the changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void ThemeChanged(DependencyPropertyChangedEventArgs args)
         {
             switch (Theme)
             {
                 case Theme.Arctic:
-                    brushes=Themes.ArcticBrushes();
+                    _brushes=Themes.ArcticBrushes();
                     break;
                 case Theme.Autmn:
-                    brushes = Themes.AutmnBrushes();
+                    _brushes = Themes.AutmnBrushes();
                     break;
                 case Theme.Cold:
-                    brushes = Themes.ColdBrushes();
+                    _brushes = Themes.ColdBrushes();
                     break;
                 case Theme.Flower:
-                    brushes = Themes.FlowerBrushes();
+                    _brushes = Themes.FlowerBrushes();
                     break;
                 case Theme.Forest:
-                    brushes = Themes.ForestBrushes();
+                    _brushes = Themes.ForestBrushes();
                     break;
                 case Theme.Grayscale:
-                    brushes = Themes.GrayscaleBrushes();
+                    _brushes = Themes.GrayscaleBrushes();
                     break;
                 case Theme.Ground:
-                    brushes = Themes.GroundBrushes();
+                    _brushes = Themes.GroundBrushes();
                     break;
                 case Theme.Lialac:
-                    brushes = Themes.LialacBrushes();
+                    _brushes = Themes.LialacBrushes();
                     break;
                 case Theme.Natural:
-                    brushes = Themes.NaturalBrushes();
+                    _brushes = Themes.NaturalBrushes();
                     break;
                 case Theme.Pastel:
-                    brushes = Themes.PastelBrushes();
+                    _brushes = Themes.PastelBrushes();
                     break;
                 case Theme.Rainbow:
-                    brushes = Themes.RainbowBrushes();
+                    _brushes = Themes.RainbowBrushes();
                     break;
                 case Theme.Spring:
-                    brushes = Themes.SpringBrushes();
+                    _brushes = Themes.SpringBrushes();
                     break;
                 case Theme.Summer:
-                    brushes = Themes.SummerBrushes();
+                    _brushes = Themes.SummerBrushes();
                     break;
                 case Theme.Warm:
-                    brushes = Themes.WarmBrushes();
+                    _brushes = Themes.WarmBrushes();
                     break;
                 case Theme.Metro:
-                    brushes = Themes.MetroBrushes();
+                    _brushes = Themes.MetroBrushes();
                     break;
                 case Theme.Custom:
                     break;
@@ -611,14 +774,23 @@ namespace Sparrow.Chart
 
         
 
-        private List<Brush> brushes;
+        private List<Brush> _brushes;
 
+        /// <summary>
+        /// Gets or sets the brushes.
+        /// </summary>
+        /// <value>
+        /// The brushes.
+        /// </value>
         public List<Brush> Brushes
         {
             get { return (List<Brush>)GetValue(BrushesProperty); }
             set { SetValue(BrushesProperty, value); }
         }
 
+        /// <summary>
+        /// The brushes property
+        /// </summary>
         public static readonly DependencyProperty BrushesProperty =
             DependencyProperty.Register("Brushes", typeof(List<Brush>), typeof(SparrowChart), new PropertyMetadata(new List<Brush>()));       
 #if WPF
@@ -651,37 +823,68 @@ namespace Sparrow.Chart
             DependencyProperty.Register("CompositingMode", typeof(CompositingMode), typeof(SparrowChart), new PropertyMetadata(CompositingMode.SourceOver));
 
 #endif
+        /// <summary>
+        /// Gets or sets the container border style.
+        /// </summary>
+        /// <value>
+        /// The container border style.
+        /// </value>
         public Style ContainerBorderStyle
         {
             get { return (Style)GetValue(ContainerBorderStyleProperty); }
             set { SetValue(ContainerBorderStyleProperty, value); }
         }
 
+        /// <summary>
+        /// The container border style property
+        /// </summary>
         public static readonly DependencyProperty ContainerBorderStyleProperty =
             DependencyProperty.Register("ContainerBorderStyle", typeof(Style), typeof(SparrowChart), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets the series margin percentage.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
         public static double GetSeriesMarginPercentage(DependencyObject obj)
         {
             return (double)obj.GetValue(SeriesMarginPercentageProperty);
         }
 
+        /// <summary>
+        /// Sets the series margin percentage.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <param name="value">The value.</param>
         public static void SetSeriesMarginPercentage(DependencyObject obj, double value)
         {
             obj.SetValue(SeriesMarginPercentageProperty, value);
         }
 
+        /// <summary>
+        /// The series margin percentage property
+        /// </summary>
         public static readonly DependencyProperty SeriesMarginPercentageProperty =
             DependencyProperty.RegisterAttached("SeriesMarginPercentage", typeof(double), typeof(SparrowChart), new PropertyMetadata(0.3d));
 
 
+        /// <summary>
+        /// Gets or sets the rendering mode.
+        /// </summary>
+        /// <value>
+        /// The rendering mode.
+        /// </value>
         public RenderingMode RenderingMode
         {
             get { return (RenderingMode)GetValue(RenderingModeProperty); }
             set { SetValue(RenderingModeProperty, value); }
         }
 
+        /// <summary>
+        /// The rendering mode property
+        /// </summary>
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(SparrowChart), new PropertyMetadata(RenderingMode.Default));
        

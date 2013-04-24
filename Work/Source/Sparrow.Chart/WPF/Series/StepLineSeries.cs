@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
 using System.Windows.Media;
-using System.Windows.Threading;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 
@@ -29,17 +17,23 @@ namespace Sparrow.Chart
     public class StepLineSeries : LineSeriesBase
     {
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StepLineSeries"/> class.
+        /// </summary>
         public StepLineSeries()
         {            
             LinePoints = new PointCollection(); 
         }
 
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         override public void GenerateDatas()
         {
             LinePoints.Clear();
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 Parts.Clear();
-            if (this.Points != null && this.seriesContainer != null)
+            if (this.Points != null && this.SeriesContainer != null)
             {
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
@@ -63,7 +57,7 @@ namespace Sparrow.Chart
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
                         if (!this.UseSinglePart)
                         {
@@ -81,7 +75,7 @@ namespace Sparrow.Chart
                             SetBindingForStrokeandStrokeThickness(stepLinePart);
                             this.Parts.Add(stepLinePart);
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
@@ -90,9 +84,9 @@ namespace Sparrow.Chart
                         {
                             foreach (StepLinePart part in this.Parts)
                             {
-                                part.startPoint = LinePoints[i];
-                                part.stepPoint = LinePoints[i + 1];
-                                part.endPoint = LinePoints[i + 2];
+                                part.StartPoint = LinePoints[i];
+                                part.StepPoint = LinePoints[i + 1];
+                                part.EndPoint = LinePoints[i + 2];
                                 part.Refresh();
                                 i++;
                             }
@@ -108,22 +102,36 @@ namespace Sparrow.Chart
                         }
                     }
                 }
-                if (this.seriesContainer != null)
-                    this.seriesContainer.Invalidate();
+                if (this.SeriesContainer != null)
+                    this.SeriesContainer.Invalidate();
             }
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new StepLineContainer();
         }
+
+        /// <summary>
+        /// Gets or sets the line points.
+        /// </summary>
+        /// <value>
+        /// The line points.
+        /// </value>
         public PointCollection LinePoints
         {
             get { return (PointCollection)GetValue(LinePointsProperty); }
             set { SetValue(LinePointsProperty, value); }
         }
 
+        /// <summary>
+        /// The line points property
+        /// </summary>
         public static readonly DependencyProperty LinePointsProperty =
             DependencyProperty.Register("LinePoints", typeof(PointCollection), typeof(StepLineSeries), new PropertyMetadata(null));
     

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 #if WPF
 using System.Drawing;
-using System.Drawing.Drawing2D;
 #endif
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -14,26 +11,19 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
 using Image = System.Windows.Controls.Image;
 using System.Windows.Threading;
 using Size = System.Windows.Size;
-using System.Windows.Media.Animation;
 using System.Windows.Data;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
-using System.IO;
 #if DIRECTX2D
 using Sparrow.Directx2D;
 using D2D = Microsoft.WindowsAPICodePack.DirectX.Direct2D1;
@@ -49,16 +39,25 @@ namespace Sparrow.Chart
     /// </summary>
     public class ContainerCollection : Panel
     {
+        /// <summary>
+        /// Gets or sets the series.
+        /// </summary>
+        /// <value>
+        /// The series.
+        /// </value>
         public SeriesCollection Series
         {
             get { return (SeriesCollection)GetValue(SeriesProperty); }
             set { SetValue(SeriesProperty, value); }
         }
 
+        /// <summary>
+        /// The series property
+        /// </summary>
         public static readonly DependencyProperty SeriesProperty =
             DependencyProperty.Register("Series", typeof(SeriesCollection), typeof(ContainerCollection), new PropertyMetadata(null));
 
-        Canvas containerCanvas;
+        Canvas _containerCanvas;
 #if DIRECTX2D
         protected Directx2DBitmap DirectxBimap;
         protected D3D10Image Directx2DGraphics;
@@ -80,28 +79,42 @@ namespace Sparrow.Chart
         protected Bitmap ImageBitmap;
         protected Graphics WritableBitmapGraphics;
 #endif
-        private Canvas partsCanvas;
-        private bool isLegendUpdate;
+        private Canvas _partsCanvas;
+        private bool _isLegendUpdate;
 
         
 
-        internal AxisCrossLinesContainer axisLinesconatiner;
-        bool isIntialized;
+        internal AxisCrossLinesContainer AxisLinesconatiner;
+        bool _isIntialized;
 
-        private const uint FILE_MAP_ALL_ACCESS = 0xF001F;
-        private const uint PAGE_READWRITE = 0x04;
+        private const uint FileMapAllAccess = 0xF001F;
+        private const uint PageReadwrite = 0x04;
 
-        
 
+
+        /// <summary>
+        /// Gets or sets the containers.
+        /// </summary>
+        /// <value>
+        /// The containers.
+        /// </value>
         public Containers Containers
         {
             get { return (Containers)GetValue(ContainersProperty); }
             set { SetValue(ContainersProperty, value); }
         }
+
         Image bitmapImage;
+
+        /// <summary>
+        /// The containers property
+        /// </summary>
         public static readonly DependencyProperty ContainersProperty =
             DependencyProperty.Register("Containers", typeof(Containers), typeof(ContainerCollection), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContainerCollection"/> class.
+        /// </summary>
         public ContainerCollection()
         {
             Containers = new Containers();
@@ -115,6 +128,11 @@ namespace Sparrow.Chart
             
         }
 
+        /// <summary>
+        /// Handles the SizeChanged event of the ContainerCollection control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="SizeChangedEventArgs"/> instance containing the event data.</param>
         void ContainerCollection_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 #if !WPF
@@ -156,6 +174,9 @@ namespace Sparrow.Chart
             isDirectXInitialized = true;
         }
 #endif
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
         public void Refresh()
         {
 #if DIRECTX2D
@@ -192,22 +213,22 @@ namespace Sparrow.Chart
             }
 
             Initialize();
-            if (!isIntialized)
+            if (!_isIntialized)
                 GenerateConatiners();
             else
                 UpdateContainers();            
 
             if (this.XAxis != null)
             {
-                this.XAxis.m_MinValue = 0;
-                this.XAxis.m_MaxValue = 1;
+                this.XAxis.MMinValue = 0;
+                this.XAxis.MMaxValue = 1;
                 this.XAxis.CalculateIntervalFromSeriesPoints();
                 this.XAxis.Refresh();
             }
             if (this.YAxis != null)
             {
-                this.YAxis.m_MinValue = 0;
-                this.YAxis.m_MaxValue = 1;
+                this.YAxis.MMinValue = 0;
+                this.YAxis.MMaxValue = 1;
                 this.YAxis.CalculateIntervalFromSeriesPoints();
                 this.YAxis.Refresh();
             }
@@ -215,12 +236,15 @@ namespace Sparrow.Chart
             foreach (SeriesBase series in this.Series)
             {
                 if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
-                    series.seriesContainer = Containers[series.Index];
+                    series.SeriesContainer = Containers[series.Index];
                 series.Refresh();
             }
            
         }
-       
+
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             try
@@ -251,6 +275,12 @@ namespace Sparrow.Chart
 
         private bool _isBitmapInitialized;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is bitmap initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is bitmap initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsBitmapInitialized
         {
             get { return _isBitmapInitialized; }
@@ -271,13 +301,13 @@ namespace Sparrow.Chart
             });
 #else
 
-            this.Dispatcher.BeginInvoke(new Action(delegate
-            {
-                Draw();
-            }));
+            DispatcherOperation dispatcherOperation = this.Dispatcher.BeginInvoke(new Action(Draw));
 #endif
-            
         }
+
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public virtual void Draw()
         {
         }
@@ -299,6 +329,9 @@ namespace Sparrow.Chart
             }
         }
 #endif
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         internal void Initialize()
         {
             if (ActualHeight > 1 && ActualWidth > 1)
@@ -317,8 +350,8 @@ namespace Sparrow.Chart
                             uint byteCount = (uint)(ActualWidth * ActualHeight * bpp);
 
                             //Allocate and create the InteropBitmap
-                            var fileMappingPointer = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, PAGE_READWRITE, 0, byteCount, null);
-                            this.MapViewPointer = MapViewOfFile(fileMappingPointer, FILE_MAP_ALL_ACCESS, 0, 0, byteCount);
+                            var fileMappingPointer = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, PageReadwrite, 0, byteCount, null);
+                            this.MapViewPointer = MapViewOfFile(fileMappingPointer, FileMapAllAccess, 0, 0, byteCount);
                             var format = PixelFormats.Bgra32;
                             var stride = (int)((int)ActualWidth * (int)format.BitsPerPixel / 8);
                             this.InteropBitmap = Imaging.CreateBitmapSourceFromMemorySection(fileMappingPointer,
@@ -362,6 +395,9 @@ namespace Sparrow.Chart
 
         }
 
+        /// <summary>
+        /// Invalidates the bitmap.
+        /// </summary>
         public void InvalidateBitmap()
         {      
  #if WPF
@@ -389,11 +425,17 @@ namespace Sparrow.Chart
             this.bitmapImage.InvalidateVisual();  
 #endif
         }
-        private int index;
+        private int _index;
+        /// <summary>
+        /// Gets or sets the index.
+        /// </summary>
+        /// <value>
+        /// The index.
+        /// </value>
         internal int Index
         {
-            get { return index; }
-            set { index = value; }
+            get { return _index; }
+            set { _index = value; }
         }
 #if WPF
         private Graphics GetGdiGraphics(IntPtr mapViewPointer)
@@ -417,6 +459,11 @@ namespace Sparrow.Chart
         }
 #endif
 
+        /// <summary>
+        /// Measures the override.
+        /// </summary>
+        /// <param name="constraint">The constraint.</param>
+        /// <returns></returns>
         protected override Size MeasureOverride(Size constraint)
         {
             Size desiredSize = new Size(0, 0);
@@ -438,6 +485,11 @@ namespace Sparrow.Chart
             return constraint;
         }
 
+        /// <summary>
+        /// Arranges the override.
+        /// </summary>
+        /// <param name="arrangeSize">Size of the arrange.</param>
+        /// <returns></returns>
         protected override Size ArrangeOverride(Size arrangeSize)
         {
             foreach (UIElement child in Children)
@@ -461,10 +513,13 @@ namespace Sparrow.Chart
                                                    uint dwFileOffsetHigh,
                                                    uint dwFileOffsetLow,
                                                    uint dwNumberOfBytesToMap);
+        /// <summary>
+        /// Updates the containers.
+        /// </summary>
         private void UpdateContainers()
         {
-            axisLinesconatiner.Height = this.ActualHeight;
-            axisLinesconatiner.Width = this.ActualWidth;            
+            AxisLinesconatiner.Height = this.ActualHeight;
+            AxisLinesconatiner.Width = this.ActualWidth;            
             foreach (var container in Containers)
             {               
                 container.RenderingMode = this.RenderingMode;
@@ -500,21 +555,19 @@ namespace Sparrow.Chart
                 }
             }
         }
+        /// <summary>
+        /// Generates the conatiners.
+        /// </summary>
         private void GenerateConatiners()
         {
             this.Children.Clear();
             this.Containers.Clear();
-            axisLinesconatiner = new AxisCrossLinesContainer();
-            Binding xAxisBinding = new Binding();
-            xAxisBinding.Path = new PropertyPath("XAxis");
-            xAxisBinding.Source = this;
-            Binding yAxisBinding = new Binding();
-            yAxisBinding.Path = new PropertyPath("YAxis");
-            yAxisBinding.Source = this;
-            axisLinesconatiner.SetBinding(AxisCrossLinesContainer.XAxisProperty, xAxisBinding);
-            axisLinesconatiner.SetBinding(AxisCrossLinesContainer.YAxisProperty, yAxisBinding);
-            axisLinesconatiner.Height = this.ActualHeight;
-            axisLinesconatiner.Width = this.ActualWidth;            
+            AxisLinesconatiner = new AxisCrossLinesContainer {Height = this.ActualHeight, Width = this.ActualWidth};
+            Binding xAxisBinding = new Binding {Path = new PropertyPath("XAxis"), Source = this};
+            Binding yAxisBinding = new Binding {Source = this, Path = new PropertyPath("YAxis")};
+            AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.XAxisProperty, xAxisBinding);
+            AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.YAxisProperty, yAxisBinding);
+
             foreach (var seriesBase in Series)
             {
                 SeriesContainer container = seriesBase.CreateContainer();
@@ -526,7 +579,7 @@ namespace Sparrow.Chart
 #if WPF
                 container.dpiFactor = this.dpiFactor;      
 #endif
-                container.collection = this;
+                container.Collection = this;
                 switch (RenderingMode)
                 {
 #if WPF
@@ -558,9 +611,9 @@ namespace Sparrow.Chart
             }
                     
             this.Children.Add(bitmapImage);
-            this.Children.Add(axisLinesconatiner);   
+            this.Children.Add(AxisLinesconatiner);   
             
-            isIntialized = true;
+            _isIntialized = true;
         }
 #if WPF
         internal SmoothingMode SmoothingMode
@@ -593,43 +646,79 @@ namespace Sparrow.Chart
             DependencyProperty.Register("CompositingMode", typeof(CompositingMode), typeof(ContainerCollection), new PropertyMetadata(CompositingMode.SourceOver));
 
 #endif
+        /// <summary>
+        /// Gets or sets the rendering mode.
+        /// </summary>
+        /// <value>
+        /// The rendering mode.
+        /// </value>
         public RenderingMode RenderingMode
         {
             get { return (RenderingMode)GetValue(RenderingModeProperty); }
             set { SetValue(RenderingModeProperty, value); }
         }
 
+        /// <summary>
+        /// The rendering mode property
+        /// </summary>
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(ContainerCollection), new PropertyMetadata(RenderingMode.Default));
 
 
 
+        /// <summary>
+        /// Gets or sets the chart.
+        /// </summary>
+        /// <value>
+        /// The chart.
+        /// </value>
         public SparrowChart Chart
         {
             get { return (SparrowChart)GetValue(ChartProperty); }
             set { SetValue(ChartProperty, value); }
         }
 
+        /// <summary>
+        /// The chart property
+        /// </summary>
         public static readonly DependencyProperty ChartProperty =
             DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(ContainerCollection), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the X axis.
+        /// </summary>
+        /// <value>
+        /// The X axis.
+        /// </value>
         public XAxis XAxis
         {
             get { return (XAxis)GetValue(XAxisProperty); }
             set { SetValue(XAxisProperty, value); }
         }
 
+        /// <summary>
+        /// The X axis property
+        /// </summary>
         public static readonly DependencyProperty XAxisProperty =
             DependencyProperty.Register("XAxis", typeof(XAxis), typeof(ContainerCollection), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the Y axis.
+        /// </summary>
+        /// <value>
+        /// The Y axis.
+        /// </value>
         public YAxis YAxis
         {
             get { return (YAxis)GetValue(YAxisProperty); }
             set { SetValue(YAxisProperty, value); }
         }
 
+        /// <summary>
+        /// The Y axis property
+        /// </summary>
         public static readonly DependencyProperty YAxisProperty =
             DependencyProperty.Register("YAxis", typeof(YAxis), typeof(ContainerCollection), new PropertyMetadata(null));
 #if DIRECTX2D

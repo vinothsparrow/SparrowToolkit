@@ -1,47 +1,32 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+
 #else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
 {
     public class HiLoSeries : StockChartBase
-    {       
+    {
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         override public void GenerateDatas()
         {
             LowPoints.Clear();
             HighPoints.Clear();
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 Parts.Clear();
-            if (this.Points != null && this.seriesContainer != null)
+            if (Points != null && SeriesContainer != null)
             {
                 CalculateMinAndMax();
-                ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint { XValue = 0, YValue = 0 };
                 IntializePoints();
                 int index = 0;
-                foreach (ChartPoint point in this.Points)
+                foreach (ChartPoint point in Points)
                 {
                     if (CheckValuePoint(oldPoint,point))
                     {
@@ -53,45 +38,52 @@ namespace Sparrow.Chart
                     }
                     index++;
                 }
-                if (this.RenderingMode == RenderingMode.Default)
+                if (RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
-                        for (int i = 0; i < this.HighPoints.Count; i++)
+                        for (int i = 0; i < HighPoints.Count; i++)
                         {
-                            LinePart linePart = new LinePart(this.HighPoints[i], this.LowPoints[i]);
+                            LinePart linePart = new LinePart(HighPoints[i], LowPoints[i]);
                             SetBindingForStrokeandStrokeThickness(linePart);
-                            this.Parts.Add(linePart);
+                            Parts.Add(linePart);
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
                         int i = 0;
-                        foreach (LinePart part in this.Parts)
+                        foreach (LinePart part in Parts)
                         {
-                            part.X1 = this.HighPoints[i].X;
-                            part.Y1 = this.HighPoints[i].Y;
-                            part.X2 = this.LowPoints[i].X;
-                            part.Y2 = this.LowPoints[i].Y;
+                            part.X1 = HighPoints[i].X;
+                            part.Y1 = HighPoints[i].Y;
+                            part.X2 = LowPoints[i].X;
+                            part.Y2 = LowPoints[i].Y;
                             part.Refresh();
                             i++;
                         }
                     }
 
                 }                
-                this.seriesContainer.Invalidate();
+                SeriesContainer.Invalidate();
             }
 
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HiLoSeries"/> class.
+        /// </summary>
         public HiLoSeries()
         {
             HighPoints = new PointCollection();
             LowPoints = new PointCollection();
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new LineContainer();

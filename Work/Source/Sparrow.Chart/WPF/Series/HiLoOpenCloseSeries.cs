@@ -1,29 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using System.Windows;
 #if !WINRT
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 using System.Windows.Data;
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
@@ -31,45 +16,51 @@ namespace Sparrow.Chart
     public class HiLoOpenCloseSeries : StockChartBase
     {
 
-        internal List<double> openValues;
-        internal List<double> closeValues;
+        internal List<double> OpenValues;
+        internal List<double> CloseValues;
         internal PointsCollection openPoints;
-        internal PointCollection openOffPoints;
-        internal PointCollection closeOffPoints;
+        internal PointCollection OpenOffPoints;
+        internal PointCollection CloseOffPoints;
         internal PointsCollection closePoints;
 
+        /// <summary>
+        /// Generates the points from source.
+        /// </summary>
         public override void GeneratePointsFromSource()
         {
             base.GeneratePointsFromSource();
-            openValues = this.GetReflectionValues(this.OpenPath, PointsSource, openValues, false);
-            closeValues = this.GetReflectionValues(this.ClosePath, PointsSource, closeValues, false);
-            if (openValues != null && openValues.Count > 0)
+            OpenValues = this.GetReflectionValues(this.OpenPath, PointsSource, OpenValues, false);
+            CloseValues = this.GetReflectionValues(this.ClosePath, PointsSource, CloseValues, false);
+            if (OpenValues != null && OpenValues.Count > 0)
             {
-                this.openPoints = GetPointsFromValues(xValues, openValues);
+                this.openPoints = GetPointsFromValues(XValues, OpenValues);
             }
-            if (closeValues != null && closeValues.Count > 0)
+            if (CloseValues != null && CloseValues.Count > 0)
             {
-                this.closePoints = GetPointsFromValues(xValues, closeValues);
+                this.closePoints = GetPointsFromValues(XValues, CloseValues);
             }
         }
 
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         public override void GenerateDatas()
         {
             LowPoints.Clear();
             HighPoints.Clear();
             OpenPoints.Clear();
             ClosePoints.Clear();
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 Parts.Clear();
-            if (this.Points != null && this.seriesContainer != null)
+            if (this.Points != null && this.SeriesContainer != null)
             {
                 CalculateMinAndMax();
-                openOffPoints = new PointCollection();
-                closeOffPoints = new PointCollection();
+                OpenOffPoints = new PointCollection();
+                CloseOffPoints = new PointCollection();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
                 IntializePoints();
                 int index = 0;
-                Point StartAndEndPoint = CalculateSeriesInfo();
+                Point startAndEndPoint = CalculateSeriesInfo();
                 foreach (ChartPoint point in this.Points)
                 {
                     if (CheckValuePoint(oldPoint, point))
@@ -78,57 +69,60 @@ namespace Sparrow.Chart
                         Point lowPoint = NormalizePoint(new Point(lowPoints[index].XValue, lowPoints[index].YValue));
                         Point openPoint = NormalizePoint(new Point(openPoints[index].XValue, openPoints[index].YValue));
                         Point closePoint = NormalizePoint(new Point(closePoints[index].XValue, closePoints[index].YValue));
-                        Point openOffPoint = NormalizePoint(new Point(openPoints[index].XValue + StartAndEndPoint.X, openPoints[index].YValue));
-                        Point closeOffPoint = NormalizePoint(new Point(closePoints[index].XValue - StartAndEndPoint.X, closePoints[index].YValue));
+                        Point openOffPoint = NormalizePoint(new Point(openPoints[index].XValue + startAndEndPoint.X, openPoints[index].YValue));
+                        Point closeOffPoint = NormalizePoint(new Point(closePoints[index].XValue - startAndEndPoint.X, closePoints[index].YValue));
                         HighPoints.Add(highPoint);
                         LowPoints.Add(lowPoint);
                         OpenPoints.Add(openPoint);
                         ClosePoints.Add(closePoint);
-                        openOffPoints.Add(openOffPoint);
-                        closeOffPoints.Add(closeOffPoint);
+                        OpenOffPoints.Add(openOffPoint);
+                        CloseOffPoints.Add(closeOffPoint);
                         oldPoint = point;
                     }
                     index++;
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
                         for (int i = 0; i < this.HighPoints.Count; i++)
                         {
-                            HiLoOpenClosePart hiLoOpenClosePart = new HiLoOpenClosePart(this.HighPoints[i],this.LowPoints[i],this.ClosePoints[i],this.closeOffPoints[i],this.OpenPoints[i],this.openOffPoints[i]);
+                            HiLoOpenClosePart hiLoOpenClosePart = new HiLoOpenClosePart(this.HighPoints[i],this.LowPoints[i],this.ClosePoints[i],this.CloseOffPoints[i],this.OpenPoints[i],this.OpenOffPoints[i]);
                             if (this.openPoints[i].YValue <= this.closePoints[i].YValue)
-                                hiLoOpenClosePart.isBearfill = true;
+                                hiLoOpenClosePart.IsBearfill = true;
                             else
-                                hiLoOpenClosePart.isBearfill = false;
+                                hiLoOpenClosePart.IsBearfill = false;
                             SetBindingForStrokeandStrokeThickness(hiLoOpenClosePart);
                             this.Parts.Add(hiLoOpenClosePart);
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
                         int i = 0;
                         foreach (HiLoOpenClosePart part in this.Parts)
                         {
-                            part.point1 = this.HighPoints[i];
-                            part.point2 = this.LowPoints[i];
-                            part.point3 = this.ClosePoints[i];
-                            part.point4 = this.closeOffPoints[i];                            
-                            part.point5 = this.OpenPoints[i];
-                            part.point6 = this.openOffPoints[i];
+                            part.Point1 = this.HighPoints[i];
+                            part.Point2 = this.LowPoints[i];
+                            part.Point3 = this.ClosePoints[i];
+                            part.Point4 = this.CloseOffPoints[i];                            
+                            part.Point5 = this.OpenPoints[i];
+                            part.Point6 = this.OpenOffPoints[i];
                             part.Refresh();
                             i++;
                         }
                     }
 
                 }
-                this.seriesContainer.Invalidate();
+                this.SeriesContainer.Invalidate();
             }
 
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HiLoOpenCloseSeries"/> class.
+        /// </summary>
         public HiLoOpenCloseSeries()
         {
             HighPoints = new PointCollection();
@@ -137,40 +131,50 @@ namespace Sparrow.Chart
             ClosePoints = new PointCollection();
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new HiLoOpenCloseContainer();
         }
 
+        /// <summary>
+        /// Sets the binding for strokeand stroke thickness.
+        /// </summary>
+        /// <param name="part">The part.</param>
         protected override void SetBindingForStrokeandStrokeThickness(SeriesPartBase part)
         {
             HiLoOpenClosePart hiLoOpenClosePart = part as HiLoOpenClosePart;
-            Binding strokeBinding = new Binding();
-            if (hiLoOpenClosePart.isBearfill)
+            Binding strokeBinding = new Binding {Source = this};
+            if (hiLoOpenClosePart.IsBearfill)
                 strokeBinding.Path = new PropertyPath("BearFill");
             else
                 strokeBinding.Path = new PropertyPath("BullFill");
-            strokeBinding.Source = this;
-            Binding strokeThicknessBinding = new Binding();
-            strokeThicknessBinding.Path = new PropertyPath("StrokeThickness");
-            strokeThicknessBinding.Source = this;
+            Binding strokeThicknessBinding = new Binding {Path = new PropertyPath("StrokeThickness"), Source = this};
             part.SetBinding(SeriesPartBase.StrokeProperty, strokeBinding);
             part.SetBinding(SeriesPartBase.StrokeThicknessProperty, strokeThicknessBinding);            
         }
-        public Point CalculateSeriesInfo()
+
+        /// <summary>
+        /// Calculates the series info.
+        /// </summary>
+        /// <returns></returns>
+        internal Point CalculateSeriesInfo()
         {
             double width = 1 - SparrowChart.GetSeriesMarginPercentage(this);
             double mininumWidth = double.MaxValue;
-            int position = Chart.hiLoOpenCloseSeries.IndexOf(this) + 1;
-            int count = Chart.hiLoOpenCloseSeries.Count;
+            int position = Chart.HiLoOpenCloseSeries.IndexOf(this) + 1;
+            int count = Chart.HiLoOpenCloseSeries.Count;
             foreach (SeriesBase series in Chart.Series)
             {
-                List<double> xValues = series.xValues as List<double>;
-                if (xValues != null)
+                List<double> values = series.XValues as List<double>;
+                if (values != null)
                 {
-                    for (int i = 1; i < xValues.Count; i++)
+                    for (int i = 1; i < values.Count; i++)
                     {
-                        double delta = xValues[i] - xValues[i - 1];
+                        double delta = values[i] - values[i - 1];
                         if (delta != 0)
                         {
                             mininumWidth = Math.Min(mininumWidth, delta);
@@ -184,18 +188,34 @@ namespace Sparrow.Chart
             double end = start + per;
             return new Point(start, end);
             //}
-        }      
+        }
+
+        /// <summary>
+        /// Gets or sets the open points.
+        /// </summary>
+        /// <value>
+        /// The open points.
+        /// </value>
         public PointCollection OpenPoints
         {
             get { return (PointCollection)GetValue(OpenPointsProperty); }
             set { SetValue(OpenPointsProperty, value); }
         }
 
+        /// <summary>
+        /// The open points property
+        /// </summary>
         public static readonly DependencyProperty OpenPointsProperty =
             DependencyProperty.Register("OpenPoints", typeof(PointCollection), typeof(HiLoOpenCloseSeries), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the close points.
+        /// </summary>
+        /// <value>
+        /// The close points.
+        /// </value>
         public PointCollection ClosePoints
         {
             get { return (PointCollection)GetValue(ClosePointsProperty); }
@@ -207,22 +227,40 @@ namespace Sparrow.Chart
 
 
 
+        /// <summary>
+        /// Gets or sets the open path.
+        /// </summary>
+        /// <value>
+        /// The open path.
+        /// </value>
         public string OpenPath
         {
             get { return (string)GetValue(OpenPathProperty); }
             set { SetValue(OpenPathProperty, value); }
         }
 
+        /// <summary>
+        /// The open path property
+        /// </summary>
         public static readonly DependencyProperty OpenPathProperty =
             DependencyProperty.Register("OpenPath", typeof(string), typeof(HiLoOpenCloseSeries), new PropertyMetadata(string.Empty));
 
 
+        /// <summary>
+        /// Gets or sets the close path.
+        /// </summary>
+        /// <value>
+        /// The close path.
+        /// </value>
         public string ClosePath
         {
             get { return (string)GetValue(ClosePathProperty); }
             set { SetValue(ClosePathProperty, value); }
         }
 
+        /// <summary>
+        /// The close path property
+        /// </summary>
         public static readonly DependencyProperty ClosePathProperty =
             DependencyProperty.Register("ClosePath", typeof(string), typeof(HiLoOpenCloseSeries), new PropertyMetadata(null));
 

@@ -1,37 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using System.Windows;
 #if !WINRT
-using System.Windows.Controls;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image = System.Windows.Controls.Image;
-using System.Windows.Threading;
 using System.Windows.Shapes;
+
 #else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
 
-#if WPF
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
-#endif
 
 #if DIRECTX2D
 
@@ -44,15 +21,6 @@ namespace Sparrow.Chart
 {
     public class ColumnContainer : SeriesContainer
     {
-        public ColumnContainer()
-            : base()
-        {
-
-        }
-        public override void Draw()
-        {
-            base.Draw();
-        }
 #if DIRECTX2D
         override protected void OnRender()
         {
@@ -102,7 +70,7 @@ namespace Sparrow.Chart
                 ColumnSeries columnSeries = series as ColumnSeries;
                 points = columnSeries.ColumnPoints;
                 pointCount = columnSeries.ColumnPoints.Count;
-                rects = columnSeries.rects;
+                rects = columnSeries.Rects;
                 System.Drawing.Brush fill = columnSeries.Fill.AsDrawingBrush();
                 System.Drawing.Pen fillPen = new System.Drawing.Pen(fill);
                 if (RenderingMode == RenderingMode.Default)
@@ -137,28 +105,32 @@ namespace Sparrow.Chart
                         }
 
                     }
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }
             }
         }
 #else
+        /// <summary>
+        /// Draws the path.
+        /// </summary>
+        /// <param name="series">The series.</param>
+        /// <param name="brush">The brush.</param>
+        /// <param name="strokeThickness">The stroke thickness.</param>
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
             if (series is ColumnSeries)
-            {
-                var points = new PointCollection();
-                var pointCount = 0;
-
-                ColumnSeries columnSeries = series as ColumnSeries;
-                points = columnSeries.ColumnPoints;
-                pointCount = columnSeries.ColumnPoints.Count;
-
+            {                
+                ColumnSeries columnSeries = series as ColumnSeries;                
                 if (RenderingMode == RenderingMode.Default)
                 {
                     for (int i = 0; i < columnSeries.Parts.Count; i++)
                     {
-                        Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as Rectangle;                        
-                        PartsCanvas.Children.Add(element);
+                        var columnPart = columnSeries.Parts[i] as ColumnPart;
+                        if (columnPart != null)
+                        {
+                            Rectangle element = columnPart.CreatePart() as Rectangle;                        
+                            PartsCanvas.Children.Add(element);
+                        }
                     }
                 }
             }

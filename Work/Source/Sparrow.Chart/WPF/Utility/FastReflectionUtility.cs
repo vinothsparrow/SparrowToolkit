@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace Sparrow.Chart
 {
@@ -13,22 +10,29 @@ namespace Sparrow.Chart
     /// </summary>
     public class FastProperty
     {
+
         /// <summary>
-        /// 
+        /// Gets or sets the property.
         /// </summary>
+        /// <value>
+        /// The property.
+        /// </value>
         public PropertyInfo Property { get; set; }
+
         /// <summary>
-        /// 
+        /// The get delegate
         /// </summary>
         public Func<object, object> GetDelegate;
+
         /// <summary>
-        /// 
+        /// The set delegate
         /// </summary>
         public Action<object, object> SetDelegate;
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="FastProperty"/> class.
         /// </summary>
-        /// <param name="property"></param>
+        /// <param name="property">The property.</param>
         public FastProperty(PropertyInfo property)
         {
             this.Property = property;
@@ -36,6 +40,9 @@ namespace Sparrow.Chart
             InitializeSet();
         }
 
+        /// <summary>
+        /// Initializes the set.
+        /// </summary>
         private void InitializeSet()
         {
             var instance = System.Linq.Expressions.Expression.Parameter(typeof(object), "instance");
@@ -52,6 +59,9 @@ namespace Sparrow.Chart
             this.SetDelegate = System.Linq.Expressions.Expression.Lambda<Action<object, object>>(System.Linq.Expressions.Expression.Call(instanceCast, this.Property.GetSetMethod(), valueCast), new ParameterExpression[] { instance, value }).Compile();
         }
 
+        /// <summary>
+        /// Initializes the get.
+        /// </summary>
         private void InitializeGet()
         {
             var instance = System.Linq.Expressions.Expression.Parameter(typeof(object), "instance");
@@ -62,20 +72,22 @@ namespace Sparrow.Chart
 #endif
             this.GetDelegate = System.Linq.Expressions.Expression.Lambda<Func<object, object>>(System.Linq.Expressions.Expression.TypeAs(System.Linq.Expressions.Expression.Call(instanceCast, this.Property.GetGetMethod()), typeof(object)), instance).Compile();
         }
+
         /// <summary>
-        /// 
+        /// Gets the specified instance.
         /// </summary>
-        /// <param name="instance"></param>
+        /// <param name="instance">The instance.</param>
         /// <returns></returns>
         public object Get(object instance)
         {
             return this.GetDelegate(instance);
         }
+
         /// <summary>
-        /// 
+        /// Sets the specified instance.
         /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="value"></param>
+        /// <param name="instance">The instance.</param>
+        /// <param name="value">The value.</param>
         public void Set(object instance, object value)
         {
             this.SetDelegate(instance, value);

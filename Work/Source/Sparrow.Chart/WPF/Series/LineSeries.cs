@@ -1,28 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 namespace Sparrow.Chart
 {
@@ -31,17 +14,20 @@ namespace Sparrow.Chart
     /// </summary>
     public class LineSeries : LineSeriesBase
     {
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         override public void GenerateDatas()
         {            
-            if (this.Points != null && this.seriesContainer != null)
+            if (Points != null && SeriesContainer != null)
             {
                 LinePoints = new PointCollection();
-                if (!isPointsGenerated)
+                if (!IsPointsGenerated)
                     Parts.Clear();
                 CalculateMinAndMax();
-                ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint { XValue = 0, YValue = 0 };
                 IntializePoints();
-                foreach (ChartPoint point in this.Points)
+                foreach (ChartPoint point in Points)
                 {
                     if (CheckValuePoint(oldPoint,point))
                     {
@@ -50,43 +36,43 @@ namespace Sparrow.Chart
                         oldPoint = point;
                     }
                 }
-                if (this.RenderingMode == RenderingMode.Default)
+                if (RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
                         if (!UseSinglePart)
                         {
-                            for (int i = 0; i < this.LinePoints.Count - 1; i++)
+                            for (int i = 0; i < LinePoints.Count - 1; i++)
                             {
-                                if (CheckValue(this.LinePoints[i].X) && CheckValue(this.LinePoints[i].Y) && CheckValue(this.LinePoints[i + 1].X) && CheckValue(this.LinePoints[i + 1].Y))
+                                if (CheckValue(LinePoints[i].X) && CheckValue(LinePoints[i].Y) && CheckValue(LinePoints[i + 1].X) && CheckValue(LinePoints[i + 1].Y))
                                 {
-                                    LinePart linePart = new LinePart(this.LinePoints[i], this.LinePoints[i + 1]);
+                                    LinePart linePart = new LinePart(LinePoints[i], LinePoints[i + 1]);
                                     SetBindingForStrokeandStrokeThickness(linePart);
-                                    this.Parts.Add(linePart);
+                                    Parts.Add(linePart);
                                 }
                             }
                         }
                         else
                         {
-                            LineSinglePart singlePart = new LineSinglePart(this.LinePoints);
+                            LineSinglePart singlePart = new LineSinglePart(LinePoints);
                             SetBindingForStrokeandStrokeThickness(singlePart);
-                            this.Parts.Add(singlePart);
+                            Parts.Add(singlePart);
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
                         int i=0;
                         if (!UseSinglePart)
                         {
-                            foreach (LinePart part in this.Parts)
+                            foreach (LinePart part in Parts)
                             {
-                                if (CheckValue(this.LinePoints[i].X) && CheckValue(this.LinePoints[i].Y) && CheckValue(this.LinePoints[i + 1].X) && CheckValue(this.LinePoints[i + 1].Y))
+                                if (CheckValue(LinePoints[i].X) && CheckValue(LinePoints[i].Y) && CheckValue(LinePoints[i + 1].X) && CheckValue(LinePoints[i + 1].Y))
                                 {
-                                    part.X1 = this.LinePoints[i].X;
-                                    part.Y1 = this.LinePoints[i].Y;
-                                    part.X2 = this.LinePoints[i + 1].X;
-                                    part.Y2 = this.LinePoints[i + 1].Y;
+                                    part.X1 = LinePoints[i].X;
+                                    part.Y1 = LinePoints[i].Y;
+                                    part.X2 = LinePoints[i + 1].X;
+                                    part.Y2 = LinePoints[i + 1].Y;
                                     part.Refresh();
                                 }
                                 i++;
@@ -94,21 +80,24 @@ namespace Sparrow.Chart
                         }
                         else
                         {
-                            foreach (LineSinglePart part in this.Parts)
+                            foreach (LineSinglePart part in Parts)
                             {
-                                part.LinePoints = this.LinePoints;
+                                part.LinePoints = LinePoints;
                                 part.Refresh();
                                 i++;
                             }
                         }
                     }
                 }
-                this.seriesContainer.Invalidate();
+                SeriesContainer.Invalidate();
             }
 
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineSeries"/> class.
+        /// </summary>
         public LineSeries()
         {
             LinePoints = new PointCollection();

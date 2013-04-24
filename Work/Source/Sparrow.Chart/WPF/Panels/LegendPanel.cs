@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using System.Windows.Data;
+
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,20 +20,39 @@ namespace Sparrow.Chart
     {
 
 
+        /// <summary>
+        /// Gets or sets the dock position.
+        /// </summary>
+        /// <value>
+        /// The dock position.
+        /// </value>
         public Dock DockPosition
         {
             get { return (Dock)GetValue(DockPositionProperty); }
             set { SetValue(DockPositionProperty, value); }
         }
 
+        /// <summary>
+        /// The dock position property
+        /// </summary>
         public static readonly DependencyProperty DockPositionProperty =
             DependencyProperty.Register("DockPosition", typeof(Dock), typeof(LegendPanel), new PropertyMetadata(Dock.Top,OnDockChanged));
 
+        /// <summary>
+        /// Called when [dock changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnDockChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as LegendPanel).DockChanged(args);
+            var legendPanel = sender as LegendPanel;
+            if (legendPanel != null) legendPanel.DockChanged(args);
         }
-        
+
+        /// <summary>
+        /// Docks the changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void DockChanged(DependencyPropertyChangedEventArgs args)
         {
             switch (DockPosition)

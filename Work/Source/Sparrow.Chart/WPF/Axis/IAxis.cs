@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if WINRT
 using Windows.UI.Xaml;
 #endif
@@ -10,6 +6,9 @@ using Windows.UI.Xaml;
 namespace Sparrow.Chart
 {
 
+    /// <summary>
+    /// IAxis
+    /// </summary>
     public interface IAxis
     {        
 

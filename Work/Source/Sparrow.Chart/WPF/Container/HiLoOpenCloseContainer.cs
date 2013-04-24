@@ -1,51 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows;
-#if !WINRT
-using System.Windows.Controls;
-using System.Windows.Interop;
+﻿#if !WINRT
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image = System.Windows.Controls.Image;
-using System.Windows.Threading;
 #else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
-#if WPF
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
-#endif
 
 namespace Sparrow.Chart
 {
     public class HiLoOpenCloseContainer : SeriesContainer
     {
-        public HiLoOpenCloseContainer()
-            : base()
-        {
-
-        }
-        public override void Draw()
-        {
-            base.Draw();
-        }
-        #if DIRECTX2D
+#if DIRECTX2D
         override protected void OnRender()
         {
             if (this.Directx2DGraphics.IsFrontBufferAvailable)
@@ -103,8 +67,8 @@ namespace Sparrow.Chart
                     lowPoints = lineSeries.LowPoints;
                     openPoints = lineSeries.OpenPoints;
                     closePoints = lineSeries.ClosePoints;
-                    openOffPoints = lineSeries.openOffPoints;
-                    closeOffPoints = lineSeries.closeOffPoints;
+                    openOffPoints = lineSeries.OpenOffPoints;
+                    closeOffPoints = lineSeries.CloseOffPoints;
 
                     pointCount = lineSeries.HighPoints.Count;
                     partsCollection = lineSeries.Parts;
@@ -144,17 +108,21 @@ namespace Sparrow.Chart
                             }
                         }
                     }                   
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }                
             }        
         }
 #else
+        /// <summary>
+        /// Draws the path.
+        /// </summary>
+        /// <param name="series">The series.</param>
+        /// <param name="brush">The brush.</param>
+        /// <param name="strokeThickness">The stroke thickness.</param>
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
             if (series is HiLoOpenCloseSeries)
             {
-                var points = new PointCollection();
-                var pointCount = 0;
                 PartsCollection partsCollection = new PartsCollection();
                 partsCollection = (series as HiLoOpenCloseSeries).Parts;
                 if (RenderingMode == RenderingMode.Default)

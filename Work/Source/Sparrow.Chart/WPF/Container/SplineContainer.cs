@@ -1,27 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-#if !WINRT
-using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image=System.Windows.Controls.Image;
-using System.Windows.Threading;
-#else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
+﻿using System.Windows;
+#if WINRT
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
+#else
+using System.Windows.Media;
 #endif
 namespace Sparrow.Chart
 {
@@ -30,11 +11,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class SplineContainer : SeriesContainer
     {
-        public override void Draw()
-        {
-            base.Draw();
-            
-        }
 #if WPF
         protected override void DrawPath(SeriesBase series, System.Drawing.Pen pen)
         {
@@ -72,7 +48,7 @@ namespace Sparrow.Chart
                                 break;
                         }
                     }
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }
             }
         }

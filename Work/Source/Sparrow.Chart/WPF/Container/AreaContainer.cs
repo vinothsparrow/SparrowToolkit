@@ -1,28 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-#if WPF
-using System.Drawing.Drawing2D;
-#endif
-using System.Linq;
-using System.Text;
-using System.Windows;
-#if !WINRT
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Input;
-#else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
+﻿using System.Windows;
+#if WINRT
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
+#else
+using System.Windows.Media;
 #endif
 namespace Sparrow.Chart
 {
@@ -31,10 +11,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class AreaContainer : SeriesContainer
     {
-        public override void Draw()
-        {
-            base.Draw();        
-        }
 #if WPF
         private void DrawFilledPath(SeriesBase series, System.Drawing.Pen pen,System.Drawing.Brush brush)
         {
@@ -110,19 +86,25 @@ namespace Sparrow.Chart
                     }
                     DrawFilledPath(areaSeries, pen, brush);
                 }
-                this.collection.InvalidateBitmap();
+                this.Collection.InvalidateBitmap();
             }
         }
 #else
+        /// <summary>
+        /// Draws the path.
+        /// </summary>
+        /// <param name="series">The series.</param>
+        /// <param name="brush">The brush.</param>
+        /// <param name="strokeThickness">The stroke thickness.</param>
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
             if (series is AreaSeries)
             {
                 AreaSeries areaSeries = series as AreaSeries;                
                 PartsCanvas.Children.Clear();
-                for (int i = 0; i < areaSeries.Parts.Count; i++)
+                foreach (SeriesPartBase part in areaSeries.Parts)
                 {
-                    PartsCanvas.Children.Add(areaSeries.Parts[i].CreatePart());
+                    PartsCanvas.Children.Add(part.CreatePart());
                 }
             }
         }

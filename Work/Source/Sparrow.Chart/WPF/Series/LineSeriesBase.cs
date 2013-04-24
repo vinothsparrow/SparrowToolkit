@@ -2,23 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
-using System.Windows.Media;
 using System.Windows.Threading;
-using System.ComponentModel;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 
@@ -30,21 +20,28 @@ namespace Sparrow.Chart
     public class LineSeriesBase : SeriesBase
     {
 
+        /// <summary>
+        /// Generates the points from source.
+        /// </summary>
         public void GeneratePointsFromSource()
         {
-            xValues = this.GetReflectionValues(this.XPath, PointsSource, xValues, false);
-            yValues = new List<double>();
+            XValues = GetReflectionValues(XPath, PointsSource, XValues, false);
+            YValues = new List<double>();
 
-            yValues = this.GetReflectionValues(this.YPath, PointsSource, yValues, false);
+            YValues = GetReflectionValues(YPath, PointsSource, YValues, false);
 
-            if (xValues != null && xValues.Count > 0)
+            if (XValues != null && XValues.Count > 0)
             {
-                this.Points = GetPointsFromValues(xValues, yValues);
+                Points = GetPointsFromValues(XValues, YValues);
             }
         }
+
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
         override public void Refresh()
         {
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 base.Refresh();
             if (IsRefresh)
             {
@@ -53,27 +50,46 @@ namespace Sparrow.Chart
 #elif WINRT
                 IAsyncAction action = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, this.GenerateDatas);
 #else
-                Dispatcher.BeginInvoke(new Action(this.GenerateDatas));
+                Dispatcher.BeginInvoke(GenerateDatas);
 #endif
                 //isRefreshed = true;
             }
         }
-       
+
+        /// <summary>
+        /// Gets or sets the points source.
+        /// </summary>
+        /// <value>
+        /// The points source.
+        /// </value>
         public IEnumerable PointsSource
         {
             get { return (IEnumerable)GetValue(PointsSourceProperty); }
             set { SetValue(PointsSourceProperty, value); }
         }
 
+        /// <summary>
+        /// The points source property
+        /// </summary>
         public static readonly DependencyProperty PointsSourceProperty =
             DependencyProperty.Register("PointsSource", typeof(IEnumerable), typeof(LineSeriesBase), new PropertyMetadata(null, OnPointsSourceChanged));
 
+        /// <summary>
+        /// Called when [points source changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnPointsSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             LineSeriesBase series = sender as LineSeriesBase;
-            series.PointsSourceChanged(sender, args);
-
+            if (series != null) series.PointsSourceChanged(sender, args);
         }
+
+        /// <summary>
+        /// Pointses the source changed.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void PointsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             if (args.OldValue is INotifyCollectionChanged)
@@ -88,34 +104,48 @@ namespace Sparrow.Chart
             GeneratePointsFromSource();
         }
 
+        /// <summary>
+        /// Handles the CollectionChanged event of the PointsSource control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         void PointsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                double xValue = GetReflectionValue(XPath, PointsSource, xValues.Count + 1);
-                double yValue = GetReflectionValue(YPath, PointsSource, yValues.Count + 1);
-                this.xValues.Add(xValue);                
-                this.yValues.Add(xValue);
-                this.Points.Add(new ChartPoint() { XValue = xValue, YValue = yValue });
+                double xValue = GetReflectionValue(XPath, PointsSource, XValues.Count + 1);
+                double yValue = GetReflectionValue(YPath, PointsSource, YValues.Count + 1);
+                XValues.Add(xValue);                
+                YValues.Add(xValue);
+                Points.Add(new ChartPoint() { XValue = xValue, YValue = yValue });
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 IList oldItems = e.OldItems;
                 double oldXValue = GetReflectionValueFromItem(XPath, oldItems[0]);
-                int index = this.xValues.IndexOf(oldXValue);
-                this.xValues.RemoveAt(index);
-                this.yValues.RemoveAt(index);
-                this.Points.RemoveAt(index);
+                int index = XValues.IndexOf(oldXValue);
+                XValues.RemoveAt(index);
+                YValues.RemoveAt(index);
+                Points.RemoveAt(index);
             }
 
         }
 
+        /// <summary>
+        /// Gets or sets the Y path.
+        /// </summary>
+        /// <value>
+        /// The Y path.
+        /// </value>
         public string YPath
         {
             get { return (string)GetValue(YPathProperty); }
             set { SetValue(YPathProperty, value); }
         }
 
+        /// <summary>
+        /// The Y path property
+        /// </summary>
         public static readonly DependencyProperty YPathProperty =
             DependencyProperty.Register("YPath", typeof(string), typeof(LineSeriesBase), new PropertyMetadata(null));
        

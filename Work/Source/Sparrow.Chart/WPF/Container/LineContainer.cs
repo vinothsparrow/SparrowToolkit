@@ -1,35 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows;
-#if !WINRT
-using System.Windows.Controls;
-using System.Windows.Interop;
+﻿#if !WINRT
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image = System.Windows.Controls.Image;
-using System.Windows.Threading;
 #else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 #if WPF
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using LinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
+
 #endif
 
 #if DIRECTX2D
@@ -43,17 +19,7 @@ namespace Sparrow.Chart
     /// LineSeries Container
     /// </summary>
     public class LineContainer : SeriesContainer
-    {       
-
-        public LineContainer()
-            : base()
-        {                                 
-        }
-       
-        public override void Draw()
-        {
-            base.Draw();
-        }
+    {
 #if DIRECTX2D
         override protected void OnRender()
         {
@@ -179,7 +145,7 @@ namespace Sparrow.Chart
                             }
                         }
                     }
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }                
             }        
         }
@@ -188,21 +154,16 @@ namespace Sparrow.Chart
         {
             if (series is LineSeries || series is HiLoSeries)
             {
-                var points = new PointCollection();
-                var pointCount = 0;
+                
                 PartsCollection partsCollection = new PartsCollection();
                 if (series is LineSeries)
                 {
-                    LineSeries lineSeries = series as LineSeries;
-                    points = lineSeries.LinePoints;
-                    pointCount = lineSeries.LinePoints.Count;
+                    LineSeries lineSeries = series as LineSeries;                  
                     partsCollection = lineSeries.Parts;
                 }
                 else if (series is HiLoSeries)
                 {
-                    HiLoSeries lineSeries = series as HiLoSeries;
-                    points = lineSeries.HighPoints;
-                    pointCount = lineSeries.HighPoints.Count;
+                    HiLoSeries lineSeries = series as HiLoSeries;                   
                     partsCollection = lineSeries.Parts;
                 }
                 if (RenderingMode == RenderingMode.Default)

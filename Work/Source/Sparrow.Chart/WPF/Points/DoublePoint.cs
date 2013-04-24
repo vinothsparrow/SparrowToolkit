@@ -1,43 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Sparrow.Chart
+﻿namespace Sparrow.Chart
 {
     /// <summary>
     /// DoublePoint for Series.Points
     /// </summary>
     public class DoublePoint : ChartPoint
     {
-        public DoublePoint()
-        {
-
-        }
-        private double m_data;
+        private double _mData;
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        /// <value>
+        /// The data.
+        /// </value>
         public double Data
         {
             get
             {
-                return m_data;
+                return _mData;
             }
             set
             {
-                m_data = value;
+                _mData = value;
                 this.XValue = value;
             }
         }
 
-        private double m_value;
+        private double _mValue;
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
         public double Value
         {
             get
             {
-                return m_value;
+                return _mValue;
             }
             set
             {
-                m_value = value;
+                _mValue = value;
                 this.YValue = value;
             }
         }

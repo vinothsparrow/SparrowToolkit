@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
-using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Shapes;
+
 #else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 using Windows.UI;
 #endif
 
@@ -122,8 +112,9 @@ namespace Sparrow.Chart
     /// </summary>
     public static class Themes
     {
+
         /// <summary>
-        /// 
+        /// Metroes the brushes.
         /// </summary>
         /// <returns></returns>
         public static List<Brush> MetroBrushes()
@@ -144,6 +135,10 @@ namespace Sparrow.Chart
             return metroBrushes;
         }
 
+        /// <summary>
+        /// Arctics the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> ArcticBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -162,6 +157,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Autmns the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> AutmnBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -179,6 +178,11 @@ namespace Sparrow.Chart
             brushes[7] = new SolidColorBrush(Color.FromArgb(0xFF, 0x7D, 0x3B, 0x25));
             return brushes;
         }
+
+        /// <summary>
+        /// Colds the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> ColdBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -196,6 +200,11 @@ namespace Sparrow.Chart
             brushes[7] = new SolidColorBrush(Color.FromArgb(0xFF, 0x45, 0x93, 0xAC));
             return brushes;
         }
+
+        /// <summary>
+        /// Flowers the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> FlowerBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -213,6 +222,11 @@ namespace Sparrow.Chart
             brushes[7] = new SolidColorBrush(Color.FromArgb(0xFF, 0xDE, 0xB3, 0xB7));
             return brushes;
         }
+
+        /// <summary>
+        /// Forests the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> ForestBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -231,6 +245,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Grayscales the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> GrayscaleBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -248,6 +266,11 @@ namespace Sparrow.Chart
             brushes[7] = new SolidColorBrush(Color.FromArgb(0xFF, 0xA6, 0xA6, 0xA6));
             return brushes;
         }
+
+        /// <summary>
+        /// Grounds the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> GroundBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -266,6 +289,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Lialacs the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> LialacBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -284,6 +311,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Naturals the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> NaturalBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -302,6 +333,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Pastels the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> PastelBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -320,6 +355,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Rainbows the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> RainbowBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -338,6 +377,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Springs the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> SpringBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -356,6 +399,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Summers the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> SummerBrushes()
         {
             List<Brush> brushes = new List<Brush>();
@@ -374,6 +421,10 @@ namespace Sparrow.Chart
             return brushes;
         }
 
+        /// <summary>
+        /// Warms the brushes.
+        /// </summary>
+        /// <returns></returns>
         public static List<Brush> WarmBrushes()
         {
             List<Brush> brushes = new List<Brush>();

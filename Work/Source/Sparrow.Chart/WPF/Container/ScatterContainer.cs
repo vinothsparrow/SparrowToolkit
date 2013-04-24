@@ -1,27 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Collections.Generic;
 #if !WINRT
 using System.Windows.Controls;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image = System.Windows.Controls.Image;
-using System.Windows.Threading;
 using System.Windows.Shapes;
 #else
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
 
@@ -32,10 +16,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class ScatterContainer : SeriesContainer
     {
-        public override void Draw()
-        {
-            base.Draw();
-        }
 #if WPF
         override protected void DrawPath(SeriesBase series, System.Drawing.Pen pen)
         {
@@ -62,7 +42,7 @@ namespace Sparrow.Chart
                     points = scatterSeries.BubblePoints;
                     pointCount = scatterSeries.BubblePoints.Count;
                     //size = (float)scatterSeries.;
-                    sizes=scatterSeries.sizeValues;
+                    sizes=scatterSeries.SizeValues;
                     brush = (this.Series as FillSeriesBase).Fill.AsDrawingBrush();
                     partsCollection = scatterSeries.Parts;
                 }
@@ -122,11 +102,17 @@ namespace Sparrow.Chart
                         }
 
                     }
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }
             }
         }
 #else
+        /// <summary>
+        /// Draws the path.
+        /// </summary>
+        /// <param name="series">The series.</param>
+        /// <param name="brush">The brush.</param>
+        /// <param name="strokeThickness">The stroke thickness.</param>
         protected override void DrawPath(SeriesBase series, Brush brush, double strokeThickness)
         {
             if (series is ScatterSeries || series is BubbleSeries)

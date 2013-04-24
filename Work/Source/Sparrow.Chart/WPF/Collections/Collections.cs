@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace Sparrow.Chart
 {
@@ -14,10 +7,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class PartsCollection : ObservableCollection<SeriesPartBase>
     {
-        public PartsCollection()
-        {
-
-        }
     }
 
     /// <summary>
@@ -25,10 +14,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class PointsCollection : ObservableCollection<ChartPoint>
     {
-        public PointsCollection()
-        {
-
-        }
     }
 
     /// <summary>
@@ -36,10 +21,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class SeriesCollection : ObservableCollection<SeriesBase>
     {
-        public SeriesCollection()
-        {
-
-        }
     }
 
 
@@ -47,19 +28,14 @@ namespace Sparrow.Chart
     /// Container Collection
     /// </summary>
     public class Containers : ObservableCollection<SeriesContainer>
-    {      
-        public Containers()
-        {
-
-        }
+    {
     }
 
+    /// <summary>
+    /// Axis Collection
+    /// </summary>
     public class Axes : ObservableCollection<AxisBase>
     {
-        public Axes()
-        {
-
-        }
     }
 
 }

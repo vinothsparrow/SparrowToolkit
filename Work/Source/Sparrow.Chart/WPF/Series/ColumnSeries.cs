@@ -1,60 +1,49 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
 using System.Windows;
 #if !WINRT
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
 {
     public class ColumnSeries : FillSeriesBase
     {        
-        internal PointCollection startEndPoints;
-        internal List<Rect> rects;
+        internal PointCollection StartEndPoints;
+        internal List<Rect> Rects;
+
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         override public void GenerateDatas()
         {
-            if (this.Points != null && this.seriesContainer != null)
+            if (this.Points != null && this.SeriesContainer != null)
             {
                 ColumnPoints.Clear();
-                if (!isPointsGenerated)
+                if (!IsPointsGenerated)
                     Parts.Clear();
-                startEndPoints = new PointCollection();
-                rects = new List<Rect>();
+                StartEndPoints = new PointCollection();
+                Rects = new List<Rect>();
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
                 IntializePoints();
-                Point StartAndEndPoint = CalculateColumnSeriesInfo();
+                Point startAndEndPoint = CalculateColumnSeriesInfo();
                 foreach (ChartPoint point in this.Points)
                 {
                     if (CheckValuePoint(oldPoint, point))
                     {
                         Point linePoint = NormalizePoint(new Point(point.XValue, point.YValue));
-                        Point startPoint = NormalizePoint(new Point(point.XValue + StartAndEndPoint.X, point.YValue));
-                        Point endPoint = NormalizePoint(new Point(point.XValue + StartAndEndPoint.Y, yMin));
-                        startEndPoints.Add(startPoint);
-                        startEndPoints.Add(endPoint);
+                        Point startPoint = NormalizePoint(new Point(point.XValue + startAndEndPoint.X, point.YValue));
+                        Point endPoint = NormalizePoint(new Point(point.XValue + startAndEndPoint.Y, YMin));
+                        StartEndPoints.Add(startPoint);
+                        StartEndPoints.Add(endPoint);
                         ColumnPoints.Add(linePoint);
-                        rects.Add(new Rect(startPoint, endPoint));
+                        Rects.Add(new Rect(startPoint, endPoint));
                         oldPoint = point;
                     }
                 }
@@ -62,13 +51,13 @@ namespace Sparrow.Chart
                 {
                     //if (!UseSinglePart)
                     //{
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
-                        for (int i = 0; i <= this.startEndPoints.Count - 2; i += 2)
+                        for (int i = 0; i <= this.StartEndPoints.Count - 2; i += 2)
                         {
-                            if (CheckValue(startEndPoints[i].X) && CheckValue(startEndPoints[i].Y) && CheckValue(startEndPoints[i + 1].X) && CheckValue(startEndPoints[i + 1].Y))
+                            if (CheckValue(StartEndPoints[i].X) && CheckValue(StartEndPoints[i].Y) && CheckValue(StartEndPoints[i + 1].X) && CheckValue(StartEndPoints[i + 1].Y))
                             {
-                                ColumnPart columnPart = new ColumnPart(startEndPoints[i].X, startEndPoints[i].Y, startEndPoints[i + 1].X, startEndPoints[i + 1].Y);
+                                ColumnPart columnPart = new ColumnPart(StartEndPoints[i].X, StartEndPoints[i].Y, StartEndPoints[i + 1].X, StartEndPoints[i + 1].Y);
                                 SetBindingForStrokeandStrokeThickness(columnPart);
                                 this.Parts.Add(columnPart);
                             }
@@ -80,19 +69,19 @@ namespace Sparrow.Chart
                             //    this.Parts.Add(singlePart);
                             //}
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
                         int i = 0;
                         foreach (ColumnPart part in this.Parts)
                         {
-                            if (CheckValue(startEndPoints[i].X) && CheckValue(startEndPoints[i].Y) && CheckValue(startEndPoints[i + 1].X) && CheckValue(startEndPoints[i + 1].Y))
+                            if (CheckValue(StartEndPoints[i].X) && CheckValue(StartEndPoints[i].Y) && CheckValue(StartEndPoints[i + 1].X) && CheckValue(StartEndPoints[i + 1].Y))
                             {
-                                part.X1 = startEndPoints[i].X;
-                                part.Y1 = startEndPoints[i].Y;
-                                part.X2 = startEndPoints[i + 1].X;
-                                part.Y2 = startEndPoints[i + 1].Y;
+                                part.X1 = StartEndPoints[i].X;
+                                part.Y1 = StartEndPoints[i].Y;
+                                part.X2 = StartEndPoints[i + 1].X;
+                                part.Y2 = StartEndPoints[i + 1].Y;
                                 part.Refresh();
                             }
                             i += 2;
@@ -101,36 +90,48 @@ namespace Sparrow.Chart
                     }
                     
                 }
-                this.seriesContainer.Invalidate();                
+                this.SeriesContainer.Invalidate();                
 
             }
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColumnSeries"/> class.
+        /// </summary>
         public ColumnSeries()
         {
             ColumnPoints = new PointCollection();
-            isFill = true;
+            IsFill = true;
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new ColumnContainer();
         }
+
+        /// <summary>
+        /// Calculates the column series info.
+        /// </summary>
+        /// <returns></returns>
         public Point CalculateColumnSeriesInfo()
         {
             double width = 1 - SparrowChart.GetSeriesMarginPercentage(this);
             double mininumWidth = double.MaxValue;
-            int position = Chart.columnSeries.IndexOf(this) + 1;
-            int count = Chart.columnSeries.Count;
+            int position = Chart.ColumnSeries.IndexOf(this) + 1;
+            int count = Chart.ColumnSeries.Count;
             foreach (SeriesBase series in Chart.Series)
             {
-                List<double> xValues = series.xValues as List<double>;
-                if (xValues != null)
+                List<double> values = series.XValues as List<double>;
+                if (values != null)
                 {
-                    for (int i = 1; i < xValues.Count; i++)
+                    for (int i = 1; i < values.Count; i++)
                     {
-                        double delta = xValues[i] - xValues[i - 1];
+                        double delta = values[i] - values[i - 1];
                         if (delta != 0)
                         {
                             mininumWidth = Math.Min(mininumWidth, delta);
@@ -144,15 +145,24 @@ namespace Sparrow.Chart
             double end = start + per;
             return new Point(start,end);
             //}
-        }      
-        
+        }
 
+
+        /// <summary>
+        /// Gets or sets the column points.
+        /// </summary>
+        /// <value>
+        /// The column points.
+        /// </value>
         public PointCollection ColumnPoints
         {
             get { return (PointCollection)GetValue(ColumnPointsProperty); }
             set { SetValue(ColumnPointsProperty, value); }
         }
 
+        /// <summary>
+        /// The column points property
+        /// </summary>
         public static readonly DependencyProperty ColumnPointsProperty =
             DependencyProperty.Register("ColumnPoints", typeof(PointCollection), typeof(ColumnSeries), new PropertyMetadata(null));
     }

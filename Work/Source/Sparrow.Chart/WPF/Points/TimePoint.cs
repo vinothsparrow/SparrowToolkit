@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sparrow.Chart
 {
@@ -10,29 +7,41 @@ namespace Sparrow.Chart
     /// </summary>
     public class TimePoint : ChartPoint
     {
-        private DateTime m_time;
+        private DateTime _mTime;
+        /// <summary>
+        /// Gets or sets the time.
+        /// </summary>
+        /// <value>
+        /// The time.
+        /// </value>
         public DateTime Time
         {
             get
             {
-                return m_time;
+                return _mTime;
             }
             set
             {
-                m_time = value;
-                this.XValue = m_time.ToOADate();
+                _mTime = value;
+                this.XValue = _mTime.ToOADate();
             }
         }
-        private double m_value;
+        private double _mValue;
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
         public double Value
         {
             get
             {
-                return m_value;
+                return _mValue;
             }
             set
             {
-                m_value = value;
+                _mValue = value;
                 this.YValue = value;
             }
         }

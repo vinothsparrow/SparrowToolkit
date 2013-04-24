@@ -1,63 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
 
 
 namespace Sparrow.Chart
-{
-    /// <summary>
-    /// 
-    /// </summary>
+{    
     public class SeriesPartBase : FrameworkElement
     {
+
         /// <summary>
-        /// 
+        /// Gets or sets the stroke.
         /// </summary>
+        /// <value>
+        /// The stroke.
+        /// </value>
         public Brush Stroke
         {
             get { return (Brush)GetValue(StrokeProperty); }
             set { SetValue(StrokeProperty, value); }
         }
+
         /// <summary>
-        /// 
+        /// The stroke property
         /// </summary>
         public static readonly DependencyProperty StrokeProperty =
             DependencyProperty.Register("Stroke", typeof(Brush), typeof(SeriesPartBase), new PropertyMetadata(null));
 
         /// <summary>
-        /// 
+        /// Gets or sets the stroke thickness.
         /// </summary>
+        /// <value>
+        /// The stroke thickness.
+        /// </value>
         public double StrokeThickness
         {
             get { return (double)GetValue(StrokeThicknessProperty); }
             set { SetValue(StrokeThicknessProperty, value); }
         }
+
         /// <summary>
-        /// 
+        /// The stroke thickness property
         /// </summary>
         public static readonly DependencyProperty StrokeThicknessProperty =
           DependencyProperty.Register("StrokeThickness", typeof(double), typeof(SeriesPartBase), new PropertyMetadata(1d));
+
         /// <summary>
-        /// 
+        /// Sets the binding for strokeand stroke thickness.
         /// </summary>
-        /// <param name="shape"></param>
+        /// <param name="shape">The shape.</param>
         protected virtual void SetBindingForStrokeandStrokeThickness(Shape shape)
         {
             Binding strokeBinding = new Binding();
@@ -70,8 +68,9 @@ namespace Sparrow.Chart
             shape.SetBinding(Shape.StrokeThicknessProperty, strokeThicknessBinding);
         }
 
+
         /// <summary>
-        /// Create a visual for single Series Part
+        /// Creates the part.
         /// </summary>
         /// <returns>UIElement</returns>
         public virtual UIElement CreatePart()
@@ -79,8 +78,9 @@ namespace Sparrow.Chart
             return null;
         }
 
+
         /// <summary>
-        /// Refresh the Series Part
+        /// Refreshes this instance.
         /// </summary>
         public virtual void Refresh()
         {

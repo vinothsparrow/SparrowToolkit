@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using System.Windows.Data;
+
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
@@ -31,6 +19,10 @@ namespace Sparrow.Chart
     public class Legend : ItemsControl
     {        
         ResourceDictionary styles;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Legend"/> class.
+        /// </summary>
         public Legend()
         {
             this.DefaultStyleKey = typeof(Legend);
@@ -57,17 +49,32 @@ namespace Sparrow.Chart
 #if WINRT || WP7 || WP8 || SILVERLIGHT4
             Loaded += Legend_Loaded;
 #endif
-        }           
-       
+        }
+
+        /// <summary>
+        /// Gets or sets the chart.
+        /// </summary>
+        /// <value>
+        /// The chart.
+        /// </value>
         public SparrowChart Chart
         {
             get { return (SparrowChart)GetValue(ChartProperty); }
             set { SetValue(ChartProperty, value); }
         }
 
+        /// <summary>
+        /// The chart property
+        /// </summary>
         public static readonly DependencyProperty ChartProperty =
-            DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(Legend), new PropertyMetadata(null));              
-       
+            DependencyProperty.Register("Chart", typeof(SparrowChart), typeof(Legend), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the dock.
+        /// </summary>
+        /// <value>
+        /// The dock.
+        /// </value>
         public Dock Dock
         {
             get { return (Dock)GetValue(DockProperty); }
@@ -76,60 +83,108 @@ namespace Sparrow.Chart
 
 
 
+        /// <summary>
+        /// Gets or sets the legend position.
+        /// </summary>
+        /// <value>
+        /// The legend position.
+        /// </value>
         public LegendPosition LegendPosition
         {
             get { return (LegendPosition)GetValue(LegendPositionProperty); }
             set { SetValue(LegendPositionProperty, value); }
         }
 
+        /// <summary>
+        /// The legend position property
+        /// </summary>
         public static readonly DependencyProperty LegendPositionProperty =
             DependencyProperty.Register("LegendPosition", typeof(LegendPosition), typeof(Legend), new PropertyMetadata(LegendPosition.Outside));
 
 
 
 #if WPF || SILVERLIGHT && !SILVERLIGHT4
+        /// <summary>
+        /// The dock property
+        /// </summary>
         public static readonly DependencyProperty DockProperty =
             DependencyProperty.Register("Dock", typeof(Dock), typeof(Legend), new PropertyMetadata(Dock.Top));
 #endif
-      
+
+        /// <summary>
+        /// Gets or sets the header.
+        /// </summary>
+        /// <value>
+        /// The header.
+        /// </value>
         public object Header
         {
             get { return (object)GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
         }
 
+        /// <summary>
+        /// The header property
+        /// </summary>
         public static readonly DependencyProperty HeaderProperty =
             DependencyProperty.Register("Header", typeof(object), typeof(Legend), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the header template.
+        /// </summary>
+        /// <value>
+        /// The header template.
+        /// </value>
         public DataTemplate HeaderTemplate
         {
             get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
             set { SetValue(HeaderTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// The header template property
+        /// </summary>
         public static readonly DependencyProperty HeaderTemplateProperty =
             DependencyProperty.Register("HeaderTemplate", typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Gets or sets the corner radius.
+        /// </summary>
+        /// <value>
+        /// The corner radius.
+        /// </value>
         public CornerRadius CornerRadius
         {
             get { return (CornerRadius)GetValue(CornerRadiusProperty); }
             set { SetValue(CornerRadiusProperty, value); }
         }
 
+        /// <summary>
+        /// The corner radius property
+        /// </summary>
         public static readonly DependencyProperty CornerRadiusProperty =
             DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Legend), new PropertyMetadata(new CornerRadius(0)));
 
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show icon].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show icon]; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowIcon
         {
             get { return (bool)GetValue(ShowIconProperty); }
             set { SetValue(ShowIconProperty, value); }
         }
 
+        /// <summary>
+        /// The show icon property
+        /// </summary>
         public static readonly DependencyProperty ShowIconProperty =
             DependencyProperty.Register("ShowIcon", typeof(bool), typeof(Legend), new PropertyMetadata(true));
 

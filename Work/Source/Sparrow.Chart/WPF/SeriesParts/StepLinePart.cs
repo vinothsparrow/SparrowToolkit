@@ -1,82 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public class StepLinePart : LinePartBase
     {
-        internal Point startPoint;
-        internal Point endPoint;
-        internal Point stepPoint;
-        internal Polyline lines;
+        internal Point StartPoint;
+        internal Point EndPoint;
+        internal Point StepPoint;
+        internal Polyline Lines;
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="StepLinePart"/> class.
         /// </summary>
         public StepLinePart()
         {
         }
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="StepLinePart"/> class.
         /// </summary>
-        /// <param name="startPoint"></param>
-        /// <param name="stepPoint"></param>
-        /// <param name="endPoint"></param>
+        /// <param name="startPoint">The start point.</param>
+        /// <param name="stepPoint">The step point.</param>
+        /// <param name="endPoint">The end point.</param>
         public StepLinePart(Point startPoint, Point stepPoint, Point endPoint)
         {
             this.X1 = startPoint.X;
             this.Y1 = startPoint.Y;
             this.X2 = endPoint.X;
             this.Y2 = endPoint.Y;
-            this.startPoint = startPoint;
-            this.endPoint = endPoint;
-            this.stepPoint = stepPoint;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override UIElement CreatePart()
-        {            
-            lines = new Polyline();
-            PointCollection pointsCollection=new PointCollection();
-            pointsCollection.Add(startPoint);
-            pointsCollection.Add(stepPoint);
-            pointsCollection.Add(endPoint);
-            lines.Points = pointsCollection;
-            SetBindingForStrokeandStrokeThickness(lines);
-            return lines;
+            this.StartPoint = startPoint;
+            this.EndPoint = endPoint;
+            this.StepPoint = stepPoint;
         }
 
+        /// <summary>
+        /// Creates the part.
+        /// </summary>
+        /// <returns>
+        /// UIElement
+        /// </returns>
+        public override UIElement CreatePart()
+        {            
+            Lines = new Polyline();
+            PointCollection pointsCollection=new PointCollection {StartPoint, StepPoint, EndPoint};
+            Lines.Points = pointsCollection;
+            SetBindingForStrokeandStrokeThickness(Lines);
+            return Lines;
+        }
+
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
         public override void Refresh()
         {
-            if (lines != null)
+            if (Lines != null)
             {
-                PointCollection pointsCollection = new PointCollection();
-                pointsCollection.Add(startPoint);
-                pointsCollection.Add(stepPoint);
-                pointsCollection.Add(endPoint);
-                lines.Points = pointsCollection;
+                PointCollection pointsCollection = new PointCollection {StartPoint, StepPoint, EndPoint};
+                Lines.Points = pointsCollection;
             }
         }
         

@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Input;
 using System.Windows.Shapes;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
@@ -31,31 +22,38 @@ namespace Sparrow.Chart
     /// </summary>
     public abstract class YAxis : AxisBase
     {
-
-        public YAxis()
-            : base()
-        {
-
-        }
-
+        /// <summary>
+        /// Gets the styles.
+        /// </summary>
         protected override void GetStyles()
         {
             base.GetStyles();
-            this.HeaderTemplate = (DataTemplate)styles["yAxisHeaderTemplate"];
+            this.HeaderTemplate = (DataTemplate)Styles["yAxisHeaderTemplate"];
         }
 
+        /// <summary>
+        /// Checks the type.
+        /// </summary>
+        /// <returns></returns>
         protected override bool CheckType()
         {
             return true; 
         }
 
+        /// <summary>
+        /// Invalidates the visuals.
+        /// </summary>
         internal override void InvalidateVisuals()
         {
-            if (!isInitialized)
+            if (!IsInitialized)
                 Initialize();
             else
                 Update();
         }
+
+        /// <summary>
+        /// Updates this instance.
+        /// </summary>
         internal void Update()
         {
             double desiredWidth = 0;
@@ -63,32 +61,32 @@ namespace Sparrow.Chart
             GenerateLabels();
             if (this.ActualHeight > 0 && this.ActualWidth > 0)
             {
-                double yAxisHeightStep = this.ActualHeight / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
+                double yAxisHeightStep = this.ActualHeight / ((MIntervalCount > 0) ? MIntervalCount : 1);
                 double yAxisHeightPosition = 0;
                 Rect oldRect = new Rect(0, 0, 0, 0);
-                axisLine.X1 = this.ActualWidth;
-                axisLine.X2 = this.ActualWidth;
-                axisLine.Y1 = 0;
-                axisLine.Y2 = this.ActualHeight;
+                AxisLine.X1 = this.ActualWidth;
+                AxisLine.X2 = this.ActualWidth;
+                AxisLine.Y1 = 0;
+                AxisLine.Y2 = this.ActualHeight;
                 Binding binding = new Binding();
                 binding.Path = new PropertyPath("AxisLineStyle");
                 binding.Source = this;
-                axisLine.SetBinding(Line.StyleProperty, binding);
+                AxisLine.SetBinding(Line.StyleProperty, binding);
                 double labelSize = 0;
                 int minorCount = 0;
-                if (this.m_Labels.Count == labels.Count)
+                if (this.MLabels.Count == Labels.Count)
                 {
-                    for (int i = this.m_Labels.Count - 1; i >=0; i--)
+                    for (int i = this.MLabels.Count - 1; i >=0; i--)
                     {
-                        yAxisHeightPosition = this.DataToPoint(m_labelValues[i]);                        
-                        ContentControl label = labels[i];
-                        label.Content = m_Labels[i];
+                        yAxisHeightPosition = this.DataToPoint(MLabelValues[i]);                        
+                        ContentControl label = Labels[i];
+                        label.Content = MLabels[i];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         RotateTransform labelRotation = new RotateTransform();
                         labelRotation.Angle = LabelAngle;
                         Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
                         label.RenderTransform = labelRotation;  
-                        Line tickLine = majorTickLines[i];
+                        Line tickLine = MajorTickLines[i];
                         double labelPadding = 0;
                         tickLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         //tickLine.X1 = this.ActualWidth;
@@ -128,14 +126,13 @@ namespace Sparrow.Chart
                                 break;
                         }
                         //desiredWidth = 0;
-                        double minorstep = 0;                       
-                        if (!(i == 0))
+                        if (i != 0)
                         {
                             double minorWidth = yAxisHeightStep;
-                            minorstep = minorWidth / (MinorTicksCount + 1);
+                            double minorstep = minorWidth / (MinorTicksCount + 1);
                             for (int j = 0; j < this.MinorTicksCount; j++)
                             {
-                                Line minorLine = minorTickLines[minorCount];
+                                Line minorLine = MinorTickLines[minorCount];
                                 minorLine.Y1 = (yAxisHeightPosition + minorstep * (j + 1));
                                 minorLine.Y2 = (yAxisHeightPosition + minorstep * (j + 1));
                                 //minorLine.X1 = this.ActualWidth - (minorLine.StrokeThickness);
@@ -177,13 +174,13 @@ namespace Sparrow.Chart
                 }
                 else
                 {
-                    if (this.m_Labels.Count > labels.Count)
+                    if (this.MLabels.Count > Labels.Count)
                     {
-                        int offset = this.m_Labels.Count - labels.Count;
+                        int offset = this.MLabels.Count - Labels.Count;
                         for (int j = 0; j < offset; j++)
                         {
                             ContentControl label = new ContentControl();
-                            label.Content = m_Labels[this.m_Labels.Count - offset - 1];
+                            label.Content = MLabels[this.MLabels.Count - offset - 1];
                             //label.ContentTemplate = this.LabelTemplate;
                             Binding labelTemplateBinding = new Binding();
                             labelTemplateBinding.Path = new PropertyPath("LabelTemplate");
@@ -194,7 +191,7 @@ namespace Sparrow.Chart
                             labelRotation.Angle = LabelAngle;
                             Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
                             label.RenderTransform = labelRotation;  
-                            labels.Add(label);
+                            Labels.Add(label);
                             Line tickLine = new Line();
                             Binding styleBinding = new Binding();
                             styleBinding.Path = new PropertyPath("MajorLineStyle");
@@ -261,40 +258,40 @@ namespace Sparrow.Chart
                                     default:
                                         break;
                                 }
-                                minorTickLines.Add(minorLine);
+                                MinorTickLines.Add(minorLine);
                                 this.Children.Add(minorLine);
                             }
                             this.Children.Add(label);
-                            majorTickLines.Add(tickLine);
+                            MajorTickLines.Add(tickLine);
                             this.Children.Add(tickLine);
                         }
                     }
                     else
                     {
-                        int offset = labels.Count - this.m_Labels.Count;
+                        int offset = Labels.Count - this.MLabels.Count;
                         for (int j = 0; j < offset; j++)
                         {
-                            this.Children.Remove(labels[labels.Count - 1]);
-                            labels.RemoveAt(labels.Count - 1);
+                            this.Children.Remove(Labels[Labels.Count - 1]);
+                            Labels.RemoveAt(Labels.Count - 1);
                             for (int k = 0; k < this.MinorTicksCount; k++)
                             {
-                                this.Children.Remove(minorTickLines[minorTickLines.Count - 1]);
-                                minorTickLines.RemoveAt(minorTickLines.Count - 1);
+                                this.Children.Remove(MinorTickLines[MinorTickLines.Count - 1]);
+                                MinorTickLines.RemoveAt(MinorTickLines.Count - 1);
                             }
-                            this.Children.Remove(majorTickLines[majorTickLines.Count - 1]);
-                            majorTickLines.RemoveAt(majorTickLines.Count - 1);
+                            this.Children.Remove(MajorTickLines[MajorTickLines.Count - 1]);
+                            MajorTickLines.RemoveAt(MajorTickLines.Count - 1);
                         }
                     }
-                    for (int i = this.m_Labels.Count - 1; i >= 0; i--)
+                    for (int i = this.MLabels.Count - 1; i >= 0; i--)
                     {
-                        ContentControl label = labels[i];
-                        label.Content = m_Labels[i];
+                        ContentControl label = Labels[i];
+                        label.Content = MLabels[i];
                         label.Measure(new Size(this.ActualHeight, this.ActualWidth));
                         RotateTransform labelRotation = new RotateTransform();
                         labelRotation.Angle = LabelAngle;
                         Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
                         label.RenderTransform = labelRotation;  
-                        Line tickLine = majorTickLines[i];
+                        Line tickLine = MajorTickLines[i];
                         double labelPadding = 0;
                        
                         tickLine.Y1 = yAxisHeightPosition;
@@ -340,7 +337,7 @@ namespace Sparrow.Chart
                             minorstep = minorWidth / (MinorTicksCount + 1);
                             for (int j = 0; j < this.MinorTicksCount; j++)
                             {
-                                Line minorLine = minorTickLines[minorCount];
+                                Line minorLine = MinorTickLines[minorCount];
                                 minorLine.Y1 = (yAxisHeightPosition + minorstep * (j + 1));
                                 minorLine.Y2 = (yAxisHeightPosition + minorstep * (j + 1));
                                 //minorLine.X1 = this.ActualWidth - (minorLine.StrokeThickness);
@@ -399,27 +396,27 @@ namespace Sparrow.Chart
             {
                
                 this.Children.Clear();
-                double yAxisHeightStep = this.ActualHeight / ((m_IntervalCount > 0) ? m_IntervalCount : 1);
-                double yAxisHeightPosition = this.DataToPoint(m_startValue);
+                double yAxisHeightStep = this.ActualHeight / ((MIntervalCount > 0) ? MIntervalCount : 1);
+                double yAxisHeightPosition = this.DataToPoint(MStartValue);
                 Rect oldRect = new Rect(0, 0, 0, 0);
-                axisLine = new Line();
+                AxisLine = new Line();
                 Binding binding = new Binding();
                 binding.Path = new PropertyPath("AxisLineStyle");
                 binding.Source = this;
-                axisLine.SetBinding(Line.StyleProperty, binding);
-                axisLine.X1 = this.ActualWidth;
-                axisLine.X2 = this.ActualWidth;
-                axisLine.Y1 = 0;
-                axisLine.Y2 = this.ActualHeight;
-                axisLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
-                labels = new List<ContentControl>();
-                majorTickLines = new List<Line>();
-                minorTickLines = new List<Line>();
+                AxisLine.SetBinding(Line.StyleProperty, binding);
+                AxisLine.X1 = this.ActualWidth;
+                AxisLine.X2 = this.ActualWidth;
+                AxisLine.Y1 = 0;
+                AxisLine.Y2 = this.ActualHeight;
+                AxisLine.Measure(new Size(this.ActualHeight, this.ActualWidth));
+                Labels = new List<ContentControl>();
+                MajorTickLines = new List<Line>();
+                MinorTickLines = new List<Line>();
                 double labelSize = 0;
-                for (int i = this.m_Labels.Count - 1; i >= 0; i--)
+                for (int i = this.MLabels.Count - 1; i >= 0; i--)
                 {
                     ContentControl label = new ContentControl();
-                    label.Content = m_Labels[i];
+                    label.Content = MLabels[i];
                     //label.ContentTemplate = this.LabelTemplate;
                     Binding labelTemplateBinding = new Binding();
                     labelTemplateBinding.Path = new PropertyPath("LabelTemplate");
@@ -430,7 +427,7 @@ namespace Sparrow.Chart
                     labelRotation.Angle = LabelAngle;
                     Rect rotatedRect = GetRotatedRect(new Rect(0, 0, label.DesiredSize.Width, label.DesiredSize.Height), labelRotation);
                     label.RenderTransform = labelRotation;      
-                    labels.Add(label);
+                    Labels.Add(label);
                     Line tickLine = new Line();
                     double labelPadding = 0;
                     Binding styleBinding = new Binding();
@@ -480,7 +477,7 @@ namespace Sparrow.Chart
                     ticklineVisibilityBinding.Source = this;
                     ticklineVisibilityBinding.Converter = new BooleanToVisibilityConverter();
                     tickLine.SetBinding(Line.VisibilityProperty, ticklineVisibilityBinding);
-                    majorTickLines.Add(tickLine);
+                    MajorTickLines.Add(tickLine);
                     this.Children.Add(tickLine);
                     //desiredWidth = 0;
                     double minorstep = 0;
@@ -516,7 +513,7 @@ namespace Sparrow.Chart
                                 default:
                                     break;
                             }
-                            minorTickLines.Add(minorLine);
+                            MinorTickLines.Add(minorLine);
                             this.Children.Add(minorLine);
                         }
                     }
@@ -555,21 +552,29 @@ namespace Sparrow.Chart
                 Canvas.SetTop(header, this.ActualHeight / 2);
                 desiredWidth = desiredWidth + header.DesiredSize.Height ;
                 this.Children.Add(header);
-                this.Children.Add(axisLine);
-                isInitialized = true;
+                this.Children.Add(AxisLine);
+                IsInitialized = true;
                 this.Chart.AxisWidth = desiredWidth;
             }
                            
         }
 
+        /// <summary>
+        /// Datas to point.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public override double DataToPoint(double value)
         {
-            if (!(m_MinValue == m_MaxValue))
-                return (this.ActualHeight - ((value - m_MinValue) * this.ActualHeight) / (m_MaxValue - m_MinValue));
+            if (!(MMinValue == MMaxValue))
+                return (this.ActualHeight - ((value - MMinValue) * this.ActualHeight) / (MMaxValue - MMinValue));
             else
                 return 0;
         }
 
+        /// <summary>
+        /// Calculates the interval from series points.
+        /// </summary>
         public override void CalculateIntervalFromSeriesPoints()
         {
             List<double> yValues = new List<double>();
@@ -577,11 +582,8 @@ namespace Sparrow.Chart
                 foreach (SeriesBase series in Series)
                 {
                     if (series.Points != null)
-                    {                                              
-                        foreach (var point in series.Points)
-                        {
-                            yValues.Add(point.YValue);                            
-                        }
+                    {
+                        yValues.AddRange(series.Points.Select(point => point.YValue));
                     }
                 }
             if (yValues.Count > 1)
@@ -590,6 +592,11 @@ namespace Sparrow.Chart
             }
         }
 
+        /// <summary>
+        /// Gets the original label.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         override public string GetOriginalLabel(double value)
         {
             switch (Type)
@@ -607,19 +614,39 @@ namespace Sparrow.Chart
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         internal YType Type
         {
             get { return (YType)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
+        /// <summary>
+        /// The type property
+        /// </summary>
         internal static readonly DependencyProperty TypeProperty =
             DependencyProperty.Register("Type", typeof(YType), typeof(YAxis), new PropertyMetadata(YType.Double,OnTypeChanged));
 
+        /// <summary>
+        /// Called when [type changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void OnTypeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            (sender as YAxis).TypeChanged(args);
+            var yAxis = sender as YAxis;
+            if (yAxis != null) yAxis.TypeChanged(args);
         }
+
+        /// <summary>
+        /// Types the changed.
+        /// </summary>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         internal void TypeChanged(DependencyPropertyChangedEventArgs args)
         {
             switch (Type)
@@ -637,9 +664,7 @@ namespace Sparrow.Chart
 #else
                     this.ActualType = (ActualType)Enum.Parse(typeof(ActualType), YType.DateTime.ToString(),false);
 #endif
-                    break;               
-                default:
-                    break;
+                    break;  
             }
         }
 

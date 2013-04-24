@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
-using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Threading;
+
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
@@ -29,21 +15,27 @@ namespace Sparrow.Chart
     /// </summary>
     public class AreaSeries : FillSeriesBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AreaSeries"/> class.
+        /// </summary>
         public AreaSeries()
         {
             this.AreaPoints = new PointCollection();            
-            this.isFill = true;
+            this.IsFill = true;
         }
 
+        /// <summary>
+        /// Generates the datas.
+        /// </summary>
         override public void GenerateDatas()
         {
             AreaPoints.Clear();
-            if (!isPointsGenerated)
+            if (!IsPointsGenerated)
                 Parts.Clear();
-            Point endPoint = new Point(0,0);
+            Point endPoint;
             Point startPoint=new Point(0,0);
             int index = 0;
-            if (this.Points != null && this.seriesContainer != null && this.Points.Count > 1)
+            if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 1)
             {
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
@@ -61,37 +53,37 @@ namespace Sparrow.Chart
                 }
                 if (this.RenderingMode == RenderingMode.Default)
                 {
-                    if (!isPointsGenerated)
+                    if (!IsPointsGenerated)
                     {
                         for (int i = 0; i < AreaPoints.Count - 2; i++)
                         {
-                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, yMin));
-                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, yMin));
+                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, YMin));
+                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, YMin));
                             AreaPart areaPart = new AreaPart(AreaPoints[i + 1], startPoint, endPoint, AreaPoints[i + 2]);
                             SetBindingForStrokeandStrokeThickness(areaPart);
                             this.Parts.Add(areaPart);
 
                         }
-                        isPointsGenerated = true;
+                        IsPointsGenerated = true;
                     }
                     else
                     {
                         int i = 0;
                         foreach (AreaPart part in this.Parts)
                         {
-                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, yMin));
-                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, yMin));
-                            part.startPoint = AreaPoints[i + 1];
-                            part.areaStartPoint = startPoint;
-                            part.areaEndPoint = endPoint;
-                            part.endPoint = AreaPoints[i + 2];
+                            startPoint = NormalizePoint(new Point(this.Points[i].XValue, YMin));
+                            endPoint = NormalizePoint(new Point(this.Points[i + 1].XValue, YMin));
+                            part.StartPoint = AreaPoints[i + 1];
+                            part.AreaStartPoint = startPoint;
+                            part.AreaEndPoint = endPoint;
+                            part.EndPoint = AreaPoints[i + 2];
                             part.Refresh();
                             i++;
                         }
                     }
                 }
-                endPoint = NormalizePoint(new Point(this.Points[this.Points.Count - 1].XValue, yMin));
-                startPoint = NormalizePoint(new Point(this.Points[0].XValue, yMin));
+                endPoint = NormalizePoint(new Point(this.Points[this.Points.Count - 1].XValue, YMin));
+                startPoint = NormalizePoint(new Point(this.Points[0].XValue, YMin));
                 startPoint.X = startPoint.X - this.StrokeThickness;                
                 if (AreaPoints.Count > 0)
                 {
@@ -99,24 +91,37 @@ namespace Sparrow.Chart
                     AreaPoints.Add(endPoint);
                 }
 
-                if (this.seriesContainer != null)
-                    this.seriesContainer.Invalidate();
+                if (this.SeriesContainer != null)
+                    this.SeriesContainer.Invalidate();
             }
-            isRefreshed = false;
+            IsRefreshed = false;
         }
 
+        /// <summary>
+        /// Creates the container.
+        /// </summary>
+        /// <returns></returns>
         internal override SeriesContainer CreateContainer()
         {
             return new AreaContainer();
         }
-      
-       
+
+
+        /// <summary>
+        /// Gets or sets the area points.
+        /// </summary>
+        /// <value>
+        /// The area points.
+        /// </value>
         public PointCollection AreaPoints
         {
             get { return (PointCollection)GetValue(AreaPointsProperty); }
             set { SetValue(AreaPointsProperty, value); }
         }
 
+        /// <summary>
+        /// The area points property
+        /// </summary>
         public static readonly DependencyProperty AreaPointsProperty =
             DependencyProperty.Register("AreaPoints", typeof(PointCollection), typeof(AreaSeries), new PropertyMetadata(null));    
 

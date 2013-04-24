@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 #if !WINRT
-using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Controls;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 
@@ -32,16 +20,32 @@ namespace Sparrow.Chart
         private Panel panel;
         private Stack<T> unused = new Stack<T>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElementRecycler{T}"/> class.
+        /// </summary>
+        /// <param name="panel">The panel.</param>
         public ElementRecycler(Panel panel)
         {
             this.panel = panel;
         }
 
+        /// <summary>
+        /// Recycles the children.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
         public IEnumerable<T> RecycleChildren(int count)
         {
             return RecycleChildren(panel, count, unused).ToArray();
         }
 
+        /// <summary>
+        /// Recycles the children.
+        /// </summary>
+        /// <param name="panel">The panel.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="unused">The unused.</param>
+        /// <returns>IEnumerable</returns>
         public static IEnumerable<T> RecycleChildren(Panel panel, int count, Stack<T> unused)
         {
             var elementEnum = panel.Children.OfType<T>().ToArray().AsEnumerable().GetEnumerator();

@@ -1,27 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-#if !WINRT
-using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
-using Image=System.Windows.Controls.Image;
-using System.Windows.Threading;
-#else
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
+﻿#if WINRT
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
-using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
+#else
+using System.Windows.Media;
 #endif
 #if DIRECTX2D
 using Sparrow.Directx2D;
@@ -35,10 +15,6 @@ namespace Sparrow.Chart
     /// </summary>
     public class StepLineContainer : SeriesContainer
     {
-        public override void Draw()
-        {
-            base.Draw();            
-        }
 #if DIRECTX2D
         override protected void OnRender()
         {
@@ -111,7 +87,7 @@ namespace Sparrow.Chart
                                 break;
                         }
                     }
-                    this.collection.InvalidateBitmap();
+                    this.Collection.InvalidateBitmap();
                 }
             }
         }
@@ -122,9 +98,9 @@ namespace Sparrow.Chart
             {
                 StepLineSeries stepLineSeries = series as StepLineSeries;
                 PartsCanvas.Children.Clear();
-                for (int i = 0; i < stepLineSeries.Parts.Count; i++)
+                foreach (SeriesPartBase t in stepLineSeries.Parts)
                 {
-                    PartsCanvas.Children.Add(stepLineSeries.Parts[i].CreatePart());
+                    PartsCanvas.Children.Add(t.CreatePart());
                 }
             }
         }

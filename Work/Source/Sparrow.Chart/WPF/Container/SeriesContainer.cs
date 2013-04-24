@@ -1,33 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 #if WPF
 using System.Drawing;
-using System.Drawing.Drawing2D;
 #endif
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows;
 #if !WINRT
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Color = System.Windows.Media.Color;
-using Point = System.Windows.Point;
 using Image=System.Windows.Controls.Image;
 using System.Windows.Threading;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
 #endif
 
 #if DIRECTX2D
@@ -44,7 +32,7 @@ namespace Sparrow.Chart
     /// </summary>
     public abstract class SeriesContainer : DependencyObject
     {
-        internal Image sourceImage;
+        internal Image SourceImage;
 #if DIRECTX2D
         internal Microsoft.WindowsAPICodePack.DirectX.Direct2D1.Brush directXBrush;
         internal float thickness;
@@ -60,50 +48,83 @@ namespace Sparrow.Chart
         internal double dpiFactor;
 #endif
         internal Canvas PartsCanvas;
-        internal ContainerCollection collection;
+        internal ContainerCollection Collection;
 #if WINRT
         IAsyncAction action;
 #endif
 
+        /// <summary>
+        /// Gets or sets the series.
+        /// </summary>
+        /// <value>
+        /// The series.
+        /// </value>
         public SeriesBase Series
         {
             get { return (SeriesBase)GetValue(SeriesProperty); }
             set { SetValue(SeriesProperty, value); }
         }
 
+        /// <summary>
+        /// The series property
+        /// </summary>
         public static readonly DependencyProperty SeriesProperty =
             DependencyProperty.Register("Series", typeof(SeriesBase), typeof(SeriesContainer), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the rendering mode.
+        /// </summary>
+        /// <value>
+        /// The rendering mode.
+        /// </value>
         public RenderingMode RenderingMode
         {
             get { return (RenderingMode)GetValue(RenderingModeProperty); }
             set { SetValue(RenderingModeProperty, value); }
         }
 
+        /// <summary>
+        /// The rendering mode property
+        /// </summary>
         public static readonly DependencyProperty RenderingModeProperty =
             DependencyProperty.Register("RenderingMode", typeof(RenderingMode), typeof(SeriesContainer), new PropertyMetadata(RenderingMode.Default));
 
 
 
+        /// <summary>
+        /// Gets or sets the container.
+        /// </summary>
+        /// <value>
+        /// The container.
+        /// </value>
         public ContainerCollection Container
         {
             get { return (ContainerCollection)GetValue(ContainerProperty); }
             set { SetValue(ContainerProperty, value); }
         }
 
+        /// <summary>
+        /// The container property
+        /// </summary>
         public static readonly DependencyProperty ContainerProperty =
             DependencyProperty.Register("Container", typeof(ContainerCollection), typeof(SeriesContainer), new PropertyMetadata(null));
 
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SeriesContainer"/> class.
+        /// </summary>
         public SeriesContainer()
         {
             
-            this.sourceImage = new Image() { Stretch = Stretch.None };
+            this.SourceImage = new Image() { Stretch = Stretch.None };
             PartsCanvas = new Canvas();
                       
         }
-        
+
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             try
@@ -123,9 +144,6 @@ namespace Sparrow.Chart
                     case RenderingMode.Default:
                         PartsCanvas.Children.Clear();
                         break;
-                   
-                    default:
-                        break;
                 }                
             }
             catch (Exception e)
@@ -135,12 +153,21 @@ namespace Sparrow.Chart
         }
         private bool _isBitmapInitialized;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is bitmap initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is bitmap initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsBitmapInitialized
         {
             get { return _isBitmapInitialized; }
             set { _isBitmapInitialized = value; }
         }
 
+        /// <summary>
+        /// Invalidates this instance.
+        /// </summary>
         public void Invalidate()
         {
             switch (RenderingMode)
@@ -173,10 +200,7 @@ namespace Sparrow.Chart
                     }));
                     break;
 #elif !WINRT 
-                    this.Dispatcher.BeginInvoke(new Action(delegate
-                    {
-                        Draw();
-                    }));
+                    this.Dispatcher.BeginInvoke(new Action(Draw));
                     break;
 #endif
 #if WINRT
@@ -185,12 +209,13 @@ namespace Sparrow.Chart
                         Draw();
                     });
                     break;
-#endif
-                default:
-                    break;
+#endif               
             }           
 
         }
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public virtual void Draw()
         {
             if (this.Series.Index == 0)
@@ -239,28 +264,35 @@ namespace Sparrow.Chart
                         DrawPath(Series, this.Series.Stroke,this.Series.StrokeThickness);
 #endif
                     break;
-                
-                default:
-                    break;
+                               
             }
         }
 
 #if WPF
         protected virtual void DrawPath(SeriesBase series, System.Drawing.Pen pen)
 #else
+        /// <summary>
+        /// Draws the path.
+        /// </summary>
+        /// <param name="series">The series.</param>
+        /// <param name="brush">The brush.</param>
+        /// <param name="strokeThickness">The stroke thickness.</param>
         protected virtual void DrawPath(SeriesBase series, Brush brush,double strokeThickness)
 #endif
         {
         }
+        /// <summary>
+        /// Called when [render].
+        /// </summary>
         protected virtual void OnRender()
         {
         }
              
-        private int index;
+        private int _index;
         internal int Index
         {
-            get { return index; }
-            set { index = value; }
+            get { return _index; }
+            set { _index = value; }
         }      
                
     }

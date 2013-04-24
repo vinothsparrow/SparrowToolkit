@@ -1,95 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 #else
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
 
 namespace Sparrow.Chart
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    
     public class SplinePart : LinePartBase
     {
-        internal Point startPoint;
-        internal Point firstControlPoint;
-        internal Point endControlPoint;
-        internal Point endPoint;
-        internal Path splinePath;
+        internal Point StartPoint;
+        internal Point FirstControlPoint;
+        internal Point EndControlPoint;
+        internal Point EndPoint;
+        internal Path SplinePath;
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="SplinePart"/> class.
         /// </summary>
         public SplinePart()
         {
         }
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="SplinePart"/> class.
         /// </summary>
-        /// <param name="startPoint"></param>
-        /// <param name="firstControlPoint"></param>
-        /// <param name="endControlPoint"></param>
-        /// <param name="endPoint"></param>
+        /// <param name="startPoint">The start point.</param>
+        /// <param name="firstControlPoint">The first control point.</param>
+        /// <param name="endControlPoint">The end control point.</param>
+        /// <param name="endPoint">The end point.</param>
         public SplinePart(Point startPoint,Point firstControlPoint,Point endControlPoint,Point endPoint)
         {
             this.X1 = startPoint.X;
             this.Y1 = startPoint.Y;
             this.X2 = endPoint.X;
             this.Y2 = endPoint.Y;
-            this.startPoint = startPoint;
-            this.firstControlPoint = firstControlPoint;
-            this.endControlPoint = endControlPoint;
-            this.endPoint = endPoint;
+            this.StartPoint = startPoint;
+            this.FirstControlPoint = firstControlPoint;
+            this.EndControlPoint = endControlPoint;
+            this.EndPoint = endPoint;
         }
+
         /// <summary>
-        /// 
+        /// Creates the part.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// UIElement
+        /// </returns>
         public override UIElement CreatePart()
         {
-            splinePath = new Path();
+            SplinePath = new Path();
             PathFigure figure = new PathFigure();
             BezierSegment bezierPoints = new BezierSegment();
             PathGeometry pathGeometry = new PathGeometry();
-            figure.StartPoint = startPoint;
-            bezierPoints.Point1 = firstControlPoint;
-            bezierPoints.Point2 = endControlPoint;
-            bezierPoints.Point3 = endPoint;
+            figure.StartPoint = StartPoint;
+            bezierPoints.Point1 = FirstControlPoint;
+            bezierPoints.Point2 = EndControlPoint;
+            bezierPoints.Point3 = EndPoint;
             figure.Segments.Add(bezierPoints);
             pathGeometry.Figures = new PathFigureCollection() { figure };
-            splinePath.Data = pathGeometry;
-            SetBindingForStrokeandStrokeThickness(splinePath);
-            return splinePath;
+            SplinePath.Data = pathGeometry;
+            SetBindingForStrokeandStrokeThickness(SplinePath);
+            return SplinePath;
         }
 
+        /// <summary>
+        /// Refreshes this instance.
+        /// </summary>
         public override void Refresh()
         {
-            if (splinePath != null)
+            if (SplinePath != null)
             {
                 PathFigure figure = new PathFigure();
                 BezierSegment bezierPoints = new BezierSegment();
                 PathGeometry pathGeometry = new PathGeometry();
-                figure.StartPoint = startPoint;
-                bezierPoints.Point1 = firstControlPoint;
-                bezierPoints.Point2 = endControlPoint;
-                bezierPoints.Point3 = endPoint;
+                figure.StartPoint = StartPoint;
+                bezierPoints.Point1 = FirstControlPoint;
+                bezierPoints.Point2 = EndControlPoint;
+                bezierPoints.Point3 = EndPoint;
                 figure.Segments.Add(bezierPoints);
                 pathGeometry.Figures = new PathFigureCollection() { figure };
-                splinePath.Data = pathGeometry;
+                SplinePath.Data = pathGeometry;
             }
         }
     }

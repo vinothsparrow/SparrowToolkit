@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 #if !WINRT
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 #else
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml.Shapes;
 #endif
@@ -24,22 +15,38 @@ namespace Sparrow.Chart
 {
     public class ScatterPart : FillPartBase
     {
-        internal Ellipse ellipse;
+        internal Ellipse Ellipse;
 
+        /// <summary>
+        /// Gets or sets the size.
+        /// </summary>
+        /// <value>
+        /// The size.
+        /// </value>
         public double Size
         {
             get { return (double)GetValue(SizeProperty); }
             set { SetValue(SizeProperty, value); }
         }
 
+        /// <summary>
+        /// The size property
+        /// </summary>
         public static readonly DependencyProperty SizeProperty =
             DependencyProperty.Register("Size", typeof(double), typeof(ScatterPart), new PropertyMetadata(0d));
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScatterPart"/> class.
+        /// </summary>
         public ScatterPart()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScatterPart"/> class.
+        /// </summary>
+        /// <param name="centerPoint">The center point.</param>
         public ScatterPart(Point centerPoint)
         {
             this.X1 = centerPoint.X;
@@ -48,31 +55,36 @@ namespace Sparrow.Chart
             this.Y2 = centerPoint.Y;
         }
 
+        /// <summary>
+        /// Create a visual for single Series Part
+        /// </summary>
+        /// <returns>
+        /// UIElement
+        /// </returns>
         public override UIElement CreatePart()
         {
-            ellipse = new Ellipse();            
-            Binding heightBinding = new Binding();
-            heightBinding.Path = new PropertyPath("Size");
-            heightBinding.Source = this;
-            ellipse.SetBinding(Ellipse.HeightProperty, heightBinding);
-            Binding widthBinding = new Binding();
-            widthBinding.Path = new PropertyPath("Size");
-            widthBinding.Source = this;
-            ellipse.SetBinding(Ellipse.WidthProperty, widthBinding);
+            Ellipse = new Ellipse();            
+            Binding heightBinding = new Binding {Path = new PropertyPath("Size"), Source = this};
+            Ellipse.SetBinding(Ellipse.HeightProperty, heightBinding);
+            Binding widthBinding = new Binding {Path = new PropertyPath("Size"), Source = this};
+            Ellipse.SetBinding(Ellipse.WidthProperty, widthBinding);
 
-            Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
-            Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
+            Canvas.SetLeft(Ellipse, X1 - (Ellipse.Width / 2));
+            Canvas.SetTop(Ellipse, Y1 - (Ellipse.Height / 2));
 
-            SetBindingForStrokeandStrokeThickness(ellipse);
-            return ellipse;
+            SetBindingForStrokeandStrokeThickness(Ellipse);
+            return Ellipse;
         }
 
+        /// <summary>
+        /// Refresh the Series Part
+        /// </summary>
         public override void Refresh()
         {
-            if (ellipse != null)
+            if (Ellipse != null)
             {
-                Canvas.SetLeft(ellipse, X1 - (ellipse.Width / 2));
-                Canvas.SetTop(ellipse, Y1 - (ellipse.Height / 2));
+                Canvas.SetLeft(Ellipse, X1 - (Ellipse.Width / 2));
+                Canvas.SetTop(Ellipse, Y1 - (Ellipse.Height / 2));
             }
         }
 
