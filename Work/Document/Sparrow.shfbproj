@@ -16,6 +16,7 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <OutputPath>Help\</OutputPath>
+	<SHFBROOT>$(SourcesDirectory)..\Source\Tools\shfb\</SHFBROOT>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, XamlUsage</SyntaxFilters>
