@@ -12,6 +12,8 @@
     <WixToolPath>$(SourcesDirectory)Tools\wix\</WixToolPath>
     <WixTargetsPath>$(WixToolPath)targets\Wix.targets</WixTargetsPath>
     <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
+	<OutputPath>bin\Release\</OutputPath>
+    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>

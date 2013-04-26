@@ -13,6 +13,11 @@
     <WixTargetsPath>$(WixToolPath)targets\Wix.targets</WixTargetsPath>
     <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
 	<WixExtDir>$(WixToolPath)</WixExtDir>
+	<OutputPath>..\..\..\..\Build\$(Version)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <WixVariables>Version=1.0.0.0;</WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
