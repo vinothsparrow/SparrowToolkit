@@ -10,24 +10,40 @@ namespace Sparrow.Chart.Test
     {
         [TestMethod]
         public void TestDefaultRenderingMode()
-        {
-            Window window = new Window();
-
+        {            
             Sparrow.Chart.SparrowChart Chart = new Sparrow.Chart.SparrowChart();
-            Chart.XAxis = new Sparrow.Chart.XAxis();
-            Chart.YAxis = new Sparrow.Chart.YAxis();
+            Chart.XAxis = new Sparrow.Chart.LinearXAxis();
+            Chart.YAxis = new Sparrow.Chart.LinearYAxis();
             Chart.Series.Add(new Sparrow.Chart.LineSeries());
-            window.Content = Chart;
-            window.Show();
-            Thread.Sleep(1000);
-            Assert.AreEqual(Sparrow.Chart.RenderingMode.DefaultWPFRendering, Chart.RenderingMode);
+            Assert.AreEqual(Sparrow.Chart.RenderingMode.Default, Chart.RenderingMode);
         }
+
+        [TestMethod]
+        public void TestDefaultAxisHeight()
+        {
+            Sparrow.Chart.SparrowChart Chart = new Sparrow.Chart.SparrowChart();
+            Chart.XAxis = new Sparrow.Chart.LinearXAxis();
+            Chart.YAxis = new Sparrow.Chart.LinearYAxis();
+            Chart.Series.Add(new Sparrow.Chart.LineSeries());   
+            Assert.AreEqual(30d, Chart.AxisHeight);
+        }
+
+        [TestMethod]
+        public void TestDefaultAxisWidth()
+        {
+            Sparrow.Chart.SparrowChart Chart = new Sparrow.Chart.SparrowChart();
+            Chart.XAxis = new Sparrow.Chart.LinearXAxis();
+            Chart.YAxis = new Sparrow.Chart.LinearYAxis();
+            Chart.Series.Add(new Sparrow.Chart.LineSeries());
+            Assert.AreEqual(30d, Chart.AxisWidth);
+        }
+
         [TestMethod]
         public void TestDefaultSmoothingMode()
         {
             Sparrow.Chart.SparrowChart Chart = new Sparrow.Chart.SparrowChart();
-            Chart.XAxis = new Sparrow.Chart.XAxis();
-            Chart.YAxis = new Sparrow.Chart.YAxis();
+            Chart.XAxis = new Sparrow.Chart.LinearXAxis();
+            Chart.YAxis = new Sparrow.Chart.LinearYAxis();
             Chart.Series.Add(new Sparrow.Chart.LineSeries());
             Assert.AreEqual(Sparrow.Chart.SmoothingMode.HighQuality, Chart.SmoothingMode);
         }

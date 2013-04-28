@@ -58,7 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sparrow.Chart\Sparrow.Chart.csproj">
+    <ProjectReference Include="..\Sparrow.Chart\WPF\Sparrow.Chart.Wpf.csproj">
       <Project>{561755e1-9492-4ec2-aca1-8cf76e6cac5a}</Project>
       <Name>Sparrow.Chart</Name>
     </ProjectReference>
