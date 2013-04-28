@@ -4,20 +4,16 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.7</ProductVersion>
-    <ProjectGuid>fd2ffaea-6877-4dfd-bdf2-bff13d85a878</ProjectGuid>
+    <ProjectGuid>7e936699-34d3-465d-94a6-eab42a34dfc9</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Sparrow Chart Toolkit Setup for Silverlight</OutputName>
-    <OutputType>Bundle</OutputType>
+    <OutputName>Sparrow.Chart.Setup_SL</OutputName>
+    <OutputType>Package</OutputType>
     <SourcesDirectory Condition=" $(SourcesDirectory) == ''">$(MSBuildProjectDirectory)\..\..\</SourcesDirectory>
     <WixToolPath>$(SourcesDirectory)Tools\wix\</WixToolPath>
     <WixTargetsPath>$(WixToolPath)targets\Wix.targets</WixTargetsPath>
     <WixTasksPath>$(WixToolPath)wixtasks.dll</WixTasksPath>
-    <WixExtDir>$(WixToolPath)</WixExtDir>
-    <OutputPath>..\..\..\..\Build\$(Version)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <WixVariables>Version=1.0.0.0;</WixVariables>
+    <OutputPath>bin\Release\</OutputPath>
+    <IntermediateOutputPath>obj\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -25,27 +21,11 @@
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>..\..\..\..\Build\$(Version)\</OutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <WixVariables>Version=1.0.0.0;</WixVariables>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Bundle.wxs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WixExtension Include="WixUtilExtension">
-      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
-      <Name>WixUtilExtension</Name>
-    </WixExtension>
-    <WixExtension Include="WixBalExtension">
-      <HintPath>$(WixExtDir)\WixBalExtension.dll</HintPath>
-      <Name>WixBalExtension</Name>
-    </WixExtension>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Stocks.ico" />
+    <Compile Include="Product_SL.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

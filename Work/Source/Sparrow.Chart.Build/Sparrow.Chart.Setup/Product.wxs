@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define Version="13.1.0.1"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-<Product Id="*" Name="Sparrow Chart Toolkit $(var.Version)" Language="1033" Version="$(var.Version)" Manufacturer="Vinoth Kumar J" UpgradeCode="E2E5F86F-8B25-4F1D-A77B-84CB15C2D770">
+<Product Id="*" Name="Sparrow Chart Toolkit for WPF $(var.Version)" Language="1033" Version="$(var.Version)" Manufacturer="Vinoth Kumar J" UpgradeCode="E2E5F86F-8B25-4F1D-A77B-84CB15C2D770">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" AdminImage="yes" InstallPrivileges="elevated" />    
     <Property Id='ARPHELPLINK'>http://sparrowtoolkit.codeplex.com/discussions</Property>
     <Property Id='ARPCOMMENTS' >Sparrow Chart Toolkit a Charting(Data visualization) control with lot of flexibility, performance, faster and more efficient</Property>
@@ -9,7 +9,7 @@
     <Property Id='ARPURLUPDATEINFO'>http://sparrowtoolkit.codeplex.com/releases</Property>
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate />
-		<Feature Id="ProductFeature" Title="Sparrow Chart Toolkit" Level="1">
+		<Feature Id="ProductFeature" Title="Sparrow Chart Toolkit for WPF" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="Framework_4_0"/>
       <ComponentRef Id="DemoBinaries_4_0"/>
@@ -37,11 +37,11 @@
             </Shortcut>
              <Shortcut Id="UninstallProduct"             
                           Name="Uninstall Sparrow Chart Toolkit"
-                          Description="Uninstalls the Sparrow Chart Toolkit"
+                          Description="Uninstalls the Sparrow Chart Toolkit for WPF"
                           Target="[System64Folder]msiexec.exe"
                           Arguments="/x [ProductCode]"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-        <RegistryValue Root="HKCU" Key="Software\Sparrow Chart Toolkit" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKCU" Key="Software\Sparrow Chart Toolkit for WPF" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         </Component>    
        </Directory>
       </Directory>

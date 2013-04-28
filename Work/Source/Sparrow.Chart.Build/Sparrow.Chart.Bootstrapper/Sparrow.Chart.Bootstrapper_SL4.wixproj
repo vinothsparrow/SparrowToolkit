@@ -6,7 +6,7 @@
     <ProductVersion>3.7</ProductVersion>
     <ProjectGuid>fd2ffaea-6877-4dfd-bdf2-bff13d85a878</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Sparrow Chart Toolkit Setup for Silverlight</OutputName>
+    <OutputName>Sparrow Chart Toolkit Setup</OutputName>
     <OutputType>Bundle</OutputType>
     <SourcesDirectory Condition=" $(SourcesDirectory) == ''">$(MSBuildProjectDirectory)\..\..\</SourcesDirectory>
     <WixToolPath>$(SourcesDirectory)Tools\wix\</WixToolPath>
@@ -32,9 +32,6 @@
     <WixVariables>Version=1.0.0.0;</WixVariables>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Bundle.wxs" />
-  </ItemGroup>
-  <ItemGroup>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
       <Name>WixUtilExtension</Name>
@@ -46,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Stocks.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bundle_SL.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
