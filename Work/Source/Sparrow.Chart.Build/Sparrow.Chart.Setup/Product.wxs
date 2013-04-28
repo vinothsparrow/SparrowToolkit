@@ -94,7 +94,7 @@
                        <Icon Id="Icon.exe" SourceFile="..\..\..\DemoBinaries\Sparrow.Chart.Demos.exe" />
                      </Shortcut>
                    </File>
-                     <File Id="SYSTEM.WINDOWS.INTERACTIVITY.DEMO" Name="System.Windows.Interactivity.dll" Source="..\..\..\DemoBinaries\System.Windows.Interactivity.dll" /> 
+                     <File Id="SYSTEM.WINDOWS.INTERACTIVITY.DEMO" Name="System.Windows.Interactivity.dll" Source="..\..\Sparrow.Resources\bin\Release\System.Windows.Interactivity.dll" /> 
                  </Component>                                
           </Directory>
            </Directory>
