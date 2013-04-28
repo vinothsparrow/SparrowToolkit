@@ -14,5 +14,5 @@ copy  Source\Sparrow.Chart\WPF\bin\Release\3.5\*.xml ..\Build\3.5
 copy  Source\Sparrow.Chart\WPF\bin\Release\3.5\*.dll ..\Build\3.5
 copy Source\Sparrow.Chart\Silverlight\Bin\Release\*.dll ..\Build\Silverlight5
 copy Source\Sparrow.Chart\Silverlight\Bin\Release\*.xml ..\Build\Silverlight5
-copy Source\Sparrow.Chart\Silverlight\Bin\Release\4.0\*.dll ..\Build\Silverlight4
-copy Source\Sparrow.Chart\Silverlight\Bin\Release\4.0\*.xml ..\Build\Silverlight4
+copy Source\Sparrow.Chart\Silverlight\Bin\Release\SL4\*.dll ..\Build\Silverlight4
+copy Source\Sparrow.Chart\Silverlight\Bin\Release\SL4\*.xml ..\Build\Silverlight4
