@@ -6,7 +6,7 @@
     <ProductVersion>3.7</ProductVersion>
     <ProjectGuid>fd2ffaea-6877-4dfd-bdf2-bff13d85a878</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>Sparrow Chart Toolkit Setup for Silverlight</OutputName>
+    <OutputName>Sparrow Chart Toolkit Setup for WPF</OutputName>
     <OutputType>Bundle</OutputType>
     <SourcesDirectory Condition=" $(SourcesDirectory) == ''">$(MSBuildProjectDirectory)\..\..\</SourcesDirectory>
     <WixToolPath>$(SourcesDirectory)Tools\wix\</WixToolPath>
