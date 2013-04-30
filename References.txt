@@ -10,3 +10,5 @@ http://stackoverflow.com/questions/361681/algorithm-for-nice-grid-line-intervals
 http://www.codeproject.com/Articles/113991/Using-Direct2D-with-WPF
 http://archive.msdn.microsoft.com/WindowsAPICodePack
 http://mahapps.com/MahApps.Metro/
+http://oxyplot.codeplex.com
+
