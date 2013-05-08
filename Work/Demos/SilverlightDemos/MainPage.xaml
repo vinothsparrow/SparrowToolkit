@@ -4,29 +4,30 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sparrow="http://sparrowtoolkit.codeplex.com/silverlight"
-    xmlns:local="clr-namespace:SilverlightDemos"
+    xmlns:local="clr-namespace:SilverlightDemos" xmlns:demos="clr-namespace:Sparrow.Chart.Demos"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
-
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Grid >
         <Grid.DataContext>
-            <local:ViewModel/>
+            <demos:DemoViewModel></demos:DemoViewModel>
         </Grid.DataContext>
-        <sparrow:SparrowChart>
-            <sparrow:SparrowChart.Legend>
-                <sparrow:Legend Header="Legend"/>
-            </sparrow:SparrowChart.Legend>
-            <sparrow:SparrowChart.XAxis>
-                <sparrow:LinearXAxis MinValue="0" MaxValue="6" Interval="1" Header="Data" ShowCrossLines="True"/>
-            </sparrow:SparrowChart.XAxis>
-            <sparrow:SparrowChart.YAxis>
-                <sparrow:LinearYAxis Interval="1" MinValue="0" ShowCrossLines="True" Header="Value"/>
-            </sparrow:SparrowChart.YAxis>
+        <Grid.Resources>
+            <demos:SampleToContentConverter x:Key="sampleToContentConverter"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="demos" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemContainerStyle="{StaticResource ItemContainerStyle}" VerticalContentAlignment="Center"  
+                          BorderThickness="0"                                                   
+                          ItemsSource="{Binding Samples}" SelectedItem="{Binding Samples[0]}"
+                          Margin="5,10" >
 
-            <sparrow:ColumnSeries Label="Series 1" PointsSource="{Binding Collection}" XPath="X" YPath="Y"/>
-            <sparrow:ColumnSeries Label="Series 2" PointsSource="{Binding Collection}" XPath="X" YPath="Y"/>
-            <sparrow:LineSeries Label="Series 3" PointsSource="{Binding Collection}" XPath="X" Stroke="Red" StrokeThickness="3" YPath="Y"/>
-
-        </sparrow:SparrowChart>
-    </Grid>
+        </ListBox>
+        
+        <Grid Grid.Column="1">
+            <ScrollViewer x:Name="contentArea" Content="{Binding ElementName=demos,Path=SelectedItem,Converter={StaticResource sampleToContentConverter}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+            </ScrollViewer>
+        </Grid>
+    </Grid> 
 </UserControl>

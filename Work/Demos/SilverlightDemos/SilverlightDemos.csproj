@@ -74,18 +74,39 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\SampleToContentConverter.cs" />
+    <Compile Include="Demos\LiveDatasDemo\ViewModel\ViewModel.cs" />
+    <Compile Include="Demos\LiveDatasDemo\View\LiveDatasDemo.xaml.cs">
+      <DependentUpon>LiveDatasDemo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Demos\PerformanceDemo\Model\PerformanceModel.cs" />
+    <Compile Include="Demos\PerformanceDemo\ViewModel\ViewModel.cs" />
+    <Compile Include="Demos\PerformanceDemo\View\PerformanceDemo.xaml.cs">
+      <DependentUpon>PerformanceDemo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\CategoryModel.cs" />
+    <Compile Include="Model\SampleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="Utils\Datas.cs" />
+    <Compile Include="Utils\ViewModelBase.cs" />
+    <Compile Include="ViewModel\DemoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Demos\LiveDatasDemo\View\LiveDatasDemo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Demos\PerformanceDemo\View\PerformanceDemo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -99,6 +120,13 @@
       <Project>{ddb73cf4-9c97-47c6-816c-11518a89ca56}</Project>
       <Name>Sparrow.Chart.Silverlight_SL4</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sparrow.png" />
+    <Content Include="Resources\Stocks.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Demos\LiveDatasDemo\Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
