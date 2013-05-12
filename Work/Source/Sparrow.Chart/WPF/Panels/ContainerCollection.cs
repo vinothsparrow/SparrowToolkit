@@ -568,6 +568,9 @@ namespace Sparrow.Chart
             AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.XAxisProperty, xAxisBinding);
             AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.YAxisProperty, yAxisBinding);
 
+            if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.SeriesFirst)
+                this.Children.Add(AxisLinesconatiner); 
+            
             foreach (var seriesBase in Series)
             {
                 SeriesContainer container = seriesBase.CreateContainer();
@@ -609,10 +612,10 @@ namespace Sparrow.Chart
                                 
                 this.Containers.Add(container);
             }
-                    
+          
             this.Children.Add(bitmapImage);
-            this.Children.Add(AxisLinesconatiner);   
-            
+            if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.AxisFirst)
+                this.Children.Add(AxisLinesconatiner); 
             _isIntialized = true;
         }
 #if WPF

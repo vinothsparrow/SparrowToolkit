@@ -38,9 +38,18 @@ namespace Sparrow.Chart
         /// </returns>
         public override UIElement CreatePart()
         {
-            LinePart = new Polyline {Points = this.LinePoints};
-            SetBindingForStrokeandStrokeThickness(LinePart);
-            return LinePart;
+            if (this.LinePoints.Count > 0)
+            {
+                LinePart = new Polyline();
+                foreach (var linePoint in LinePoints)
+                {
+                    LinePart.Points.Add(linePoint);
+                }
+                SetBindingForStrokeandStrokeThickness(LinePart);
+                return LinePart;
+            }
+            else
+                return null;
         }
 
         /// <summary>

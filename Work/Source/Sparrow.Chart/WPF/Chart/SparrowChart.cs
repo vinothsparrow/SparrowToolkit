@@ -772,7 +772,24 @@ namespace Sparrow.Chart
             BrushTheme();
         }
 
-        
+
+        /// <summary>
+        /// The overlay mode property
+        /// </summary>
+        public static readonly DependencyProperty OverlayModeProperty =
+            DependencyProperty.Register("OverlayMode", typeof (OverlayMode), typeof (SparrowChart), new PropertyMetadata(OverlayMode.SeriesFirst));
+
+        /// <summary>
+        /// Gets or sets the overlay mode.
+        /// </summary>
+        /// <value>
+        /// The overlay mode.
+        /// </value>
+        public OverlayMode OverlayMode
+        {
+            get { return (OverlayMode) GetValue(OverlayModeProperty); }
+            set { SetValue(OverlayModeProperty, value); }
+        }
 
         private List<Brush> _brushes;
 

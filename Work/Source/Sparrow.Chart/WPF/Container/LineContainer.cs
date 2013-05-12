@@ -1,4 +1,5 @@
 ﻿#if !WINRT
+using System.Windows;
 using System.Windows.Media;
 #else
 using Windows.UI.Xaml.Media;
@@ -170,7 +171,9 @@ namespace Sparrow.Chart
                 {
                     for (int i = 0; i < partsCollection.Count; i++)
                     {
-                        PartsCanvas.Children.Add(partsCollection[i].CreatePart());
+                        UIElement element = partsCollection[i].CreatePart();
+                        if (element != null)
+                        PartsCanvas.Children.Add(element);
                     }
                 }
             }
