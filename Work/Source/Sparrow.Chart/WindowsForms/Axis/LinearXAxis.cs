@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Sparrow.Chart
 {
-    public class LinearYAxis : YAxis
+    public class LinearXAxis : XAxis
     {
         private double? interval;
         public double? Interval
@@ -50,6 +50,15 @@ namespace Sparrow.Chart
                 return Convert.ToDouble(minValue.ToString());
             else
                 return 0;
+        }
+
+        protected override void CalculateAxisRange()
+        {
+            this.DesiredMinValue = ((MinValue != null)) ? ActualMinValue : this.CalculateMinimumFromSeries();
+            this.DesiredMaxValue = ((MaxValue != null)) ? ActualMaxValue : this.CalculateMaximumFromSeries();
+            this.DesiredInterval = ((Interval != null)
+                                        ? ActualInterval
+                                        : ((DesiredMaxValue - DesiredMinValue)/IntervalCount));
         }
     }
 }

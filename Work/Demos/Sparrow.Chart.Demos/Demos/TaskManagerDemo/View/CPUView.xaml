@@ -36,7 +36,7 @@
                 <chart:SparrowChart.YAxis>
                     <chart:LinearYAxis MinValue="0" CrossLineStyle="{StaticResource crossLineStyle}" Interval="10" MaxValue="100" Visibility="Collapsed"/>
                 </chart:SparrowChart.YAxis>
-                <chart:AreaSeries XPath="Time" Stroke="#FF117DBB" StrokeThickness="1" YPath="Percentage" Fill="Green" PointsSource="{Binding CPU}"/>
+                <chart:AreaSeries XPath="Time" Stroke="#FF117DBB" StrokeThickness="1" YPath="Percentage" Fill="#11117DBB" PointsSource="{Binding CPU}"/>
             </chart:SparrowChart>
             <Grid Grid.Row="0">
                 <TextBlock Text="% Utilization" FontFamily="Segoe UI Light" Foreground="#FF707070" VerticalAlignment="Bottom" HorizontalAlignment="Left" />

@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Sparrow.Chart
 {
-    public class TimeSpanXAxis : XAxis
+    public class DateTimeXAxis : XAxis
     {
-        public TimeSpan Interval
+        public TimeSpan? Interval
         {
             get;
             set;
         }
 
-        public TimeSpan MaxValue
+        public DateTime? MaxValue
         {
             get;
             set;
         }
 
-        public TimeSpan MinValue
+        public DateTime? MinValue
         {
             get;
             set;

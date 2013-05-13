@@ -7,19 +7,19 @@ namespace Sparrow.Chart
 {
     public class DateTimeYAxis : YAxis
     {
-        public TimeSpan Interval
+        public TimeSpan? Interval
         {
             get;
             set;
         }
 
-        public DateTime MaxValue
+        public DateTime? MaxValue
         {
             get;
             set;
         }
 
-        public DateTime MinValue
+        public DateTime? MinValue
         {
             get;
             set;

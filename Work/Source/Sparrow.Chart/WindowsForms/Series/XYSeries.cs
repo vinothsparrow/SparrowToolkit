@@ -7,6 +7,10 @@ namespace Sparrow.Chart
 {
     public abstract class XYSeries : Series
     {
+        public XYSeries()
+        {
+            this.Points=new PointCollection();            
+        }
 
         public string YPath
         {
@@ -14,10 +18,24 @@ namespace Sparrow.Chart
             set;
         }
 
+        private PointCollection points;
         public PointCollection Points
         {
-            get;
-            set;
+            get { return points; }
+            set
+            {
+                if(points!=null)
+                    points.CollectionChanged -= OnPointsCollectionChanged;
+                points = value;
+                if (points != null)
+                    points.CollectionChanged += OnPointsCollectionChanged;
+            }
+        }
+
+        void OnPointsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (this.Chart != null)
+                this.Chart.Invalidate();
         }
 
 
@@ -57,7 +75,7 @@ namespace Sparrow.Chart
                     double maximum = this.Points[0].XValue;
                     foreach (var point in Points)
                     {
-                        maximum = Math.Max(maximum, point.XValue);
+                        maximum = Math.Min(maximum, point.XValue);
                     }
                     return maximum;
                 }
@@ -66,7 +84,7 @@ namespace Sparrow.Chart
                     double maximum = this.Points[0].YValue;
                     foreach (var point in Points)
                     {
-                        maximum = Math.Max(maximum, point.YValue);
+                        maximum = Math.Min(maximum, point.YValue);
                     }
                     return maximum;
                 }

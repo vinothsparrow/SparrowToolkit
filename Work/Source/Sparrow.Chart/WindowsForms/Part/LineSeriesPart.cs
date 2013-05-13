@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 
@@ -58,8 +59,10 @@ namespace Sparrow.Chart
         }
 
         public override void DrawSeriesPart()
-        {            
-            this.RootGraphics.DrawLine(this.Pen, this.X1, this.Y1, this.X2, this.Y2);
+        {                        
+            this.RootGraphics.DrawLine(this.Pen, this.X1, this.Y1, this.X2, this.Y2);            
+            //this.RootGraphics.DrawEllipse(this.Pen, new RectangleF(new PointF(this.X1 - 5, this.Y1 - 5), new SizeF(10f, 10f)));
+            //this.RootGraphics.FillEllipse(this.Pen.Brush, new RectangleF(new PointF(this.X1 - 5, this.Y1 - 5), new SizeF(10f, 10f)));
         }
     }
 }

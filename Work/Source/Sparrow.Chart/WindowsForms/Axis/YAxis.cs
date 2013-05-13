@@ -16,7 +16,7 @@ namespace Sparrow.Chart
         public override float PointFromValue(double value)
         {
             float point = (float)(this.PositionedRect.Height - ((value - this.DesiredMinValue) * this.PositionedRect.Height / (this.DesiredMaxValue - this.DesiredMinValue)));
-            point -= PositionedRect.Top;
+            point += PositionedRect.Top;
             return point;
         }
     }

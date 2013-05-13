@@ -42,46 +42,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Axes.cs" />
-    <Compile Include="Axis.cs" />
-    <Compile Include="AxisPosition.cs" />
-    <Compile Include="CategoryXAxis.cs" />
-    <Compile Include="CategoryYAxis.cs" />
-    <Compile Include="ChartPoint.cs" />
-    <Compile Include="DateTimeAxis.cs" />
-    <Compile Include="DateTimePoint.cs" />
-    <Compile Include="DateTimeYAxis.cs" />
-    <Compile Include="DoublePoint.cs" />
-    <Compile Include="FastReflection.cs" />
-    <Compile Include="Legend.cs" />
-    <Compile Include="LinearXAxis.cs" />
-    <Compile Include="LinearYAxis.cs" />
-    <Compile Include="LineSeries.cs" />
-    <Compile Include="LineSeriesPart.cs" />
-    <Compile Include="LogarithmicXAxis.cs" />
-    <Compile Include="LogarithmicYAxis.cs" />
-    <Compile Include="PartCollection.cs" />
-    <Compile Include="Point.cs" />
-    <Compile Include="PointCollection.cs" />
+    <Compile Include="Collections\Axes.cs" />
+    <Compile Include="Axis\Axis.cs" />
+    <Compile Include="Enum\AxisPosition.cs" />
+    <Compile Include="Axis\CategoryXAxis.cs" />
+    <Compile Include="Axis\CategoryYAxis.cs" />
+    <Compile Include="Point\ChartPoint.cs" />
+    <Compile Include="Axis\DateTimeXAxis.cs" />
+    <Compile Include="Point\DateTimePoint.cs" />
+    <Compile Include="Axis\DateTimeYAxis.cs" />
+    <Compile Include="Point\DoublePoint.cs" />
+    <Compile Include="Misc\FastReflection.cs" />
+    <Compile Include="Legend\Legend.cs" />
+    <Compile Include="Axis\LinearXAxis.cs" />
+    <Compile Include="Axis\LinearYAxis.cs" />
+    <Compile Include="Series\LineSeries.cs" />
+    <Compile Include="Part\LineSeriesPart.cs" />
+    <Compile Include="Axis\LogarithmicXAxis.cs" />
+    <Compile Include="Axis\LogarithmicYAxis.cs" />
+    <Compile Include="Collections\PartCollection.cs" />
+    <Compile Include="Point\Point.cs" />
+    <Compile Include="Collections\PointCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RectF.cs" />
-    <Compile Include="Series.cs" />
-    <Compile Include="SeriesCollection.cs" />
-    <Compile Include="SeriesPart.cs" />
-    <Compile Include="SparrowChart.cs">
+    <Compile Include="Misc\RectF.cs" />
+    <Compile Include="Series\Series.cs" />
+    <Compile Include="Collections\SeriesCollection.cs" />
+    <Compile Include="Part\SeriesPart.cs" />
+    <Compile Include="Chart\SparrowChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Theme.cs" />
-    <Compile Include="TimeSpanXAxis.cs" />
-    <Compile Include="TimeSpanYAxis.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="XAxis.cs" />
-    <Compile Include="XYSeries.cs" />
-    <Compile Include="YAxis.cs" />
+    <Compile Include="Misc\TextStyle.cs" />
+    <Compile Include="Misc\Theme.cs" />
+    <Compile Include="Axis\TimeSpanXAxis.cs" />
+    <Compile Include="Axis\TimeSpanYAxis.cs" />
+    <Compile Include="Misc\Utility.cs" />
+    <Compile Include="Axis\XAxis.cs" />
+    <Compile Include="Series\XYSeries.cs" />
+    <Compile Include="Axis\YAxis.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SparrowChart.cd" />
+    <None Include="Chart\SparrowChart.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

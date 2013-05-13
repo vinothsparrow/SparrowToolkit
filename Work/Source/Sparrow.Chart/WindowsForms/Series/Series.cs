@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Sparrow.Chart
     {
         public Series()
         {            
-            this.StrokeThickness = 1.0f;
+            this.StrokeThickness = 2.0f;
         }
         public string XPath
         {
@@ -31,6 +32,12 @@ namespace Sparrow.Chart
             set;
         }
 
+        public Pen StrokePen
+        {
+            get;
+            set;
+        }
+
         internal Graphics RootGraphics
         {
             get;
@@ -43,16 +50,34 @@ namespace Sparrow.Chart
             set; 
         }
 
+        private XAxis xAxis;
+        [DefaultValue(false)]
         public XAxis XAxis
         {
-            get; 
-            set;
+            get { return xAxis; }
+            set
+            {
+                if (this.Chart!=null && xAxis!=null && Chart.Axes.Contains(xAxis))
+                    this.Chart.Axes.Remove(xAxis);
+                xAxis = value;
+                if (this.Chart!=null && xAxis!=null && !this.Chart.Axes.Contains(xAxis))
+                    this.Chart.Axes.Add(xAxis);
+            }
         }
 
+        private YAxis yAxis;
+        [DefaultValue(false)]
         public YAxis YAxis
         {
-            get;
-            set;
+            get { return yAxis; }
+            set
+            {
+                if (this.Chart != null && yAxis != null && this.Chart.Axes.Contains(yAxis))
+                    this.Chart.Axes.Remove(yAxis);
+                yAxis = value;
+                if (this.Chart!=null && yAxis!=null && !this.Chart.Axes.Contains(yAxis))
+                    this.Chart.Axes.Add(yAxis);
+            }
         }
 
         public PartCollection Parts
