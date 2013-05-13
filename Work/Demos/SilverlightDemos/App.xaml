@@ -35,7 +35,7 @@
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                               Opacity="0.2"
                               Margin="{TemplateBinding Padding}" />
-                            <Border BorderBrush="Green" BorderThickness="1" x:Name="ImageBorder" Visibility="Collapsed"/>
+                            <Border BorderBrush="Green"  BorderThickness="1" x:Name="ImageBorder" Visibility="Collapsed"/>
                         </Grid>
 
                     </ControlTemplate>
@@ -46,9 +46,13 @@
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Border Background="DarkSalmon" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
-                            <TextBlock FontSize="14" Text="{Binding SampleName}"></TextBlock>
-                        </Border>
+                        <Grid Width="180" Height="150">
+                            <Image Source="{Binding Image}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <!--<Border >-->
+                                <TextBlock FontSize="14" Foreground="Green" Text="{Binding SampleName}"></TextBlock>
+                            <!--</Border>-->
+                        </Grid>
+                        
                     </DataTemplate>
                 </Setter.Value>         
                 

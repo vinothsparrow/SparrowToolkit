@@ -123,6 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sparrow.png" />
+    <Content Include="Demos.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\showcase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Stocks.ico" />
   </ItemGroup>
   <ItemGroup>

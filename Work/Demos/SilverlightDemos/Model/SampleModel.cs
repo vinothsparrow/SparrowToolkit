@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Sparrow.Chart.Demos
 {
@@ -15,6 +17,13 @@ namespace Sparrow.Chart.Demos
         {
             get { return sampleName; }
             set { sampleName = value; RaisePropertyChanged("SampleName"); }
+        }
+
+        private ImageSource image;
+        public ImageSource Image
+        {
+            get { return image; }
+            set { image = value; RaisePropertyChanged("Image"); }
         }
 
         private bool isHeader;
@@ -70,6 +79,15 @@ namespace Sparrow.Chart.Demos
             this.SampleName = sampleName;
             this.SampleLocation = sampleLocation;
             this.ViewClass = viewClass;
+        }
+        public SampleModel(string sampleName, string sampleLocation, string viewClass,string imagePath)
+        {
+            this.SampleName = sampleName;
+            this.SampleLocation = sampleLocation;
+            this.ViewClass = viewClass;
+            BitmapImage image = new BitmapImage();
+            image.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
+            this.Image = image;
         }
         /// <summary>
         /// Raises the property changed event

@@ -29,6 +29,17 @@
             <TextBlock Text="{Binding}" FontSize="12" Foreground="White" FontWeight="Light">
             </TextBlock>
         </DataTemplate>
+        <DataTemplate x:Key="xaxisHeaderTemplate">
+            <TextBlock Text="{Binding}" FontSize="14" Foreground="White" FontWeight="Light">
+            </TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="yAxisHeaderTemplate">
+            <TextBlock Text="{Binding}" Foreground="White" FontSize="12" FontWeight="Bold">
+                <TextBlock.RenderTransform>
+                    <RotateTransform Angle="270"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid >
         <Grid.DataContext>
@@ -45,10 +56,10 @@
                 <chart:Legend Padding="10" Header="Live Fourier Series"/>
             </chart:SparrowChart.Legend>
             <chart:SparrowChart.XAxis>
-                <chart:LinearXAxis LabelTemplate="{StaticResource axisLabelTemplate}" CrossLineStyle="{StaticResource crossLineStyle}" MinorLineStyle="{StaticResource minorcrossLineStyle}" MajorLineStyle="{StaticResource crossLineStyle}" AxisLineStyle="{StaticResource axisLineStyle}" MinValue="2" MinorTicksCount="3" MaxValue="5"  ShowCrossLines="True" Header="Time" StringFormat="0.0"/>
+                <chart:LinearXAxis HeaderTemplate="{StaticResource xaxisHeaderTemplate}" LabelTemplate="{StaticResource axisLabelTemplate}" CrossLineStyle="{StaticResource crossLineStyle}" MinorLineStyle="{StaticResource minorcrossLineStyle}" MajorLineStyle="{StaticResource crossLineStyle}" AxisLineStyle="{StaticResource axisLineStyle}" MinValue="2" MinorTicksCount="3" MaxValue="5"  ShowCrossLines="True" Header="Time" StringFormat="0.0"/>
             </chart:SparrowChart.XAxis>
             <chart:SparrowChart.YAxis>
-                <chart:LinearYAxis LabelTemplate="{StaticResource axisLabelTemplate}" CrossLineStyle="{StaticResource crossLineStyle}"  MinorLineStyle="{StaticResource minorcrossLineStyle}" MajorLineStyle="{StaticResource crossLineStyle}" AxisLineStyle="{StaticResource axisLineStyle}" MinValue="-15" MinorTicksCount="3" MaxValue="15" ShowCrossLines="True" StringFormat="0.0" Header="Voltage(mV)" >
+                <chart:LinearYAxis HeaderTemplate="{StaticResource yAxisHeaderTemplate}" LabelTemplate="{StaticResource axisLabelTemplate}" CrossLineStyle="{StaticResource crossLineStyle}"  MinorLineStyle="{StaticResource minorcrossLineStyle}" MajorLineStyle="{StaticResource crossLineStyle}" AxisLineStyle="{StaticResource axisLineStyle}" MinValue="-15" MinorTicksCount="3" MaxValue="15" ShowCrossLines="True" StringFormat="0.0" Header="Voltage(mV)" >
                 </chart:LinearYAxis>
             </chart:SparrowChart.YAxis>
             <chart:LineSeries Label="Amplitude = 2" PointsSource="{Binding Collection}" Stroke="#FFA3FFC9" XPath="Value" YPath="Value1" StrokeThickness="2" UseSinglePart="True">

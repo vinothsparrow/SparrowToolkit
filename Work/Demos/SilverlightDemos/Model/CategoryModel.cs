@@ -37,6 +37,20 @@ namespace Sparrow.Chart.Demos
             set { selectedModel = value; RaisePropertyChanged("SelectedModel"); }
         }
 
+        public CategoryModel(string categoryName)
+        {
+            this.CategoryName = categoryName;
+            this.SelectedModel = new SampleModel("", "", "");
+            this.Samples = new List<SampleModel>();
+        }
+
+        public CategoryModel()
+        {
+
+        }
+
+
+
         public CategoryModel(string categoryName, List<SampleModel> samples)
         {
             this.CategoryName = categoryName;
