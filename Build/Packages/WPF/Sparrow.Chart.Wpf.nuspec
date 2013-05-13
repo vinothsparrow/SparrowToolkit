@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>Sparrow.Chart.Wpf</id>
     <version>$version$</version>
     <authors>vinothkumarj</authors>
     <owners>vinothkumarj</owners>
