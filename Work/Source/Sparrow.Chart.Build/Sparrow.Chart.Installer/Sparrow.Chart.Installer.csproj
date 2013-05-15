@@ -59,7 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Tools\wix\BootstrapperCore.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.1.24.16313, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">     
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.1.24.16313, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
     </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,6 +153,14 @@
   <ItemGroup>
     <Content Include="Binaries\GalaSoft.MvvmLight.WPF4.dll" />
     <Content Include="Binaries\GalaSoft.MvvmLight.WPF4.xml" />
+    <Resource Include="Resources\license.png" />
+    <Resource Include="Resources\uninstall.png" />
+    <Resource Include="Resources\back.png" />
+    <Resource Include="Resources\folder.png" />
+    <Resource Include="Resources\installaprogres.png" />
+    <Resource Include="Resources\installfinished.png" />
+    <Resource Include="Resources\uninstallaprogres.png" />
+    <Resource Include="Resources\uninstallfinished.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

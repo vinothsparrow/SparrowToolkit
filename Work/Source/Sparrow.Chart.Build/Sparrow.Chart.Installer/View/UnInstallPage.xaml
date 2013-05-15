@@ -8,20 +8,20 @@
     <Grid>
         <FlowDocumentScrollViewer IsToolBarVisible="False" HorizontalAlignment="Center" VerticalAlignment="Top">
             <FlowDocument>
-                <Paragraph TextAlignment="Center">
+                <!--<Paragraph TextAlignment="Center">
                     <Bold>
                         UnInstall
                     </Bold>
-                </Paragraph>
+                </Paragraph>-->
                 <Paragraph TextAlignment="Left">
-                    Are you sure Want to Uninstall Sparrow Chart Toolkit
+                    Are you sure Want to Uninstall Sparrow Chart Toolkit?
                 </Paragraph>
-                <Paragraph TextAlignment="Left" FontSize="12">
+                <Paragraph TextAlignment="Left" FontSize="10">
                     For more information about Sparrow Chart Toolkit,                     
                     Please visit
                 </Paragraph>
-                <Paragraph TextAlignment="Left"  FontSize="12">
-                    <Hyperlink>
+                <Paragraph TextAlignment="Left"  FontSize="10">
+                    <Hyperlink NavigateUri="http://sparrowtoolkit.codeplex.com/">
                         <Bold>http://sparrowtoolkit.codeplex.com/</Bold>
                     </Hyperlink>
                 </Paragraph>

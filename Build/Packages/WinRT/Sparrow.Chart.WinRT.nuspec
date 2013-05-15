@@ -7,8 +7,7 @@
     <owners>vinothkumarj</owners>
     <licenseUrl>https://sparrowtoolkit.codeplex.com/license</licenseUrl>
     <projectUrl>https://sparrowtoolkit.codeplex.com/</projectUrl>
-	<iconUrl>https://download-codeplex.sec.s-msft.com/Download?
-	ProjectName=sparrowtoolkit%26DownloadId=671507%26Build=20489</iconUrl>
+	<iconUrl>http://img838.imageshack.us/img838/3679/logobhm.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Sparrow Chart Toolkit a Charting(Data Visualization) control with lot of flexibility, performance, faster and more efficient</description>
     <releaseNotes>Sparrow Chart Toolkit for WinRT Package Added</releaseNotes>

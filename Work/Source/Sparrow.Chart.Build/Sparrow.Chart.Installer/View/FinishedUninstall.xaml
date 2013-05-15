@@ -11,20 +11,20 @@
                 <Paragraph TextAlignment="Center">
                     <Image Source="../Resources/sparrow.png" Height="40" Width="40"/>
                 </Paragraph>
-                <Paragraph TextAlignment="Center">
+                <!--<Paragraph TextAlignment="Center">
                     <Bold>
                         Uninstall Successful
                     </Bold>
-                </Paragraph>
+                </Paragraph>-->
                 <Paragraph TextAlignment="Left">
-                    You have successfully uninstalled the Sparrow Chart Toolkit from your computer
+                    You have successfully uninstalled the Sparrow Chart Toolkit from your computer.
                 </Paragraph>
-                <Paragraph TextAlignment="Left" FontSize="12">
+                <Paragraph TextAlignment="Left" FontSize="10">
                     For more information about Sparrow Chart Toolkit,                     
                     Please visit
                 </Paragraph>
-                <Paragraph TextAlignment="Left"  FontSize="12">
-                    <Hyperlink>
+                <Paragraph TextAlignment="Left"  FontSize="10">
+                    <Hyperlink NavigateUri="http://sparrowtoolkit.codeplex.com/">
                         <Bold>http://sparrowtoolkit.codeplex.com/</Bold>
                     </Hyperlink>
                 </Paragraph>

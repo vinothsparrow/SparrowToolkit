@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Windows.Forms;
+using System.Text;
 
 namespace Sparrow.Chart.Installer
 {
@@ -152,8 +153,67 @@ namespace Sparrow.Chart.Installer
 
         void OnExecuteMessage(object sender, ExecuteMsiMessageEventArgs e)
         {
-            this.Status ="Status :" + e.Message;
+            string eMessage = string.Empty;
+            switch (e.MessageType)
+            {
+                case InstallMessage.ActionStart:
+                    ActionStartMessage message = (ActionStartMessage)ParseMessage(e.Message, e.MessageType);
+                    ActionStartEventArgs eventArgs = new ActionStartEventArgs();
+                    eventArgs.DateRun = message.DateRun;
+                    eventArgs.Message = message.Message;
+                    eventArgs.Name = message.Name;
+                    eMessage = message.Name + ":" + message.Message;
+                    break;
+                default:
+                    eMessage=e.Message;
+                    break;
+            }
+            this.Status = eMessage;
         }
+
+        private object ParseMessage(string Message, InstallMessage MessageType)
+        {
+            switch (MessageType)
+            {
+                case InstallMessage.ActionStart:
+                    ActionStartMessage message = new ActionStartMessage();
+                    String[] items = Message.Trim().Split(new char[] { ' ' });
+
+                    string dateRun = items[1];
+                    string actionName = items[2];
+
+                    if (dateRun.EndsWith(":"))
+                    {
+                        dateRun = dateRun.Trim().TrimEnd(new char[] { ':' });
+                    }
+
+                    if (actionName.EndsWith("."))
+                    {
+                        actionName = actionName.Trim().TrimEnd(new char[] { '.' });
+                    }
+
+                    StringBuilder messageInfo = new StringBuilder();
+                    if (items.Length > 3)
+                    {
+
+                        for (int i = 3; i < items.Length; i++)
+                        {
+                            messageInfo.Append(items[i] + " ");
+                        }
+                    }
+
+                    DateTime.TryParse(dateRun, out message.DateRun);
+                    message.Name = actionName.Trim();
+                    message.Message = messageInfo.ToString().Trim();
+
+                    return message;
+
+                    break;
+            }
+
+            return null;
+        }
+  
 
         private void BrowseExecute()
         {
@@ -356,4 +416,45 @@ namespace Sparrow.Chart.Installer
         
         #endregion //RelayCommands
     }
+
+   
+
+  public class ActionStartMessage 
+  { 
+    public string Name; 
+    public DateTime DateRun; 
+    public string Message; 
+  } 
+
+  public class ActionStartEventArgs : EventArgs 
+  { 
+    private string fName; 
+    private DateTime fDateRun; 
+    private string fMessage; 
+    private Microsoft.Deployment.WindowsInstaller.Session fSession; 
+
+    public string Name 
+    { 
+      get { return fName; } 
+      set { fName = value; } 
+    } 
+
+    public DateTime DateRun 
+    { 
+      get { return fDateRun; } 
+      set { fDateRun = value; } 
+    } 
+
+    public string Message 
+    { 
+      get { return fMessage; } 
+      set { fMessage = value; } 
+    } 
+
+    public Microsoft.Deployment.WindowsInstaller.Session Session 
+    { 
+      get { return fSession; } 
+      set { fSession = value; } 
+    } 
+  }
 }

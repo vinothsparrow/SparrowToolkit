@@ -8,11 +8,11 @@
     <Grid>
         <FlowDocumentScrollViewer IsToolBarVisible="False" HorizontalAlignment="Center" VerticalAlignment="Top">
             <FlowDocument>
-                <Paragraph TextAlignment="Center">
+                <!--<Paragraph TextAlignment="Center" FontSize="26">
                     <Bold>
-                        Readme - License Agreement
+                        Readme
                     </Bold>
-                </Paragraph>
+                </Paragraph>-->
                 <Paragraph FontFamily="Times New Roman">
                     <RichTextBox IsReadOnly="True" IsTabStop="False" x:Name="licenseText"/>
                 </Paragraph>
