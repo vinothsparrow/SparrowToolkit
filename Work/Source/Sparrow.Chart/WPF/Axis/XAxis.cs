@@ -600,14 +600,17 @@ namespace Sparrow.Chart
         {
             List<double> xValues = new List<double>();
             if (this.Series != null)
-                foreach (SeriesBase series in Series)
+            {
+                var series = Series.Where(ser => ser.XAxis == this);
+                foreach (SeriesBase seriesBase in series)
                 {
-                    if (series.Points != null)
-                        foreach (var point in series.Points)
+                    if (seriesBase.Points != null)
+                        foreach (var point in seriesBase.Points)
                         {
                             xValues.Add(point.XValue);
                         }
                 }
+            }
             if (xValues.Count > 0)
             {
                 this.AddMinMax(xValues.ToArray().Min(), xValues.ToArray().Max());                
