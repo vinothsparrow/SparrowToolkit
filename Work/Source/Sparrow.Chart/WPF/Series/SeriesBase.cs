@@ -76,12 +76,12 @@ namespace Sparrow.Chart
         public virtual void CalculateMinAndMax()
         {
             if (this.XAxis != null)
-            {
+            {                
                 XMin = this.XAxis.MMinValue;
                 XMax = this.XAxis.MMaxValue;
             }
             if (this.YAxis != null)
-            {
+            {               
                 YMin = this.YAxis.MMinValue;
                 YMax = this.YAxis.MMaxValue;
             }

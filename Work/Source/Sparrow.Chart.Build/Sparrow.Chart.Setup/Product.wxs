@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define Version="13.1.0.1"?>
+<?define Version="$(env.BuildVersion)"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 <Product Id="*" Name="Sparrow Chart Toolkit for WPF $(var.Version)" Language="1033" Version="$(var.Version)" Manufacturer="Vinoth Kumar J" UpgradeCode="E2E5F86F-8B25-4F1D-A77B-84CB15C2D770">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" AdminImage="yes" InstallPrivileges="elevated" />    

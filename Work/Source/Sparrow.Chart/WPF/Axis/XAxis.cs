@@ -599,6 +599,7 @@ namespace Sparrow.Chart
         public override void CalculateIntervalFromSeriesPoints()
         {
             List<double> xValues = new List<double>();
+            
             if (this.Series != null)
             {
                 var series = Series.Where(ser => ser.XAxis == this);
@@ -609,11 +610,16 @@ namespace Sparrow.Chart
                         {
                             xValues.Add(point.XValue);
                         }
+                    
                 }
             }
             if (xValues.Count > 0)
             {
-                this.AddMinMax(xValues.ToArray().Min(), xValues.ToArray().Max());                
+                double min, max;
+                min = xValues.ToArray().Min();
+                max = xValues.ToArray().Max();
+                
+                this.AddMinMax(min, max);                
             }
         }
 

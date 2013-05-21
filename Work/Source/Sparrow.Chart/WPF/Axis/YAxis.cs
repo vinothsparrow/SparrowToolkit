@@ -577,6 +577,7 @@ namespace Sparrow.Chart
         /// </summary>
         public override void CalculateIntervalFromSeriesPoints()
         {
+            bool isContainsColumn = false;
             List<double> yValues = new List<double>();
             if (this.Series != null)
                 foreach (SeriesBase series in Series)
@@ -585,10 +586,19 @@ namespace Sparrow.Chart
                     {
                         yValues.AddRange(series.Points.Select(point => point.YValue));
                     }
+                    if (series is ColumnSeries || series is AreaSeries)
+                        isContainsColumn = true;
                 }
             if (yValues.Count > 1)
             {
-                this.AddMinMax(yValues.ToArray().Min(), yValues.ToArray().Max());
+                double min, max;
+                min = yValues.ToArray().Min();
+                max = yValues.ToArray().Max();
+                if (isContainsColumn && min > 0)
+                {
+                    min = 0;
+                }
+                this.AddMinMax(min, max); 
             }
         }
 

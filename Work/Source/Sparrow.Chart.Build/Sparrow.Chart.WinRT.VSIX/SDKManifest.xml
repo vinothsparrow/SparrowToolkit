@@ -1,0 +1,16 @@
+<FileList DisplayName="Sparrow Chart Toolkit for WinRT"
+  ProductFamilyName="Sparrow Chart Toolkit for WinRT"
+  MinVSVersion="11.0"
+  MinToolsVersion="4.0"
+  CopyToSubDirectory="."
+  AppliesTo="WindowsAppContainer+WindowsXAML+Managed"
+  Help="http://sparrowtoolkit.codeplex.com"
+  MoreInfo="http://sparrowtoolkit.codeplex.com">
+
+<File Reference="Sparrow.Chart.WinRT.dll">
+	<ContainsControls>True</ContainsControls>
+	<ToolboxItems VSCategory="Sparrow Chart Toolkit for WinRT" BlendCategory="Sparrow Chart Toolkit for WinRT">
+		<Item Type="Sparrow.Chart.SparrowChart"/>
+	</ToolboxItems>
+</File>
+</FileList>

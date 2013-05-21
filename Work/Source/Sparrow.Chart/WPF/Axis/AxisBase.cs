@@ -394,6 +394,7 @@ namespace Sparrow.Chart
         protected void CalculateAutoInterval()
         {
             _isIntervalCountZero = false;
+            bool isZoomig = false;
             if (CheckType())
             {
                
@@ -413,6 +414,7 @@ namespace Sparrow.Chart
                         MMaxValue = ActualMaxvalue;
                     }
                     MStartValue = MMinValue;
+                    isZoomig = true;
                 }
                 else
                 {
@@ -438,7 +440,7 @@ namespace Sparrow.Chart
                    
                     this.MInterval = (MMaxValue - MMinValue) / MIntervalCount;
                 }
-                else
+                else if(!isZoomig)
                 {
                     switch (ActualType)
                     {
