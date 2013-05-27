@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.Chart.Wpf", "Sparrow.Chart.Wpf.csproj", "{561755E1-9492-4EC2-ACA1-8CF76E6CAC5A}"
 EndProject
 Global

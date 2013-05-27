@@ -46,12 +46,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.dll">
+    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.45.dll">
       <Link>References\CommonConfiguration\neutral\Sparrow.Chart.WinRT.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.pri">
+    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.45.pri">
       <Link>Redist\CommonConfiguration\neutral\Sparrow.Chart.WinRT.pri</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -61,7 +61,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.XML">
+    <Content Include="..\..\Sparrow.Chart\WinRT\bin\Release\Sparrow.Chart.WinRT.45.XML">
       <Link>References\CommonConfiguration\neutral\Sparrow.Chart.WinRT.XML</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sparrow.Chart</RootNamespace>
-    <AssemblyName>Sparrow.Chart.Windows</AssemblyName>
+    <AssemblyName>Sparrow.Chart.Windows.40</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
