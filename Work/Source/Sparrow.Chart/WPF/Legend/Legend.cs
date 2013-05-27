@@ -33,15 +33,29 @@ namespace Sparrow.Chart
 #elif X64
                 Source = new Uri(@"/Sparrow.Chart.DirectX2D_x64;component/Themes/Styles.xaml", UriKind.Relative)
 #elif WPF
-                Source = new Uri(@"/Sparrow.Chart.Wpf;component/Themes/Styles.xaml", UriKind.Relative)
+#if NET45
+                Source = new Uri(@"/Sparrow.Chart.Wpf.45;component/Themes/Styles.xaml", UriKind.Relative)
+#elif NET40
+                Source = new Uri(@"/Sparrow.Chart.Wpf.40;component/Themes/Styles.xaml", UriKind.Relative)
+#else
+                Source = new Uri(@"/Sparrow.Chart.Wpf.35;component/Themes/Styles.xaml", UriKind.Relative)
+#endif
 #elif SILVERLIGHT
-                Source = new Uri(@"/Sparrow.Chart.Silverlight;component/Themes/Styles.xaml", UriKind.Relative)
+#if SL5
+                Source = new Uri(@"/Sparrow.Chart.Silverlight.50;component/Themes/Styles.xaml", UriKind.Relative)
+#else
+                Source = new Uri(@"/Sparrow.Chart.Silverlight.40;component/Themes/Styles.xaml", UriKind.Relative)
+#endif
 #elif WINRT
-                Source = new Uri(@"ms-appx:///Sparrow.Chart.WinRT/Themes/Styles.xaml")
+                Source = new Uri(@"ms-appx:///Sparrow.Chart.WinRT.45/Themes/Styles.xaml")
 #elif WP7
-                Source = new Uri(@"/Sparrow.Chart.WP7;component/Themes/Styles.xaml", UriKind.Relative)
+#if NET45
+                Source = new Uri(@"/Sparrow.Chart.WP7.45;component/Themes/Styles.xaml", UriKind.Relative)
+#else
+                Source = new Uri(@"/Sparrow.Chart.WP7.40;component/Themes/Styles.xaml", UriKind.Relative)
+#endif
 #elif WP8
-                Source = new Uri(@"/Sparrow.Chart.WP8;component/Themes/Styles.xaml", UriKind.Relative)
+                Source = new Uri(@"/Sparrow.Chart.WP8.45;component/Themes/Styles.xaml", UriKind.Relative)
 #endif
             };
             this.HeaderTemplate = (DataTemplate)styles["legendTitleTemplate"];

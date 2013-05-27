@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Sparrow.Chart">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sparrow.Chart.WP8;component/Legend/Legend.xaml"/>
+        <ResourceDictionary Source="/Sparrow.Chart.WP8.45;component/Legend/Legend.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <local:BorderThicknessToLeftAndRightConverter x:Key="borderThicknessConverterXAxis"/>
     <local:BorderThicknessToTopBottomConverter x:Key="borderthicknessConverterYAxis"/>
