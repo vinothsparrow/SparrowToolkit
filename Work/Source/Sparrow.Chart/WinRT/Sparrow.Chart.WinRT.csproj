@@ -31,7 +31,7 @@
     <DefineConstants>TRACE;NETFX_CORE;WINRT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Sparrow.Chart.WinRT.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Sparrow.Chart.WinRT.45.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
