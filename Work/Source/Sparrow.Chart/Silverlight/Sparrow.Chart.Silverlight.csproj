@@ -46,7 +46,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Bin\Release\Sparrow.Chart.Silverlight.XML</DocumentationFile>
+    <DocumentationFile>Bin\Release\Sparrow.Chart.Silverlight.50.XML</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>

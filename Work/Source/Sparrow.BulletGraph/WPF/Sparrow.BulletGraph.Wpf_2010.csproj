@@ -32,7 +32,7 @@
     <DefineConstants>TRACE;WPF;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Sparrow.BulletGraph.Wpf.45.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Sparrow.BulletGraph.Wpf.40.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
