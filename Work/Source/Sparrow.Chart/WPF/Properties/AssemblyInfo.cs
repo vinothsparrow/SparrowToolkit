@@ -13,16 +13,16 @@ using System.Windows.Markup;
 #else
 [assembly: AssemblyTitle("Sparrow.Chart")]
 #endif
-[assembly: AssemblyDescription("Sparrow Chart Toolkit for WPF")]
+[assembly: AssemblyDescription("Sparrow Toolkit for WPF")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vinoth Kumar J (Author)")]
-[assembly: AssemblyProduct("Sparrow Chart Toolkit")]
+[assembly: AssemblyProduct("Sparrow Toolkit")]
 [assembly: AssemblyCopyright("Copyright © 2013 Vinoth Kumar J (Author)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: XmlnsDefinition("http://sparrowtoolkit.codeplex.com/wpf", "Sparrow.Chart")]
-[assembly: XmlnsPrefix("http://sparrowtoolkit.codeplex.com/wpf", "sparrowChartToolkit")]
-[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.Chart.snk")]
+[assembly: XmlnsPrefix("http://sparrowtoolkit.codeplex.com/wpf", "sparrowToolkit")]
+[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.snk")]
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.

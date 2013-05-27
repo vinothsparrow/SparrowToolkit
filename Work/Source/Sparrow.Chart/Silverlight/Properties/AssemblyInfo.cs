@@ -7,16 +7,16 @@ using System.Windows.Markup;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sparrow.Chart.Silverlight")]
-[assembly: AssemblyDescription("Sparrow Chart Toolkit for Silverlight")]
+[assembly: AssemblyDescription("Sparrow Toolkit for Silverlight")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vinoth Kumar J (Author)")]
-[assembly: AssemblyProduct("Sparrow Chart Toolkit")]
+[assembly: AssemblyProduct("Sparrow Toolkit")]
 [assembly: AssemblyCopyright("Copyright © 2013 Vinoth Kumar J (Author)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: XmlnsDefinition("http://sparrowtoolkit.codeplex.com/silverlight", "Sparrow.Chart")]
-[assembly: XmlnsPrefix("http://sparrowtoolkit.codeplex.com/silverlight", "sparrowChartToolkit")]
-[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.Chart.snk")]
+[assembly: XmlnsPrefix("http://sparrowtoolkit.codeplex.com/silverlight", "sparrowToolkit")]
+[assembly: AssemblyKeyFile(@"..\..\Common\Keys\Sparrow.snk")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
