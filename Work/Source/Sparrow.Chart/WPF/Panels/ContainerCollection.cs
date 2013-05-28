@@ -242,6 +242,70 @@ namespace Sparrow.Chart
            
         }
 
+        internal void Refresh(bool invalidate)
+        {
+#if DIRECTX2D
+            if (RenderingMode == RenderingMode.DirectX2D)
+                InitializeDirectX();
+#endif
+            switch (RenderingMode)
+            {
+#if WPF
+                case RenderingMode.GDIRendering:
+                    if (this.InteropBitmap != null && this.GDIGraphics != null)
+                    {
+                        this.GDIGraphics.Dispose();
+                        this.GDIGraphics = null;
+                        this.InteropBitmap = null;
+                        GC.Collect();
+                    }
+                    break;
+                case RenderingMode.WritableBitmap:
+                    if (this.WritableBitmap != null && this.WritableBitmapGraphics != null)
+                    {
+                        this.WritableBitmapGraphics.Dispose();
+                        this.WritableBitmapGraphics = null;
+                        this.WritableBitmap = null;
+                        GC.Collect();
+                    }
+                    break;
+#endif
+                case RenderingMode.Default:
+                    break;
+
+                default:
+                    break;
+            }
+
+            Initialize();
+            if (!_isIntialized || invalidate)
+                GenerateConatiners();
+            else
+                UpdateContainers();
+
+            if (this.XAxis != null)
+            {
+                this.XAxis.MMinValue = 0;
+                this.XAxis.MMaxValue = 1;
+                this.XAxis.CalculateIntervalFromSeriesPoints();
+                this.XAxis.Refresh();
+            }
+            if (this.YAxis != null)
+            {
+                this.YAxis.MMinValue = 0;
+                this.YAxis.MMaxValue = 1;
+                this.YAxis.CalculateIntervalFromSeriesPoints();
+                this.YAxis.Refresh();
+            }
+
+            foreach (SeriesBase series in this.Series)
+            {
+                if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
+                    series.SeriesContainer = Containers[series.Index];
+                series.Refresh();
+            }
+
+        }
         /// <summary>
         /// Clears this instance.
         /// </summary>
