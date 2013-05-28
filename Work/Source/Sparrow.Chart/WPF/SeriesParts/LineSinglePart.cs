@@ -46,10 +46,8 @@ namespace Sparrow.Chart
                     LinePart.Points.Add(linePoint);
                 }
                 SetBindingForStrokeandStrokeThickness(LinePart);
-                return LinePart;
             }
-            else
-                return null;
+            return LinePart;
         }
 
         /// <summary>

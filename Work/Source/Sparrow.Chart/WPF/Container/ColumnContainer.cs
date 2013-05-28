@@ -78,7 +78,8 @@ namespace Sparrow.Chart
                     for (int i = 0; i < columnSeries.Parts.Count; i++)
                     {
                         System.Windows.Shapes.Rectangle element = (columnSeries.Parts[i] as ColumnPart).CreatePart() as System.Windows.Shapes.Rectangle;
-                        PartsCanvas.Children.Add(element);
+                        if (element != null && !PartsCanvas.Children.Contains(element))
+                            PartsCanvas.Children.Add(element);
                     }
                 }
                 else

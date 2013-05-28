@@ -24,7 +24,9 @@ namespace Sparrow.Chart
                     PartsCanvas.Children.Clear();
                     for (int i = 0; i < splineSeries.Parts.Count; i++)
                     {
-                        PartsCanvas.Children.Add(splineSeries.Parts[i].CreatePart());
+                        var element = splineSeries.Parts[i].CreatePart();
+                        if (element != null && !PartsCanvas.Children.Contains(element))
+                            PartsCanvas.Children.Add(element);
                     }
                 }
                 else
