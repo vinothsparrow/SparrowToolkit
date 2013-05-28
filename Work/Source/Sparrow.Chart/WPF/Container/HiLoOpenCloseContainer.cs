@@ -77,7 +77,9 @@ namespace Sparrow.Chart
                 {
                     for (int i = 0; i < partsCollection.Count; i++)
                     {
-                        PartsCanvas.Children.Add(partsCollection[i].CreatePart());
+                        var element = partsCollection[i].CreatePart();
+                        if (element != null && !PartsCanvas.Children.Contains(element))
+                            PartsCanvas.Children.Add(element);
                     }
                 }
                 else

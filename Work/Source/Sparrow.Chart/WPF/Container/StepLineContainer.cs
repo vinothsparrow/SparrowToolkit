@@ -66,7 +66,9 @@ namespace Sparrow.Chart
                     PartsCanvas.Children.Clear();
                     for (int i = 0; i < stepLineSeries.Parts.Count; i++)
                     {
-                        PartsCanvas.Children.Add(stepLineSeries.Parts[i].CreatePart());
+                        var element = stepLineSeries.Parts[i].CreatePart();
+                        if (element != null && !PartsCanvas.Children.Contains(element))
+                            PartsCanvas.Children.Add(element);
                     }
                 }
                 else

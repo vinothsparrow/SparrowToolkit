@@ -52,7 +52,8 @@ namespace Sparrow.Chart
                     for (int i = 0; i < partsCollection.Count; i++)
                     {
                         Ellipse element = (Ellipse)partsCollection[i].CreatePart();
-                        PartsCanvas.Children.Add(element);                        
+                        if (element != null && !PartsCanvas.Children.Contains(element))
+                            PartsCanvas.Children.Add(element);                        
                     }
                 }
                 else
