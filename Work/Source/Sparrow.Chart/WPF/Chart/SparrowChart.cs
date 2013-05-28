@@ -189,8 +189,7 @@ namespace Sparrow.Chart
             this.XAxes = new Axes();
             this.XAxes.CollectionChanged += OnAxesCollectionChanged;
             this.YAxes = new Axes();
-            this.YAxes.CollectionChanged += OnAxesCollectionChanged;
-            this.Series.CollectionChanged += OnSeriesCollectionChanged;
+            this.YAxes.CollectionChanged += OnAxesCollectionChanged;            
             _brushes = Themes.MetroBrushes();
             LegendItems = new ObservableCollection<LegendItem>();
             ActualCategoryValues = new List<string>();
@@ -267,12 +266,12 @@ namespace Sparrow.Chart
                             };
                         BindingOperations.SetBinding(series, SeriesBase.RenderingModeProperty, renderingModeBinding);
                         series.Chart = this;
-                        series.Index = IndexCount;
+                        series.Index = this.Series.IndexOf(series);
                         Binding xAxisBinding = new Binding {Source = this, Path = new PropertyPath("XAxis")};
                         BindingOperations.SetBinding(series, SeriesBase.XAxisProperty, xAxisBinding);
                         Binding yAxisBinding = new Binding {Source = this, Path = new PropertyPath("YAxis")};
-                        BindingOperations.SetBinding(series, SeriesBase.YAxisProperty, yAxisBinding);                   
-                        IndexCount++;
+                        BindingOperations.SetBinding(series, SeriesBase.YAxisProperty, yAxisBinding);
+                        IndexCount = this.Series.Count;
                         if (series is ColumnSeries)
                         {
                             ColumnSeries.Add(series as ColumnSeries);                            
@@ -648,6 +647,7 @@ namespace Sparrow.Chart
            }
            if (args.NewValue != null && (args.NewValue is SeriesCollection))
            {
+               IndexCount = 0;
                (args.NewValue as SeriesCollection).CollectionChanged += OnSeriesCollectionChanged;
                foreach (var series in (args.NewValue as SeriesCollection))
                {
