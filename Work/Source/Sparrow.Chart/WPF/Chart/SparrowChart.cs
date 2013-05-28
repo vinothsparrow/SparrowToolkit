@@ -632,8 +632,55 @@ namespace Sparrow.Chart
         /// The series property
         /// </summary>
         public static readonly DependencyProperty SeriesProperty =
-            DependencyProperty.Register("Series", typeof(SeriesCollection), typeof(SparrowChart), new PropertyMetadata(null));
+            DependencyProperty.Register("Series", typeof(SeriesCollection), typeof(SparrowChart), new PropertyMetadata(null,OnSeriesChanged));
 
+        private static void OnSeriesChanged(DependencyObject sender,DependencyPropertyChangedEventArgs args)
+        {
+            (sender as SparrowChart).SeriesChanged(args);
+        }
+
+        internal void SeriesChanged(DependencyPropertyChangedEventArgs args)
+        {
+           if(args.OldValue!=null && (args.OldValue is SeriesCollection))
+           {
+               (args.OldValue as SeriesCollection).CollectionChanged -= OnSeriesCollectionChanged;
+           }
+           if (args.NewValue != null && (args.NewValue is SeriesCollection))
+           {
+               foreach (var series in (args.NewValue as SeriesCollection))
+               {
+                   Binding dataContextBinding = new Binding { Path = new PropertyPath("DataContext"), Source = this };
+                   BindingOperations.SetBinding(series, SeriesBase.DataContextProperty, dataContextBinding);
+                   Binding renderingModeBinding = new Binding
+                   {
+                       Path = new PropertyPath("RenderingMode"),
+                       Source = this
+                   };
+                   BindingOperations.SetBinding(series, SeriesBase.RenderingModeProperty, renderingModeBinding);
+                   series.Chart = this;
+                   series.Index = IndexCount;
+                   Binding xAxisBinding = new Binding { Source = this, Path = new PropertyPath("XAxis") };
+                   BindingOperations.SetBinding(series, SeriesBase.XAxisProperty, xAxisBinding);
+                   Binding yAxisBinding = new Binding { Source = this, Path = new PropertyPath("YAxis") };
+                   BindingOperations.SetBinding(series, SeriesBase.YAxisProperty, yAxisBinding);
+                   IndexCount++;
+                   if (series is ColumnSeries)
+                   {
+                       ColumnSeries.Add(series as ColumnSeries);
+                   }
+                   else if (series is HiLoOpenCloseSeries)
+                   {
+                       HiLoOpenCloseSeries.Add(series as HiLoOpenCloseSeries);
+                   }
+                   _isLegendUpdate = false;
+                   RefreshLegend();
+               }
+               if (this.Containers != null)
+               {
+                   this.Containers.Refresh(true);
+               }
+           }
+        }
 
         /// <summary>
         /// Gets or sets the legend.
