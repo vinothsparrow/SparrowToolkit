@@ -118,17 +118,18 @@ namespace Sparrow.Chart
                 if (this.Legend != null)
                 {
                     this.LegendItems.Clear();
-                    foreach (SeriesBase series in this.Series)
-                    {
-                        LegendItem legendItem = new LegendItem {Series = series};
-                        Binding showIconBinding = new Binding
-                            {
-                                Path = new PropertyPath("ShowIcon"),
-                                Source = this.Legend
-                            };
-                        BindingOperations.SetBinding(legendItem, LegendItem.ShowIconProperty, showIconBinding);
-                        this.LegendItems.Add(legendItem);
-                    }
+                    if(this.Series!=null)
+                        foreach (SeriesBase series in this.Series)
+                        {
+                            LegendItem legendItem = new LegendItem { Series = series };
+                            Binding showIconBinding = new Binding
+                                {
+                                    Path = new PropertyPath("ShowIcon"),
+                                    Source = this.Legend
+                                };
+                            BindingOperations.SetBinding(legendItem, LegendItem.ShowIconProperty, showIconBinding);
+                            this.LegendItems.Add(legendItem);
+                        }
                     this.Legend.ItemsSource = this.LegendItems;                   
                     _isLegendUpdate = true;
                     switch (this.Legend.LegendPosition)
@@ -647,6 +648,7 @@ namespace Sparrow.Chart
            }
            if (args.NewValue != null && (args.NewValue is SeriesCollection))
            {
+               (args.NewValue as SeriesCollection).CollectionChanged += OnSeriesCollectionChanged;
                foreach (var series in (args.NewValue as SeriesCollection))
                {
                    Binding dataContextBinding = new Binding { Path = new PropertyPath("DataContext"), Source = this };
