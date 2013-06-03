@@ -233,12 +233,13 @@ namespace Sparrow.Chart
                 this.YAxis.Refresh();
             }
            
-            foreach (SeriesBase series in this.Series)
-            {
-                if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
-                    series.SeriesContainer = Containers[series.Index];
-                series.Refresh();
-            }
+            if(this.Series!=null)
+                foreach (SeriesBase series in this.Series)
+                {
+                    if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
+                        series.SeriesContainer = Containers[series.Index];
+                    series.Refresh();
+                }
            
         }
 
@@ -398,64 +399,46 @@ namespace Sparrow.Chart
         /// </summary>
         internal void Initialize()
         {
+#if WPF && !PUPLISH
             if (ActualHeight > 1 && ActualWidth > 1)
             {
-                try
+                switch (RenderingMode)
                 {
-#if WPF
-                    System.Windows.Media.Matrix m = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice;
-                    dpiFactor = 1 / m.M11;
-#endif
 
-                    switch (RenderingMode)
-                    {
-#if WPF
-                        case RenderingMode.GDIRendering:
-                            uint byteCount = (uint)(ActualWidth * ActualHeight * bpp);
+                    case RenderingMode.GDIRendering:
+                        uint byteCount = (uint)(ActualWidth * ActualHeight * bpp);
 
-                            //Allocate and create the InteropBitmap
-                            var fileMappingPointer = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, PageReadwrite, 0, byteCount, null);
-                            this.MapViewPointer = MapViewOfFile(fileMappingPointer, FileMapAllAccess, 0, 0, byteCount);
-                            var format = PixelFormats.Bgra32;
-                            var stride = (int)((int)ActualWidth * (int)format.BitsPerPixel / 8);
-                            this.InteropBitmap = Imaging.CreateBitmapSourceFromMemorySection(fileMappingPointer,
-                                                                                        (int)ActualWidth,
-                                                                                        (int)ActualHeight,
-                                                                                        format,
-                                                                                        stride,
-                                                                                        0) as InteropBitmap;
-                            this.GDIGraphics = GetGdiGraphics(MapViewPointer);
-                            break;  
-          
-                        case RenderingMode.WritableBitmap:
-                            //Allocate and create the WritableBitmap
-                            WritableBitmap = new WriteableBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Bgra32, null);
-                            ImageBitmap = new Bitmap((int)ActualWidth, (int)ActualHeight, ((int)ActualWidth * 4), System.Drawing.Imaging.PixelFormat.Format32bppPArgb, WritableBitmap.BackBuffer);
-                            WritableBitmapGraphics = System.Drawing.Graphics.FromImage(ImageBitmap);
-                            WritableBitmapGraphics.CompositingMode = this.CompositingMode.AsDrawingCompositingMode();
-                            WritableBitmapGraphics.CompositingQuality = this.CompositingQuality.AsDrawingCompositingQuality();
-                            WritableBitmapGraphics.SmoothingMode = this.SmoothingMode.AsDrawingSmoothingMode();
-                            break;
-#endif
-                        default:
-                            break;
-                    }
-                    
-                    Clear();
-                    this.IsBitmapInitialized = true;
-                }
-#if WPF
-                catch (OutOfMemoryException)
-                {
-                    throw new OutOfMemoryException();
-                }
-#endif
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Exception Occured : " + e.Message);
+                        //Allocate and create the InteropBitmap
+                        var fileMappingPointer = CreateFileMapping(new IntPtr(-1), IntPtr.Zero, PageReadwrite, 0, byteCount, null);
+                        this.MapViewPointer = MapViewOfFile(fileMappingPointer, FileMapAllAccess, 0, 0, byteCount);
+                        var format = PixelFormats.Bgra32;
+                        var stride = (int)((int)ActualWidth * (int)format.BitsPerPixel / 8);
+                        this.InteropBitmap = Imaging.CreateBitmapSourceFromMemorySection(fileMappingPointer,
+                                                                                    (int)ActualWidth,
+                                                                                    (int)ActualHeight,
+                                                                                    format,
+                                                                                    stride,
+                                                                                    0) as InteropBitmap;
+                        this.GDIGraphics = GetGdiGraphics(MapViewPointer);
+                        break;
+
+                    case RenderingMode.WritableBitmap:
+                        //Allocate and create the WritableBitmap
+                        WritableBitmap = new WriteableBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Bgra32, null);
+                        ImageBitmap = new Bitmap((int)ActualWidth, (int)ActualHeight, ((int)ActualWidth * 4), System.Drawing.Imaging.PixelFormat.Format32bppPArgb, WritableBitmap.BackBuffer);
+                        WritableBitmapGraphics = System.Drawing.Graphics.FromImage(ImageBitmap);
+                        WritableBitmapGraphics.CompositingMode = this.CompositingMode.AsDrawingCompositingMode();
+                        WritableBitmapGraphics.CompositingQuality = this.CompositingQuality.AsDrawingCompositingQuality();
+                        WritableBitmapGraphics.SmoothingMode = this.SmoothingMode.AsDrawingSmoothingMode();
+                        break;
+                    default:
+                        break;
                 }
 
-            }
+                Clear();
+                this.IsBitmapInitialized = true;
+            } 
+#endif
 
         }
 
@@ -634,48 +617,48 @@ namespace Sparrow.Chart
 
             if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.SeriesFirst)
                 this.Children.Add(AxisLinesconatiner); 
-            
-            foreach (var seriesBase in Series)
-            {
-                SeriesContainer container = seriesBase.CreateContainer();
-                seriesBase.Height = this.ActualHeight;
-                seriesBase.Width = this.ActualWidth;
-                container.Series = seriesBase;
-                container.Container = this;
-                container.RenderingMode = this.RenderingMode;
-#if WPF
-                container.dpiFactor = this.dpiFactor;      
-#endif
-                container.Collection = this;
-                switch (RenderingMode)
+            if(this.Series!=null)
+                foreach (var seriesBase in Series)
                 {
+                    SeriesContainer container = seriesBase.CreateContainer();
+                    seriesBase.Height = this.ActualHeight;
+                    seriesBase.Width = this.ActualWidth;
+                    container.Series = seriesBase;
+                    container.Container = this;
+                    container.RenderingMode = this.RenderingMode;
 #if WPF
-                    case RenderingMode.GDIRendering:
-                        container.InteropBitmap = this.InteropBitmap;
-                        container.GDIGraphics = this.GDIGraphics;
-                        break;
-                   case RenderingMode.WritableBitmap:
-                        container.WritableBitmap = this.WritableBitmap;
-                        container.WritableBitmapGraphics = this.WritableBitmapGraphics;
-                        container.ImageBitmap = this.ImageBitmap;
-                        break;
+                    container.dpiFactor = this.dpiFactor;
 #endif
-                    case RenderingMode.Default:
-                        this.Children.Add(container.PartsCanvas);
-                        break;
+                    container.Collection = this;
+                    switch (RenderingMode)
+                    {
+#if WPF
+                        case RenderingMode.GDIRendering:
+                            container.InteropBitmap = this.InteropBitmap;
+                            container.GDIGraphics = this.GDIGraphics;
+                            break;
+                        case RenderingMode.WritableBitmap:
+                            container.WritableBitmap = this.WritableBitmap;
+                            container.WritableBitmapGraphics = this.WritableBitmapGraphics;
+                            container.ImageBitmap = this.ImageBitmap;
+                            break;
+#endif
+                        case RenderingMode.Default:
+                            this.Children.Add(container.PartsCanvas);
+                            break;
 #if DIRECTX2D
                     case Chart.RenderingMode.DirectX2D:
                         container.Directx2DGraphics = this.Directx2DGraphics;
                         container.RenderTarget = this.RenderTarget;
                         break;
 #endif
-                   
-                    default:
-                        break;
+
+                        default:
+                            break;
+                    }
+
+                    this.Containers.Add(container);
                 }
-                                
-                this.Containers.Add(container);
-            }
           
             this.Children.Add(bitmapImage);
             if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.AxisFirst)
