@@ -128,6 +128,11 @@ namespace Sparrow.Chart
                 YValues.RemoveAt(index);
                 Points.RemoveAt(index);
             }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Points.Clear();
+                GeneratePointsFromSource();
+            }
 
         }
 
