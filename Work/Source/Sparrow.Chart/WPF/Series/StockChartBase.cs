@@ -137,7 +137,11 @@ namespace Sparrow.Chart
                 this.YValues.RemoveAt(index);
                 this.Points.RemoveAt(index);
             }
-
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Points.Clear();
+                GeneratePointsFromSource();
+            }
         }
 
         /// <summary>
