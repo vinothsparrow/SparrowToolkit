@@ -232,15 +232,17 @@ namespace Sparrow.Chart
                 this.YAxis.CalculateIntervalFromSeriesPoints();
                 this.YAxis.Refresh();
             }
-           
-            if(this.Series!=null)
+
+            if (this.Series != null)
+            {
                 foreach (SeriesBase series in this.Series)
                 {
                     if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
                         series.SeriesContainer = Containers[series.Index];
                     series.Refresh();
                 }
-           
+            }
+
         }
 
         internal void Refresh(bool invalidate)
@@ -298,12 +300,14 @@ namespace Sparrow.Chart
                 this.YAxis.CalculateIntervalFromSeriesPoints();
                 this.YAxis.Refresh();
             }
-
-            foreach (SeriesBase series in this.Series)
+            if (this.Series != null)
             {
-                if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
-                    series.SeriesContainer = Containers[series.Index];
-                series.Refresh();
+                foreach (SeriesBase series in this.Series)
+                {
+                    if (Containers.Count > 0 && (this.Series.Count == Containers.Count))
+                        series.SeriesContainer = Containers[series.Index];
+                    series.Refresh();
+                }
             }
 
         }
