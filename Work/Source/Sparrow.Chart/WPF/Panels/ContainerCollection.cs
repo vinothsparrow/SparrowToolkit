@@ -549,7 +549,7 @@ namespace Sparrow.Chart
             }           
             return arrangeSize;
         }
-
+#if WPF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("kernel32.dll", SetLastError = true)]
         private static extern IntPtr CreateFileMapping(IntPtr hFile,
                                                        IntPtr lpFileMappingAttributes,
@@ -564,6 +564,7 @@ namespace Sparrow.Chart
                                                    uint dwFileOffsetHigh,
                                                    uint dwFileOffsetLow,
                                                    uint dwNumberOfBytesToMap);
+#endif
         /// <summary>
         /// Updates the containers.
         /// </summary>
