@@ -110,6 +110,7 @@
     <Compile Include="Collections\Collections.cs" />
     <Compile Include="Container\ColumnContainer.cs" />
     <Compile Include="Container\HiLoOpenCloseContainer.cs" />
+    <Compile Include="Container\PieContainer.cs" />
     <Compile Include="Container\ScatterContainer.cs" />
     <Compile Include="Converters\HalfValueConverter.cs" />
     <Compile Include="Converters\NegativeConverter.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="SeriesParts\LinePartBase.cs" />
     <Compile Include="SeriesParts\LineSinglePart.cs" />
     <Compile Include="SeriesParts\LineSinglePartBase.cs" />
+    <Compile Include="SeriesParts\PiePart.cs" />
     <Compile Include="SeriesParts\ScatterPart.cs" />
     <Compile Include="SeriesParts\SeriesPartBase.cs" />
     <Compile Include="SeriesParts\SplinePart.cs" />
@@ -155,6 +157,8 @@
     <Compile Include="Series\HiLoSeries.cs" />
     <Compile Include="Series\LineSeries.cs" />
     <Compile Include="Series\LineSeriesBase.cs" />
+    <Compile Include="Series\PieSeries.cs" />
+    <Compile Include="Series\PieSeriesBase.cs" />
     <Compile Include="Series\ScatterSeries.cs" />
     <Compile Include="Series\SeriesBase.cs" />
     <Compile Include="Series\SplineSeries.cs" />

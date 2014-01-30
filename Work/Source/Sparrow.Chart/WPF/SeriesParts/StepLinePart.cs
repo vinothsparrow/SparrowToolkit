@@ -55,6 +55,7 @@ namespace Sparrow.Chart
             PointCollection pointsCollection=new PointCollection {StartPoint, StepPoint, EndPoint};
             Lines.Points = pointsCollection;
             SetBindingForStrokeandStrokeThickness(Lines);
+            UiElement = Lines;
             return Lines;
         }
 
