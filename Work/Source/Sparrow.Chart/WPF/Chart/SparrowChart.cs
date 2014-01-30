@@ -121,8 +121,8 @@ namespace Sparrow.Chart
                     if(this.Series!=null)
                         foreach (SeriesBase series in this.Series)
                         {
-                            if (!(series is PieSeriesBase))
-                            {
+                            //if (!(series is PieSeriesBase))
+                            //{
                                 var legendItem = new LegendItem {Series = series};
                                 var showIconBinding = new Binding
                                 {
@@ -131,11 +131,11 @@ namespace Sparrow.Chart
                                 };
                                 BindingOperations.SetBinding(legendItem, LegendItem.ShowIconProperty, showIconBinding);
                                 this.LegendItems.Add(legendItem);
-                            }
-                            else
-                            {
-                                LegendItems = (series as PieSeriesBase).LegendItems;
-                            }
+                            //}
+                            //else
+                            //{
+                            //    LegendItems = (series as PieSeriesBase).LegendItems;
+                            //}
                         }
                     this.Legend.ItemsSource = this.LegendItems;                   
                     _isLegendUpdate = true;
@@ -389,8 +389,8 @@ namespace Sparrow.Chart
             if (this.Series != null)
                 foreach (var series in Series)
                 {
-                    if (!(series is PieSeriesBase))
-                    {
+                    //if (!(series is PieSeriesBase))
+                    //{
                         if (series.Stroke == null)
                         {
                             if (_brushes.Count > 1)
@@ -406,11 +406,11 @@ namespace Sparrow.Chart
                             else
                                 fillSeriesBase.Fill = _brushes[_brushes.Count];
                         }
-                    }
-                    else
-                    {
-                        (series as PieSeriesBase).BrushTheme(_brushes);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    (series as PieSeriesBase).BrushTheme(_brushes);
+                    //}
                 }
         }
 
