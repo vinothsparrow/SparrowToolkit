@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.BulletGraph.Silverl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparrow.BulletGraph.Wpf_2010", "Source\Sparrow.BulletGraph\WPF\Sparrow.BulletGraph.Wpf_2010.csproj", "{A437F8E1-CED6-481F-B527-833F03F637CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Demos\Samples\Samples.csproj", "{89013AC0-6231-4FED-8F82-231948E565C3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -166,27 +164,6 @@ Global
 		{A437F8E1-CED6-481F-B527-833F03F637CB}.Release-xml|Mixed Platforms.Build.0 = Release|Any CPU
 		{A437F8E1-CED6-481F-B527-833F03F637CB}.Release-xml|x64.ActiveCfg = Release|Any CPU
 		{A437F8E1-CED6-481F-B527-833F03F637CB}.Release-xml|x86.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|ARM.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|x64.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release|x86.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|Any CPU.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|Any CPU.Build.0 = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|ARM.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|Mixed Platforms.Build.0 = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|x64.ActiveCfg = Release|Any CPU
-		{89013AC0-6231-4FED-8F82-231948E565C3}.Release-xml|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
