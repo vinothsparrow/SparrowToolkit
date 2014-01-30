@@ -37,7 +37,7 @@ namespace Sparrow.Chart
             if (PointsSource != null)
                 SizeValues = this.GetReflectionValues(this.SizePath, PointsSource, SizeValues, false);
 
-            if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 1)
+            if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 0)
             {
                 CalculateMinAndMax();
                 ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };

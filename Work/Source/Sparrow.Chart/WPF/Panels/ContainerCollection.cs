@@ -570,8 +570,11 @@ namespace Sparrow.Chart
         /// </summary>
         private void UpdateContainers()
         {
-            AxisLinesconatiner.Height = this.ActualHeight;
-            AxisLinesconatiner.Width = this.ActualWidth;            
+            if (XAxis != null && YAxis != null)
+            {
+                AxisLinesconatiner.Height = this.ActualHeight;
+                AxisLinesconatiner.Width = this.ActualWidth;
+            }
             foreach (var container in Containers)
             {               
                 container.RenderingMode = this.RenderingMode;
@@ -614,14 +617,17 @@ namespace Sparrow.Chart
         {
             this.Children.Clear();
             this.Containers.Clear();
-            AxisLinesconatiner = new AxisCrossLinesContainer {Height = this.ActualHeight, Width = this.ActualWidth};
-            Binding xAxisBinding = new Binding {Path = new PropertyPath("XAxis"), Source = this};
-            Binding yAxisBinding = new Binding {Source = this, Path = new PropertyPath("YAxis")};
-            AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.XAxisProperty, xAxisBinding);
-            AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.YAxisProperty, yAxisBinding);
+            if (XAxis != null && YAxis != null)
+            {
+                AxisLinesconatiner = new AxisCrossLinesContainer {Height = this.ActualHeight, Width = this.ActualWidth};
+                Binding xAxisBinding = new Binding {Path = new PropertyPath("XAxis"), Source = this};
+                Binding yAxisBinding = new Binding {Source = this, Path = new PropertyPath("YAxis")};
+                AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.XAxisProperty, xAxisBinding);
+                AxisLinesconatiner.SetBinding(AxisCrossLinesContainer.YAxisProperty, yAxisBinding);
 
-            if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.SeriesFirst)
-                this.Children.Add(AxisLinesconatiner); 
+                if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.SeriesFirst)
+                    this.Children.Add(AxisLinesconatiner);
+            }
             if(this.Series!=null)
                 foreach (var seriesBase in Series)
                 {
@@ -666,8 +672,11 @@ namespace Sparrow.Chart
                 }
           
             this.Children.Add(bitmapImage);
-            if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.AxisFirst)
-                this.Children.Add(AxisLinesconatiner); 
+            if (XAxis != null && YAxis != null)
+            {
+                if (this.Chart != null && this.Chart.OverlayMode == OverlayMode.AxisFirst)
+                    this.Children.Add(AxisLinesconatiner);
+            }
             _isIntialized = true;
         }
 #if WPF

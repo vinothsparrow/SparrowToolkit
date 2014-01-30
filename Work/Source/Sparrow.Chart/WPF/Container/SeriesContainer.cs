@@ -47,7 +47,7 @@ namespace Sparrow.Chart
         internal Graphics WritableBitmapGraphics;
         internal double dpiFactor;
 #endif
-        internal Canvas PartsCanvas;
+        public Canvas PartsCanvas { get; set; }    
         internal ContainerCollection Collection;
 #if WINRT
         IAsyncAction action;

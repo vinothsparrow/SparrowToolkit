@@ -69,6 +69,8 @@ namespace Sparrow.Chart
         }
 
 
+        public UIElement UiElement { get; set; }
+
         /// <summary>
         /// Creates the part.
         /// </summary>
