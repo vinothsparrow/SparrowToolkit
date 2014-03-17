@@ -316,7 +316,7 @@ namespace Sparrow.Chart
             else
                 values = new List<double>();
             bool notifyCollectionChanged=false;
-            if (!string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(path) && (source != null))
             {
                 IEnumerator enumerator = source.GetEnumerator();
                 double index = 0d;
