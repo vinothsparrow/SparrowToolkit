@@ -90,10 +90,14 @@ namespace Sparrow.Chart
                     AreaPoints[0] = startPoint;
                     AreaPoints.Add(endPoint);
                 }
-
-                if (this.SeriesContainer != null)
-                    this.SeriesContainer.Invalidate();
             }
+            else
+            {
+                Parts.Clear();
+            }
+
+            if (this.SeriesContainer != null)
+                this.SeriesContainer.Invalidate();
             IsRefreshed = false;
         }
 

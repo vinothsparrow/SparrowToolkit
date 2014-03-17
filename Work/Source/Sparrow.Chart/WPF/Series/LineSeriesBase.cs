@@ -32,7 +32,11 @@ namespace Sparrow.Chart
 
             if (XValues != null && XValues.Count > 0)
             {
-                Points = GetPointsFromValues(XValues, YValues);
+              Points = GetPointsFromValues(XValues, YValues);
+            }
+            else
+            {
+              Points.Clear();
             }
         }
 

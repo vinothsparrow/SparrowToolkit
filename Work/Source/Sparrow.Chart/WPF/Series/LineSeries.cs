@@ -89,9 +89,10 @@ namespace Sparrow.Chart
                         }
                     }
                 }
-                SeriesContainer.Invalidate();
             }
 
+            if (this.SeriesContainer != null)
+                this.SeriesContainer.Invalidate();
             IsRefreshed = false;
         }
 

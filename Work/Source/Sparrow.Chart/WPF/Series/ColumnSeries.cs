@@ -22,9 +22,10 @@ namespace Sparrow.Chart
         /// </summary>
         override public void GenerateDatas()
         {
+            ColumnPoints.Clear();
+
             if (this.Points != null && this.SeriesContainer != null)
             {
-                ColumnPoints.Clear();
                 if (!IsPointsGenerated)
                     Parts.Clear();
                 StartEndPoints = new PointCollection();
@@ -90,9 +91,14 @@ namespace Sparrow.Chart
                     }
                     
                 }
-                this.SeriesContainer.Invalidate();                
-
             }
+            else
+            {
+              Parts.Clear();
+            }
+
+            if (this.SeriesContainer != null)
+                this.SeriesContainer.Invalidate();
             IsRefreshed = false;
         }
 
