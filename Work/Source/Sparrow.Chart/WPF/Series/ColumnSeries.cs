@@ -30,7 +30,7 @@ namespace Sparrow.Chart
                 StartEndPoints = new PointCollection();
                 Rects = new List<Rect>();
                 CalculateMinAndMax();
-                ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint() { XValue = double.MinValue, YValue = double.MinValue };
                 IntializePoints();
                 Point startAndEndPoint = CalculateColumnSeriesInfo();
                 foreach (ChartPoint point in this.Points)

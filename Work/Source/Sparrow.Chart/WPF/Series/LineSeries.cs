@@ -25,7 +25,7 @@ namespace Sparrow.Chart
                 if (!IsPointsGenerated)
                     Parts.Clear();
                 CalculateMinAndMax();
-                ChartPoint oldPoint = new ChartPoint { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint { XValue = double.MinValue, YValue = double.MinValue };
                 IntializePoints();
                 foreach (ChartPoint point in Points)
                 {
