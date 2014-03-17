@@ -36,7 +36,7 @@ namespace Sparrow.Chart
                 Parts.Clear();
             Point endPoint = new Point(0, 0);
             Point startPoint = new Point(0, 0);
-            int index = 0;
+
             if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 0)
             {
                 CalculateMinAndMax();
@@ -80,9 +80,15 @@ namespace Sparrow.Chart
                     }
                 }
                 
-                if (this.SeriesContainer != null)
-                    this.SeriesContainer.Invalidate();
             }
+            else
+            {
+                Parts.Clear();
+            }
+          
+            if (this.SeriesContainer != null)
+                this.SeriesContainer.Invalidate(); 
+
             IsRefreshed = false;
         }
 

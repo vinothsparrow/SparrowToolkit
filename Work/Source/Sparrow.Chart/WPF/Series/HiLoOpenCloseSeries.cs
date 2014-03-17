@@ -114,9 +114,13 @@ namespace Sparrow.Chart
                     }
 
                 }
-                this.SeriesContainer.Invalidate();
             }
-
+            else 
+            {
+              Parts.Clear();
+            }
+            if (this.SeriesContainer != null)
+                this.SeriesContainer.Invalidate();
             IsRefreshed = false;
         }
 
