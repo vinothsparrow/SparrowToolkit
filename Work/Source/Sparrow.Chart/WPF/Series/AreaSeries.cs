@@ -38,7 +38,7 @@ namespace Sparrow.Chart
             if (this.Points != null && this.SeriesContainer != null && this.Points.Count > 1)
             {
                 CalculateMinAndMax();
-                ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint() { XValue = double.MinValue, YValue = double.MinValue };
                 IntializePoints();
                 AreaPoints.Add(startPoint);
                 foreach (ChartPoint point in this.Points)

@@ -57,7 +57,7 @@ namespace Sparrow.Chart
                 CalculateMinAndMax();
                 OpenOffPoints = new PointCollection();
                 CloseOffPoints = new PointCollection();
-                ChartPoint oldPoint = new ChartPoint() { XValue = 0, YValue = 0 };
+                ChartPoint oldPoint = new ChartPoint() { XValue = double.MinValue, YValue = double.MinValue };
                 IntializePoints();
                 int index = 0;
                 Point startAndEndPoint = CalculateSeriesInfo();
